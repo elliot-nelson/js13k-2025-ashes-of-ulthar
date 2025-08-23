@@ -1,15 +1,15 @@
-// LevelScreen
+// IntroScene
 
 import { GRAVITY, TERMINAL_VELOCITY } from './Constants';
 import { game } from './Game';
-import { LoadingScreen } from './LoadingScreen';
+import { LoadingScene } from './LoadingScene';
 import { ScreenShake } from './ScreenShake';
 import { Text } from './Text';
 import { clamp } from './Util';
 import { Viewport } from './Viewport';
 import { Input } from './input/Input';
 
-export class IntroScreen {
+export class IntroScene {
     constructor() {
         this.text = [
             'HAROLD',
@@ -34,6 +34,12 @@ export class IntroScreen {
     update() {
         this.t++;
 
+        if (this.t > 10) {
+            game.scenes.pop();
+            game.scenes.push(new LoadingScene());
+        }
+
+        /*
         this.vel[0].y = clamp(this.vel[0].y + GRAVITY, 0, TERMINAL_VELOCITY);
         if (this.pos[0].y > 15) {
             this.vel[1].y = clamp(this.vel[1].y + GRAVITY, 0, TERMINAL_VELOCITY);
@@ -57,7 +63,9 @@ export class IntroScreen {
         } else if (!this.screenshakes[2]) {
             this.screenshakes[2] = new ScreenShake(12, 0, 3);
         }
+            */
 
+        /*
         if (this.fadet >= 0) this.fadet++;
 
         if (this.fadet > 30) {
@@ -73,7 +81,7 @@ export class IntroScreen {
             if (this.screenshakes[i]) {
                 this.screenshakes[i].update();
             }
-        }
+        }*/
     }
 
     draw() {

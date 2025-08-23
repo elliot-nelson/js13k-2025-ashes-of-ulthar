@@ -9,6 +9,7 @@ import gulp from 'gulp';
 import log from 'fancy-log';
 import * as rollup from 'rollup';
 import * as roadroller from 'roadroller';
+import * as process from 'process';
 
 import AsepriteCli from './tools/aseprite-cli.js';
 import ImageDataParser from './tools/image-data-parser.js';
@@ -57,8 +58,6 @@ async function compileBuild() {
             name: 'app'
         });
     } catch (error) {
-        // Use rollup's error output
-        const { handleError } = await import('./node_modules/rollup/dist/shared/loadConfigFile.js');
         handleError(error, true);
         throw error;
     }
@@ -295,6 +294,51 @@ function watch() {
 
     gulp.watch(['src/**', '!src/**/generated/**'], build);
 }
+
+//
+function handleError(error, recover = false) {
+    const { bold, red, cyan, dim } = chalk;
+    const relativeId = (arg) => arg;
+
+    const name = error.name || error.cause?.name;
+    const nameSection = name ? `${name}: ` : '';
+    const pluginSection = error.plugin ? `(plugin ${error.plugin}) ` : '';
+    const message = `${pluginSection}${nameSection}${error.message}`;
+    const outputLines = [bold(red(`[!] ${bold(message.toString())}`))];
+    if (error.url) {
+        outputLines.push(cyan(error.url));
+    }
+    if (error.loc) {
+        outputLines.push(`${relativeId((error.loc.file || error.id))} (${error.loc.line}:${error.loc.column})`);
+    }
+    else if (error.id) {
+        outputLines.push(relativeId(error.id));
+    }
+    if (error.frame) {
+        outputLines.push(dim(error.frame));
+    }
+    if (error.stack) {
+        outputLines.push(dim(error.stack?.replace(`${nameSection}${error.message}\n`, '')));
+    }
+    // ES2022: Error.prototype.cause is optional
+    if (error.cause) {
+        let cause = error.cause;
+        const causeErrorLines = [];
+        let indent = '';
+        while (cause) {
+            indent += '  ';
+            const message = cause.stack || cause;
+            causeErrorLines.push(...`[cause] ${message}`.split('\n').map(line => indent + line));
+            cause = cause.cause;
+        }
+        outputLines.push(dim(causeErrorLines.join('\n')));
+    }
+    outputLines.push('', '');
+    process.stderr.write(outputLines.join('\n'));
+    if (!recover)
+        process.exit(1);
+}
+
 
 // -----------------------------------------------------------------------------
 // Task List

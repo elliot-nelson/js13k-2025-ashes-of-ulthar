@@ -965,7 +965,6 @@
   const R0          =   0;
   const R45         =  45 * Math.PI / 180;
   const R90         =  90 * Math.PI / 180;
-  const R180        = 180 * Math.PI / 180;
 
   // Frames per second (locked)
   //
@@ -1271,33 +1270,8 @@
       return { x: pos.q * TILE_SIZE, y: pos.r * TILE_SIZE };
   }
 
-  function xy2uv(pos) {
-      return {
-          u: pos.x + Viewport.center.u - Camera.pos.x,
-          v: pos.y + Viewport.center.v - Camera.pos.y
-      };
-  }
-
-  function uv2xy(pos) {
-      return {
-          x: pos.u - Viewport.center.u + Camera.pos.x,
-          y: pos.v - Viewport.center.v + Camera.pos.y
-      };
-  }
-
-  function centerxy(pos) {
-      return {
-          x: pos.x + TILE_SIZE / 2,
-          y: pos.y + TILE_SIZE / 2
-      };
-  }
-
   function clamp(value, min, max) {
       return value < min ? min : value > max ? max : value;
-  }
-
-  function manhattanXY(xy1, xy2) {
-      return Math.abs(xy1.x - xy2.x) + Math.abs(xy1.y - xy2.y);
   }
 
   /**
@@ -1753,10 +1727,10 @@
       return canvas.canvas;
   }
 
-  // LevelScreen
+  // LoadingScene
 
 
-  class LoadingScreen {
+  class LoadingScene {
       constructor() {
           this.text = [
               'HAROLD',
@@ -1769,12 +1743,10 @@
       update() {
           this.t++;
 
-          if (this.t === 36) {
-              Audio.initTracks();
-          }
+          if (this.t === 36) ;
 
-          if (this.t > 65) {
-              game.screens.pop();
+          if (this.t > 15) {
+              game.scenes.pop();
           }
       }
 
@@ -1856,10 +1828,10 @@
       }
   }
 
-  // LevelScreen
+  // IntroScene
 
 
-  class IntroScreen {
+  class IntroScene {
       constructor() {
           this.text = [
               'HAROLD',
@@ -1884,6 +1856,12 @@
       update() {
           this.t++;
 
+          if (this.t > 10) {
+              game.scenes.pop();
+              game.scenes.push(new LoadingScene());
+          }
+
+          /*
           this.vel[0].y = clamp(this.vel[0].y + GRAVITY, 0, TERMINAL_VELOCITY);
           if (this.pos[0].y > 15) {
               this.vel[1].y = clamp(this.vel[1].y + GRAVITY, 0, TERMINAL_VELOCITY);
@@ -1907,7 +1885,9 @@
           } else if (!this.screenshakes[2]) {
               this.screenshakes[2] = new ScreenShake(12, 0, 3);
           }
+              */
 
+          /*
           if (this.fadet >= 0) this.fadet++;
 
           if (this.fadet > 30) {
@@ -1923,7 +1903,7 @@
               if (this.screenshakes[i]) {
                   this.screenshakes[i].update();
               }
-          }
+          }*/
       }
 
       draw() {
@@ -2081,270 +2061,6 @@
       }
   }
 
-  // BloodPoolParticle
-
-
-  class BloodPoolParticle {
-      constructor(pos) {
-          this.frame = 0;
-          this.pos = { ...pos };
-          this.noClipEntity = true;
-          this.t = -1;
-          this.d = 56;
-
-          // TEMPORARY
-          this.noClipWall = true;
-
-          this.pos.y = this.pos.y + 8 - (this.pos.y % 8) + 2;
-      }
-
-      update() {
-          if (++this.t === this.d) this.cull = true;
-
-          this.frame = Math.floor(this.t * 8 / 16);
-          if (this.frame > 7) this.frame = 7;
-      }
-
-      draw() {
-          Sprite.drawViewportSprite(Sprite.bleed[this.frame], this.pos);
-      }
-  }
-
-  // Player
-
-
-  const MOVE_SPEED$1 = 0.5;
-
-  class Hedgehog {
-      constructor(pos) {
-          this.pos = { ...pos };
-          this.vel = { x: 0, y: 0 };
-          this.frame = 0;
-          this.radius = 4;
-          this.jumpLength = 0;
-          this.jumpFrames = 0;
-          this.facing = 1;
-          this.isJumping = true;
-          this.team = 2;
-          this.z = 4;
-          this.r = 0;
-
-          this.bb = [{ x: -5, y: -4 }, { x: 6, y: 4 }];
-          this.abb = [{ x: -5, y: -4 }, { x: 6, y: 4 }];
-          this.hbb = [{ x: -5, y: -4 }, { x: 6, y: 4 }];
-
-          // temp
-          this.noClipWall = true;
-          this.newClip = true;
-
-          this.t = 0;
-
-          this.stack = [];
-          this.stack.push({ walk: -1 });
-          this.stack.push({ pause: 5 });
-      }
-
-      update() {
-          this.t++;
-
-          let action = this.stack[this.stack.length - 1];
-
-          this.immune = !action.vulnerable;
-          this.r = 0;
-
-          if (action.pause) {
-              this.frame = 0;
-              action.pause--;
-              if (action.pause < 1) this.stack.pop();
-          } else if (action.walk) {
-              if (!game.levelScreen.entityIsOnSolidGround(this)) {
-                  this.frame = 0;
-                  this.vel.x *= 0.9;
-              }
-              this.vel.x += this.facing * MOVE_SPEED$1 / 5;
-              this.vel.x = clamp(this.vel.x, -MOVE_SPEED$1, MOVE_SPEED$1);
-
-              let nextTile = xy2qr({ x: this.pos.x + this.vel.x, y: this.pos.y });
-              if (game.levelScreen.tileIsPassable(nextTile.q, nextTile.r + 1) ||
-                  (this.vel.x < 0 && (this.pos.x - (nextTile.q - 1) * TILE_SIZE < 12) && !game.levelScreen.tileIsPassable(nextTile.q - 1, nextTile.r)) ||
-                  (this.vel.x > 0 && ((nextTile.q + 1) * TILE_SIZE - this.pos.x < 12) && !game.levelScreen.tileIsPassable(nextTile.q + 1, nextTile.r))) {
-                  this.vel.x = 0;
-                  this.stack.push({ turn: -1 });
-                  this.stack.push({ pause: 20 });
-              }
-              this.frame = Math.floor(this.t / 10) % 2 + 1;
-          } else if (action.turn) {
-              this.frame = 0;
-              this.facing = -this.facing;
-              this.vel.x = -this.vel.x;
-              this.stack.pop();
-          } else if (action.crush) {
-              action.crush--;
-              if (action.crush === 2) {
-                  game.levelScreen.addEntity(new BloodPoolParticle(this.pos));
-              }
-              if (action.crush === 0) {
-                  this.cull = true;
-              }
-              this.frame = 2 - Math.floor(action.crush / 3);
-          } else if (action.flip) {
-              action.flip++;
-              if (action.flip === 2) {
-                  this.vel.x = 0;
-              }
-              if (action.flip === 4) {
-                  this.vel.y = -2.3;
-              }
-              this.r = (action.flip / 10) * Math.PI;
-              if (action.flip === 10) {
-                  this.stack.pop();
-                  this.stack.push({ liedown: 1, vulnerable: true });
-              }
-          } else if (action.liedown) {
-              action.liedown++;
-              if (action.liedown > 120) {
-                  this.stack.pop();
-              }
-              this.r = Math.PI;
-              this.frame = (Math.floor(action.liedown / 5) % 2) + 1;
-          }
-
-          this.vel.y += GRAVITY;
-      }
-
-      draw() {
-          if (this.dead) {
-              Sprite.drawViewportSprite(Sprite.explosiona[this.frame], this.pos);
-          } else {
-              Sprite.drawViewportSprite(Sprite.hedgehog[this.facing === 1 ? 0 : 1][this.frame], this.pos, this.r);
-          }
-      }
-
-      landedNearby(enemy) {
-          if (!this.dead) {
-              this.stack.push({ flip: 1 });
-          }
-      }
-
-      crushedBy(enemy) {
-          if (!this.dead) {
-              this.dead = true;
-              this.stack = [{ crush: 8 }];
-              game.levelScreen.enemiesAlive--;
-              Audio.play(Audio.enemyDeath);
-          }
-      }
-
-      attack(victim) {
-          victim.dieHit(this);
-      }
-  }
-
-  // Player
-
-  const MOVE_SPEED = 0.5;
-
-  class Knight {
-      constructor(pos) {
-          this.pos = { ...pos };
-          this.vel = { x: 0, y: 0 };
-          this.frame = 0;
-          this.radius = 4;
-          this.jumpLength = 0;
-          this.jumpFrames = 0;
-          this.facing = 1;
-          this.isJumping = true;
-          this.team = 2;
-          this.z = 4;
-
-          this.bb = [{ x: -3, y: -6 }, { x: 3, y: 6 }];
-          this.hbb = [{ x: -3, y: -6 }, { x: 3, y: 0 }];
-          this.abb = [{ x: -3, y: -6 }, { x: 3, y: 6 }];
-
-          // temp
-          this.noClipWall = true;
-          this.newClip = true;
-
-          this.t = 0;
-
-          this.stack = [];
-          this.stack.push({ walk: -1 });
-          this.stack.push({ pause: 5 });
-      }
-
-      update() {
-          this.t++;
-
-          let action = this.stack[this.stack.length - 1];
-
-          if (!game.levelScreen.entityIsOnSolidGround(this)) {
-              this.frame = 0;
-              this.vel.x *= 0.9;
-          } else if (action.pause) {
-              this.vel.x = 0;
-              this.frame = 0;
-              action.pause--;
-              if (action.pause < 1) this.stack.pop();
-          } else if (action.walk) {
-              this.vel.x += this.facing * MOVE_SPEED / 5;
-              this.vel.x = clamp(this.vel.x, -MOVE_SPEED, MOVE_SPEED);
-
-              let nextTile = xy2qr({ x: this.pos.x + this.vel.x, y: this.pos.y });
-              if (game.levelScreen.tileIsPassable(nextTile.q, nextTile.r + 1) ||
-                  (this.vel.x < 0 && (this.pos.x - (nextTile.q - 1) * TILE_SIZE < 12) && !game.levelScreen.tileIsPassable(nextTile.q - 1, nextTile.r)) ||
-                  (this.vel.x > 0 && ((nextTile.q + 1) * TILE_SIZE - this.pos.x < 12) && !game.levelScreen.tileIsPassable(nextTile.q + 1, nextTile.r))) {
-                  this.vel.x = 0;
-                  this.stack.push({ turn: -1 });
-                  this.stack.push({ pause: 20 });
-              }
-              this.frame = Math.floor(this.t / 10) % 2 + 1;
-          } else if (action.turn) {
-              this.frame = 0;
-              this.facing = -this.facing;
-              this.vel.x = -this.vel.x;
-              this.stack.pop();
-          } else if (action.crush) {
-              action.crush--;
-              if (action.crush === 2) {
-                  game.levelScreen.addEntity(new BloodPoolParticle(this.pos));
-              }
-              if (action.crush === 0) {
-                  this.cull = true;
-              }
-              this.frame = 2 - Math.floor(action.crush / 3);
-          }
-
-          this.vel.y += GRAVITY;
-      }
-
-      draw() {
-          if (this.dead) {
-              Sprite.drawViewportSprite(Sprite.explosiona[this.frame], this.pos);
-          } else {
-              Sprite.drawViewportSprite(Sprite.knight[this.facing === 1 ? 0 : 1][this.frame], this.pos);
-          }
-      }
-
-      landedNearby(enemy) {
-          if (!this.dead) {
-              this.stack.push({ pause: 12 });
-          }
-      }
-
-      crushedBy(enemy) {
-          if (!this.dead) {
-              this.dead = true;
-              this.stack = [{ crush: 8 }];
-              game.levelScreen.enemiesAlive--;
-              Audio.play(Audio.enemyDeath);
-          }
-      }
-
-      attack(victim) {
-          victim.dieHit(this);
-      }
-  }
-
   // LandingParticle
 
 
@@ -2378,72 +2094,6 @@
 
       draw() {
           Sprite.drawViewportSprite(Sprite.particle[0], this.pos, this.r);
-      }
-  }
-
-  // LittlePigBoxParticle
-  //
-  // A little pig box particle is a "piece of debris" thrown from a broken crate,
-  // several are spawned flying off in different directions.
-
-
-  class LittlePigBoxParticle {
-      constructor(frame, pos, angle, r) {
-          this.frame = frame;
-          this.pos = { ...pos };
-          this.angle = angle;
-          this.vel = vector2point(angle2vector(this.angle, 1.7));
-          this.a = 10 * Math.PI / 180;
-          this.noClipEntity = true;
-          //this.bounce = true;
-          this.radius = 1;
-          this.r = r;
-          this.t = -1;
-          this.d = 60;
-
-          // TEMPORARY
-          //this.noClipWall = true;
-      }
-
-      update() {
-          if (++this.t === this.d) this.cull = true;
-          this.vel.x *= 0.9;
-          this.vel.y = clamp(this.vel.y + 0.11, -10, 2);
-          this.a *= 0.99;
-          this.r += this.a;
-      }
-
-      draw() {
-          Sprite.drawViewportSprite(Sprite.littlepigbox[this.frame], this.pos, this.r);
-      }
-  }
-
-  // ExplosionAParticle
-  //
-  // "Explosion A" is a short white/tan explosion used when the player
-  // lands on an enemy or breaks a crate.
-
-
-  class ExplosionAParticle {
-      constructor(pos) {
-          this.frame = 0;
-          this.pos = { ...pos };
-          this.noClipEntity = true;
-          this.t = -1;
-          this.d = 30;
-
-          // TEMPORARY
-          this.noClipWall = true;
-      }
-
-      update() {
-          if (++this.t === this.d) this.cull = true;
-          if (this.t === 16) this.frame++;
-          if (this.t === 25) this.frame++;
-      }
-
-      draw() {
-          Sprite.drawViewportSprite(Sprite.explosiona[this.frame], this.pos, this.r);
       }
   }
 
@@ -2483,128 +2133,6 @@
 
       draw() {
           Sprite.drawViewportSprite(Sprite.star2[this.frame], this.pos, this.r);
-      }
-  }
-
-  class LittlePig {
-      constructor(pos) {
-          this.pos = { ...pos };
-          this.vel = { x: 0, y: 0 };
-          this.bb = [{ x: -7, y: -5 }, { x: 7, y: 6 }];
-          this.t = 0;
-          this.r = 0;
-          this.z = 5;
-          this.immune = true;
-
-          this.noClipWall = true;
-          this.noClipEntity = true;
-          this.newClip = true;
-          this.id = Math.random();
-      }
-
-      update() {
-          this.t++;
-
-          if (this.t === 5) {
-              this.vel.y = JUMP_VELOCITY - GRAVITY;
-              this.newClip = false;
-              Audio.play(Audio.littleJump);
-          } else if (this.t > 5 && this.t < 32) {
-              this.r = (this.t / 32) * Math.PI * 2;
-          } else if (this.t === 32) {
-              this.r = 0;
-              this.vel.x = 3.7;
-              this.vel.y = JUMP_VELOCITY - GRAVITY - GRAVITY;
-              Audio.play(Audio.littleEscape);
-          } else if (this.t > 32) {
-              this.vel.y -= GRAVITY * 0.5;
-          }
-
-          if (this.t % 3 === 0) {
-              game.levelScreen.addEntity(new StarParticle(this.pos, 0));
-          }
-
-          this.vel.y += GRAVITY * 0.9;
-
-  /*        if (this.t > 80) {
-              this.r += 2 * Math.PI / 180;
-          }
-
-          if (this.t > 90) {
-              this.r += 2 * Math.PI / 180;
-          }
-
-          if (this.t > 100) {
-              this.r += 2 * Math.PI / 180;
-              this.vel.x += 0.05;
-          }*/
-
-          //if (this.vel.y > TERMINAL_VELOCITY) this.vel.y = TERMINAL_VELOCITY;
-
-          if (this.vel.x > 0) this.facing = 0;
-          if (this.vel.x < 0) this.facing = 1;
-
-          if (xy2uv(this.pos).u > Viewport.width) {
-              this.cull = true;
-              game.levelScreen.rescueLittlePig();
-          }
-      }
-
-      draw() {
-          Sprite.drawViewportSprite(Sprite.littlepig[0][0], this.pos, this.r);
-      }
-  }
-
-  // LittlePigBox
-
-
-  class LittlePigBox {
-      constructor(qr) {
-          this.qr = { ...qr };
-          this.bb = [{ x: -7, y: -5 }, { x: 7, y: 6 }];
-          this.immune = true;
-
-          this.pos = centerxy(qr2xy(qr));
-          this.pos.y = (qr.r + 1) * TILE_SIZE - this.bb[1].y;
-          this.t = 0;
-
-          this.shakeY = 0;
-      }
-
-      update() {
-          this.t++;
-
-          if (this.shakeX > 0) this.shakeX--;
-          if (this.shakeY > 0) this.shakeY--;
-
-          if (!this.shakeY && !this.shakeX && Math.random() < 0.01) {
-              this.shakeX = 30;
-          }
-          if (!this.shakeY && !this.shakeX && Math.random() < 0.01) {
-              this.shakeY = 8;
-          }
-      }
-
-      draw() {
-          let shakeX = 0, shakeY = 0;
-          if (this.shakeY) shakeY = -1;
-          if (this.shakeX) {
-              if (this.shakeX > 20 || this.shakeX < 10) shakeX = 1;
-          }
-          Sprite.drawViewportSprite(Sprite.littlepigbox[0], { x: this.pos.x + shakeX, y: this.pos.y + shakeY });
-      }
-
-      landedOnTile(tile) {
-          if (this.qr.r === tile.r - 1 && Math.abs(this.qr.q - tile.q) <= 2 && !this.cull) {
-              game.levelScreen.addEntity(new ExplosionAParticle({ x: this.pos.x, y: this.pos.y }));
-              game.levelScreen.addEntity(new LittlePigBoxParticle(1, { x: this.pos.x, y: this.pos.y }, 225 * Math.PI / 180, 0));
-              game.levelScreen.addEntity(new LittlePigBoxParticle(2, { x: this.pos.x + 2, y: this.pos.y }, 246 * Math.PI / 180, 0));
-              game.levelScreen.addEntity(new LittlePigBoxParticle(2, { x: this.pos.x + 2, y: this.pos.y }, 292 * Math.PI / 180, R180));
-              game.levelScreen.addEntity(new LittlePigBoxParticle(3, { x: this.pos.x + 4, y: this.pos.y }, 270 * Math.PI / 180, R45));
-              game.levelScreen.addEntity(new LittlePigBoxParticle(1, { x: this.pos.x + 10, y: this.pos.y }, 315 * Math.PI / 180, 0));
-              game.levelScreen.addEntity(new LittlePig(this.pos));
-              this.cull = true;
-          }
       }
   }
 
@@ -2870,74 +2398,6 @@
 
       done() {
           return this.replayIndex >= this.frames.length;
-      }
-  }
-
-  // LittlePigBox
-
-
-  const SIGN_TEXT = [
-      'pn TO MOVE HAROLD', //1
-      'SPACEBAR TO JUMP', //2
-      '', //3
-      'HAROLD IS HEAVY! SLAM THE GROUND\n' +
-      'NEAR CRATES TO BREAK THEM OPEN', //4
-      'BREAK OPEN EVERY CRATE AND RESCUE\n' +
-      'YOUR FRIENDS TO COMPLETE THE LEVEL', //5
-      'THE KING\'S KNIGHTS ARE STILL LOOKING FOR \n' +
-      'YOU... TRY LANDING ON THEM!', //6
-      'SOME FLOATING PLATFORMS ARE UNSTABLE.\n' +
-      'LAND ON THEM FROM HIGH ENOUGH AND YOU\n' +
-      'CAN TEMPORARILY KNOCK THEM DOWN!', //7
-      'SOME ENEMIES ARE TOO SPIKY TO LAND ON.\n' +
-      'TRY LANDING NEAR THEM TO SOFTEN THEM UP!' //8
-  ];
-
-  class Sign {
-      constructor(qr, signNumber) {
-          this.qr = { ...qr };
-          this.bb = [{ x: -7, y: -5 }, { x: 7, y: 6 }];
-          this.immune = true;
-          this.signIndex = signNumber - 1;
-
-          this.pos = centerxy(qr2xy(qr));
-          this.pos.y = (qr.r + 1) * TILE_SIZE - this.bb[1].y;
-          this.t = 0;
-
-          this.text = SIGN_TEXT[this.signIndex];
-          this.displayOverlay = false;
-          this.overlaySize = Text.measure(this.text);
-      }
-
-      update() {
-          this.t++;
-
-          if (this.shakeX > 0) this.shakeX--;
-          if (this.shakeY > 0) this.shakeY--;
-
-          if (!this.shakeY && !this.shakeX && Math.random() < 0.01) {
-              this.shakeX = 30;
-          }
-          if (!this.shakeY && !this.shakeX && Math.random() < 0.01) {
-              this.shakeY = 8;
-          }
-
-          this.displayOverlay = (manhattanXY(this.pos, game.levelScreen.player.pos) < 12);
-      }
-
-      draw() {
-          let shakeX = 0, shakeY = 0;
-          Sprite.drawViewportSprite(Sprite.sign[0], { x: this.pos.x + shakeX, y: this.pos.y + shakeY });
-      }
-
-      drawOverlay() {
-          let u = (Viewport.width - this.overlaySize.w) / 2;
-          let v = (Viewport.height / 2) + 24;
-
-          Viewport.ctx.fillStyle = rgba(44, 27, 46, 0.6);
-          Viewport.ctx.fillRect(u - 2, v - 2, this.overlaySize.w + 3, this.overlaySize.h + 2);
-
-          Text.drawText(Viewport.ctx, this.text, (Viewport.width - this.overlaySize.w) / 2, (Viewport.height / 2) + 24, 1, Text.white, Text.shadow);
       }
   }
 
@@ -10543,17 +10003,17 @@
       }
   };
 
-  // LevelScreen
+  // GameScene
 
 
-  class LevelScreen {
+  class GameScene {
       constructor(levelNumber, replay) {
           game.levelScreen = this;
 
           this.levelNumber = levelNumber;
           this.levelData = LevelData[this.levelNumber];
-          this.tiles = this.levelData.floors[0].tiles.map(row => [...row]);
-          this.tileshakemap = this.levelData.floors[0].tiles.map(row => row.map(x => ({ x: 0, y: 0 })));
+          //this.tiles = this.levelData.floors[0].tiles.map(row => [...row]);
+          //this.tileshakemap = this.levelData.floors[0].tiles.map(row => row.map(x => ({ x: 0, y: 0 })));
           this.entities = [];
           this.screenshakes = [];
           this.tileshakes = [];
@@ -10562,7 +10022,8 @@
           this.lastCloud = 0;
           this.lightUpSlamTiles = 0;
 
-          this.player = new Player(qr2xy({ q: this.levelData.spawn[0], r: this.levelData.spawn[1] }));
+          //this.player = new Player(qr2xy({ q: this.levelData.spawn[0], r: this.levelData.spawn[1] }));
+          this.player = new Player(qr2xy({ q: 0, r: 0 }));
 
           if (replay) {
               replay.reset();
@@ -10584,21 +10045,9 @@
 
           this.enemiesAlive = 0;
 
-          for (const obj of this.levelData.floors[0].objects) {
-              if (obj.name === 'BOX') {
-                  this.addEntity(new LittlePigBox({ q: obj.x, r: obj.y }));
-                  this.littlePigs++;
-              } else if (obj.name === 'KNIGHT') {
-                  this.addEntity(new Knight(qr2xy({ q: obj.x, r: obj.y })));
-                  this.enemiesAlive++;
-              } else if (obj.name === 'HEDGEHOG') {
-                  this.addEntity(new Hedgehog(qr2xy({ q: obj.x, r: obj.y })));
-                  this.enemiesAlive++;
-              } else if (obj.name.startsWith('SIGN')) {
-                  this.addEntity(new Sign({ q: obj.x, r: obj.y }, Number(obj.name.slice(4))));
-              } else if (obj.name === 'SLAM') {
-                  this.superslamTiles.push(this.extractSuperslamTiles({ q: obj.x, r: obj.y }));
-              }
+          //for (const obj of this.levelData.floors[0].objects) {
+          for (const obj of []) {
+              continue;
           }
 
           Camera.pos = { ...this.player.pos };
@@ -10611,7 +10060,8 @@
               Audio.play(Audio.levelStart);
           }
 
-          let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
+          //let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
+          let levelBottomY = 100;
           let cameraMaxY = levelBottomY - (TARGET_GAME_HEIGHT / 2);
 
           /*Camera.forceTarget = {
@@ -10675,127 +10125,15 @@
           Viewport.ctx.fillStyle = '#457cd6';
           Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-          let bottomSea = 4;
-          let topSea = 14;
-          let percentage = Math.floor(clamp(this.player.pos.y / (this.tiles.length * TILE_SIZE), 0, Infinity) * (topSea - bottomSea) + bottomSea);
+          Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
+          //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
+          Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
 
-          Viewport.ctx.fillStyle = '#4b3b9c';
-          Viewport.ctx.fillRect(0, Viewport.height - percentage, Viewport.width, percentage);
-
-          /*Viewport.ctx.fillStyle = '#8fcccb';
-          Viewport.ctx.fillRect(0, Viewport.height - percentage - 2, Viewport.width, 1);
-
-          Viewport.ctx.fillStyle = '#449489';
-          Viewport.ctx.fillRect(0, Viewport.height - percentage - 4, Viewport.width, 1);
-
-          Viewport.ctx.fillStyle = '#285763';
-          Viewport.ctx.fillRect(0, Viewport.height - percentage - 6, Viewport.width, 1);*/
-
-          // Render screenshakes (canvas translation)
-          let shakeX = 0, shakeY = 0;
-          this.screenshakes.forEach(shake => {
-              shakeX += shake.x;
-              shakeY += shake.y;
-          });
-          Viewport.ctx.translate(shakeX, shakeY);
-
-          for (let entity of this.entities) {
-              if (entity.z === -1) entity.draw();
-          }
-
-          this.drawTileShakemap();
-          this.drawTiles();
-
-          let overlayEntities = [];
-
-          for (let entity of this.entities) {
-              if (entity.z > -1) entity.draw();
-
-              if (entity.displayOverlay) {
-                  overlayEntities.push(entity);
-              }
-          }
-
-          //Text.drawText(Viewport.ctx, `${this.littlePigsRescued}/${this.littlePigs}`, 180, 5, 1, Text.duotone, Text.black);
-          //Text.drawText(Viewport.ctx, 'PRESS mnop\nTO DO', 10, 100, 1, Text.tan, Text.shadow);
-
-          for (let entity of overlayEntities) {
-              entity.drawOverlay();
-          }
-
-          let pigsToShow = clamp(Math.floor(this.t / 5) - 5, 0, this.littlePigs);
-          for (let i = 0; i < pigsToShow; i++) {
-              let frame = (this.littlePigsRescued > i) ? 0 : 3;
-              Viewport.ctx.drawImage(Sprite.littlepig[0][frame].img, Viewport.width - i * 11 - 13, 3);
-          }
+          return;
       }
 
       drawTiles() {
-          const offset = xy2uv({ x: 0, y: 0 });
-          const tiles = this.tiles;
-          const tileshakemap = this.tileshakemap;
-
-          // When we draw the tilesheet on the screen, we don't need to draw the ENTIRE tilesheet,
-          // so let's clamp what we draw the portion on-screen (and up to one tile off-screen,
-          // mostly for screenshake purposes).
-          const topleft = xy2qr(uv2xy({ u: 0, v: 0 }));
-          const bottomright = xy2qr(uv2xy({ u: TARGET_GAME_WIDTH, v: TARGET_GAME_HEIGHT }));
-          const r1 = clamp(topleft.r - 1, 0, tiles.length - 1);
-          const r2 = clamp(bottomright.r + 2, 0, tiles.length - 1);
-          const q1 = clamp(topleft.q - 1, 0, tiles[0].length - 1);
-          const q2 = clamp(bottomright.q + 2, 0, tiles[0].length - 1);
-
-          // "Background" tiles
-          for (let r = r1; r <= r2; r++) {
-              for (let q = q1; q <= q2; q++) {
-                  // Bit of a hack here... if the tile is a [background tile], draw that background tile
-                  // before we lay down tile outlines. But ALSO, separately, draw the [background tile]
-                  // if the tile is going to shake and the tile ABOVE it is a [background tile]. This
-                  // prevents unseemly sky showing through the castle interiors.
-                  //
-                  // (The real fix for this of course is to have multiple LAYERS of tiles, with bg and
-                  // fg in separate layers, but nobody has space for that!)
-                  if (tiles[r][q] === 6 || (r > 0 && tileshakemap[r][q].y > 0 && tiles[r - 1][q] === 6)) {
-                      Viewport.ctx.drawImage(Sprite.tiles[6].img,
-                          q * TILE_SIZE + offset.u,
-                          r * TILE_SIZE + offset.v);
-                  }
-              }
-          }
-
-          // "Foreground" tile outlines
-          for (let r = r1; r <= r2; r++) {
-              for (let q = q1; q <= q2; q++) {
-                  if (tiles[r][q] > 0 && tiles[r][q] !== 6) {
-                      let frame = 0;
-                      for (let i = 0; i < this.superslamTiles.length; i++) {
-                          if (r === this.superslamTiles[i].r && q >= this.superslamTiles[i].q1 && q <= this.superslamTiles[i].q2) {
-                              if (this.lightUpSlamTiles > 0) {
-                                  frame++;
-                              }
-                              if (this.lightUpSlamTiles > 6) {
-                                  frame++;
-                              }
-                          }
-                      }
-
-                      Viewport.ctx.drawImage(Sprite.tilebg[frame].img,
-                          q * TILE_SIZE + offset.u - 1 + tileshakemap[r][q].x,
-                          r * TILE_SIZE + offset.v - 1 + tileshakemap[r][q].y);
-                  }
-              }
-          }
-
-          // "Foreground" tiles
-          for (let r = r1; r <= r2; r++) {
-              for (let q = q1; q <= q2; q++) {
-                  if (tiles[r][q] > 0 && tiles[r][q] !== 6) {
-                      Viewport.ctx.drawImage(Sprite.tiles[tiles[r][q]].img,
-                          q * TILE_SIZE + offset.u + tileshakemap[r][q].x,
-                          r * TILE_SIZE + offset.v + tileshakemap[r][q].y);
-                  }
-              }
-          }
+          return;
       }
 
       drawTileShakemap() {
@@ -10821,9 +10159,7 @@
       }
 
       tileIsPassable(q, r) {
-          if (r < 0 || r >= this.tiles.length) return true;
-          if (q < 0 || q >= this.tiles[0].length) return true;
-          return this.tiles[r][q] < 1 || this.tiles[r][q] === 6;
+          return true;
       }
 
       entityIsOnSolidGround(entity) {
@@ -10973,57 +10309,6 @@
       }
   }
 
-  // VictoryScreen
-
-
-  class VictoryScreen {
-      constructor() {
-          this.text = [
-              'THANKS FOR PLAYING HAROLD IS HEAVY!',
-              '',
-              'HAROLD\'S ADVENTURE IS OVER FOR NOW, BUT YOU CAN',
-              'KEEP PLAYING IF YOU WANT! TRY PRESSING 1 2 3 4',
-              'ON YOUR KEYBOARD TO TELEPORT BACK TO YOUR',
-              'FAVORITE LEVEL.',
-              '',
-              ''
-          ];
-          this.frames = 0;
-
-          this.text[this.text.length - 1] = `SPEEDRUN SCORE    ${game.speedrunScore()}*`;
-      }
-
-      update() {
-          this.frames++;
-
-          if (this.frames === 30) {
-              if (game.lastReplay) {
-                  this.replay = game.lastReplay;
-                  this.level = new LevelScreen(this.replay.levelNumber, this.replay);
-              }
-          }
-
-          if (this.level) this.level.update();
-      }
-
-      draw() {
-          if (this.level) {
-              this.level.draw();
-              Viewport.ctx.globalAlpha = 0.6;
-          }
-
-          Viewport.ctx.fillStyle = '#457cd6';
-          Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
-
-          Viewport.ctx.globalAlpha = 1;
-
-          for (let i = 0; i < this.text.length; i++) {
-              let width = Text.measure(this.text[i], 1).w;
-              Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, 30 + i * 10, 1, Text.white, Text.shadow);
-          }
-      }
-  }
-
   // Game
 
 
@@ -11050,7 +10335,7 @@
       }
 
       reset() {
-          this.screens = [];
+          this.scenes = [];
           this.lastFrame = 0;
           this.nextLevel = 0;
 
@@ -11061,7 +10346,7 @@
               { time: 300 * 60, enemiesAlive: 10 }
           ];
 
-          this.screens.push(new IntroScreen());
+          this.scenes.push(new IntroScene());
       }
 
       start() {
@@ -11103,15 +10388,11 @@
           }
 
           // Hand off control to the current "screen" (for example, game screen or menu)
-          if (this.screens.length === 0) {
-              if (this.nextLevel >= LevelData.length) {
-                  this.screens.push(new VictoryScreen());
-              } else {
-                  this.screens.push(new LevelScreen(this.nextLevel));
-              }
+          if (this.scenes.length === 0) {
+              this.scenes.push(new GameScene());
           }
-          this.screen = this.screens[this.screens.length - 1];
-          this.screen.update();
+          this.scene = this.scenes[this.scenes.length - 1];
+          this.scene.update();
 
           // Do per-frame audio updates
           Audio.update();
@@ -11122,11 +10403,7 @@
           Viewport.ctx.setTransform(1, 0, 0, 1, 0, 0);
           Viewport.ctx.scale(Viewport.scale, Viewport.scale);
 
-          this.screen.draw();
-
-          Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
-          //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
-          Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
+          this.scene.draw();
 
           Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
 
@@ -11147,7 +10424,7 @@
       }
 
       restartLevel() {
-          this.screens.pop();
+          this.scenes.pop();
       }
 
       speedrunScore() {

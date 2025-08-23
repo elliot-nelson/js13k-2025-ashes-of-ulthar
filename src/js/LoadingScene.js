@@ -1,4 +1,4 @@
-// LevelScreen
+// LoadingScene
 
 import { Audio } from './Audio';
 import { game } from './Game';
@@ -7,7 +7,7 @@ import { Text } from './Text';
 import { clamp } from './Util';
 import { Viewport } from './Viewport';
 
-export class LoadingScreen {
+export class LoadingScene {
     constructor() {
         this.text = [
             'HAROLD',
@@ -21,11 +21,11 @@ export class LoadingScreen {
         this.t++;
 
         if (this.t === 36) {
-            Audio.initTracks();
+            //Audio.initTracks();
         }
 
-        if (this.t > 65) {
-            game.screens.pop();
+        if (this.t > 15) {
+            game.scenes.pop();
         }
     }
 

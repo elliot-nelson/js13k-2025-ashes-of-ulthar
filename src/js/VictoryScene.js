@@ -1,13 +1,13 @@
-// VictoryScreen
+// VictoryScene
 
 import { Text } from './Text';
 import { Viewport } from './Viewport';
 import { rgba, createCanvas, clamp, partialText, uv2xy, xy2qr, xy2uv, qr2xy, centerxy } from './Util';
 import { game } from './Game';
 import { Audio } from './Audio';
-import { LevelScreen } from './LevelScreen';
+import { GameScene } from './GameScene';
 
-export class VictoryScreen {
+export class VictoryScene {
     constructor() {
         this.text = [
             'THANKS FOR PLAYING HAROLD IS HEAVY!',
@@ -30,7 +30,7 @@ export class VictoryScreen {
         if (this.frames === 30) {
             if (game.lastReplay) {
                 this.replay = game.lastReplay;
-                this.level = new LevelScreen(this.replay.levelNumber, this.replay);
+                this.level = new GameScene(this.replay.levelNumber, this.replay);
             }
         }
 

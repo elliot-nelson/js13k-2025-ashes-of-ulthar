@@ -1,4 +1,4 @@
-// LevelScreen
+// GameScene
 
 import { Audio } from './Audio';
 import { BigArrowParticle } from './BigArrowParticle';
@@ -15,6 +15,7 @@ import { Player } from './Player';
 import { Replay } from './Replay';
 import { Sign } from './Sign';
 import { Sprite } from './Sprite';
+import { Text } from './Text';
 import { StarParticle } from './StarParticle';
 import { clamp, qr2xy, uv2xy, xy2qr, xy2uv } from './Util';
 import { Viewport } from './Viewport';
@@ -22,14 +23,14 @@ import { LevelData } from './generated/LevelData-gen';
 import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
 
-export class LevelScreen {
+export class GameScene {
     constructor(levelNumber, replay) {
         game.levelScreen = this;
 
         this.levelNumber = levelNumber;
         this.levelData = LevelData[this.levelNumber];
-        this.tiles = this.levelData.floors[0].tiles.map(row => [...row]);
-        this.tileshakemap = this.levelData.floors[0].tiles.map(row => row.map(x => ({ x: 0, y: 0 })));
+        //this.tiles = this.levelData.floors[0].tiles.map(row => [...row]);
+        //this.tileshakemap = this.levelData.floors[0].tiles.map(row => row.map(x => ({ x: 0, y: 0 })));
         this.entities = [];
         this.screenshakes = [];
         this.tileshakes = [];
@@ -38,7 +39,8 @@ export class LevelScreen {
         this.lastCloud = 0;
         this.lightUpSlamTiles = 0;
 
-        this.player = new Player(qr2xy({ q: this.levelData.spawn[0], r: this.levelData.spawn[1] }));
+        //this.player = new Player(qr2xy({ q: this.levelData.spawn[0], r: this.levelData.spawn[1] }));
+        this.player = new Player(qr2xy({ q: 0, r: 0 }));
 
         if (replay) {
             replay.reset();
@@ -60,7 +62,10 @@ export class LevelScreen {
 
         this.enemiesAlive = 0;
 
-        for (const obj of this.levelData.floors[0].objects) {
+        //for (const obj of this.levelData.floors[0].objects) {
+        for (const obj of []) {
+            continue;
+
             if (obj.name === 'BOX') {
                 this.addEntity(new LittlePigBox({ q: obj.x, r: obj.y }));
                 this.littlePigs++;
@@ -87,7 +92,8 @@ export class LevelScreen {
             Audio.play(Audio.levelStart);
         }
 
-        let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
+        //let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
+        let levelBottomY = 100;
         let cameraMaxY = levelBottomY - (TARGET_GAME_HEIGHT / 2);
 
         /*Camera.forceTarget = {
@@ -151,6 +157,12 @@ export class LevelScreen {
         Viewport.ctx.fillStyle = '#457cd6';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
+        Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
+        //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
+        Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
+
+        return;
+
         let bottomSea = 4;
         let topSea = 14;
         let percentage = Math.floor(clamp(this.player.pos.y / (this.tiles.length * TILE_SIZE), 0, Infinity) * (topSea - bottomSea) + bottomSea);
@@ -207,6 +219,8 @@ export class LevelScreen {
     }
 
     drawTiles() {
+        return;
+
         const offset = xy2uv({ x: 0, y: 0 });
         const tiles = this.tiles;
         const tileshakemap = this.tileshakemap;
@@ -297,6 +311,7 @@ export class LevelScreen {
     }
 
     tileIsPassable(q, r) {
+        return true;
         if (r < 0 || r >= this.tiles.length) return true;
         if (q < 0 || q >= this.tiles[0].length) return true;
         return this.tiles[r][q] < 1 || this.tiles[r][q] === 6;

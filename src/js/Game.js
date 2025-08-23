@@ -3,11 +3,11 @@
 import { Audio } from './Audio';
 import { Camera } from './Camera';
 import { FPS } from './Constants';
-import { IntroScreen } from './IntroScreen';
-import { LevelScreen } from './LevelScreen';
+import { IntroScene } from './IntroScene';
+import { GameScene } from './GameScene';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
-import { VictoryScreen } from './VictoryScreen';
+import { VictoryScene } from './VictoryScene';
 import { Viewport } from './Viewport';
 import { LevelData } from './generated/LevelData-gen';
 import { Input } from './input/Input';
@@ -35,7 +35,7 @@ export class Game {
     }
 
     reset() {
-        this.screens = [];
+        this.scenes = [];
         this.lastFrame = 0;
         this.nextLevel = 0;
 
@@ -46,7 +46,7 @@ export class Game {
             { time: 300 * 60, enemiesAlive: 10 }
         ];
 
-        this.screens.push(new IntroScreen());
+        this.scenes.push(new IntroScene());
     }
 
     start() {
@@ -88,15 +88,11 @@ export class Game {
         }
 
         // Hand off control to the current "screen" (for example, game screen or menu)
-        if (this.screens.length === 0) {
-            if (this.nextLevel >= LevelData.length) {
-                this.screens.push(new VictoryScreen());
-            } else {
-                this.screens.push(new LevelScreen(this.nextLevel));
-            }
+        if (this.scenes.length === 0) {
+            this.scenes.push(new GameScene());
         }
-        this.screen = this.screens[this.screens.length - 1];
-        this.screen.update();
+        this.scene = this.scenes[this.scenes.length - 1];
+        this.scene.update();
 
         // Do per-frame audio updates
         Audio.update();
@@ -107,11 +103,7 @@ export class Game {
         Viewport.ctx.setTransform(1, 0, 0, 1, 0, 0);
         Viewport.ctx.scale(Viewport.scale, Viewport.scale);
 
-        this.screen.draw();
-
-        Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
-        //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
-        Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
+        this.scene.draw();
 
         Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
 
@@ -132,7 +124,7 @@ export class Game {
     }
 
     restartLevel() {
-        this.screens.pop();
+        this.scenes.pop();
     }
 
     speedrunScore() {
