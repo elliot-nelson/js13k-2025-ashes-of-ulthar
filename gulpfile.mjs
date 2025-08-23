@@ -181,7 +181,7 @@ async function exportTileSheet() {
 }
 
 function copyAssets() {
-    let pipeline = gulp.src('src/assets/generated/spritesheet-gen.png')
+    let pipeline = gulp.src('src/assets/generated/spritesheet-gen.png', { encoding: false })
         .pipe(size({ title: 'spritesheet  pre' }));
 
     if (!fast) {
