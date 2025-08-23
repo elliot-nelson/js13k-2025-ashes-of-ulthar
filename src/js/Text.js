@@ -43,6 +43,13 @@ export const Text = {
         Text.pig = recolor(Text.white, rgba(227, 66, 98, 1));
         Text.duotone = recolorDuotone(Text.white, '#f2b63d', '#fff4e0');
         Text.duotone_red = recolorDuotone(Text.white, '#ffaa5e', '#ffd4a3', rgba(255, 0, 0, 0.7));
+        Text.palette = [
+            recolor(Text.white, '#0a1a2f'),
+            recolor(Text.white, '#04373b'),
+            recolor(Text.white, '#1a644c'),
+            recolor(Text.white, '#40985c'),
+            recolor(Text.white, '#d1cb95')
+        ];
     },
 
     drawText(ctx, text, u, v, scale = 1, font = Text.duotone, shadow) {

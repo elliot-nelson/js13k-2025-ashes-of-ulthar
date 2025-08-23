@@ -22,6 +22,7 @@ import { Viewport } from './Viewport';
 import { LevelData } from './generated/LevelData-gen';
 import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
+import { Button } from './Button';
 
 export class GameScene {
     constructor() {
@@ -33,6 +34,12 @@ export class GameScene {
         this.influence = 0;
         this.workers = 0;
         this.sanity = 100;
+
+        this.buttons = [
+            new Button(20, 140, 'V', 'Recruit Villager'),
+            new Button(20, 140 + 12, 'W', 'Haha'),
+            new Button(20, 140 + 24, 'B', 'Chubby Bunny')
+        ];
     }
 
     update() {
@@ -116,10 +123,10 @@ export class GameScene {
     }
 
     draw() {
-        Viewport.ctx.fillStyle = '#457cd6';
+        Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
+        Viewport.ctx.drawImage(Sprite.wip[2].img, 0, -32);
         //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
         Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
 
@@ -127,6 +134,9 @@ export class GameScene {
         Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
         Text.drawText(Viewport.ctx, 'WORKERS' + this.workers, 70, 100, 1, Text.white);
 
+        for (const button of this.buttons) {
+            button.draw();
+        }
         return;
 
         let bottomSea = 4;
