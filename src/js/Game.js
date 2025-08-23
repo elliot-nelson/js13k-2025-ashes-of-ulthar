@@ -109,6 +109,10 @@ export class Game {
 
         this.screen.draw();
 
+        Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
+        //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
+        Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
+
         Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
 
         Viewport.ctx.fillStyle = 'black';

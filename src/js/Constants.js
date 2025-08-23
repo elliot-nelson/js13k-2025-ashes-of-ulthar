@@ -7,8 +7,8 @@ export const SPRITESHEET_URI = 'sprites.png';
 
 // The game's desired dimensions in pixels - the actual dimensions can be adjusted
 // slightly by the Viewport module.
-export const TARGET_GAME_WIDTH = 240;
-export const TARGET_GAME_HEIGHT = 135;
+export const TARGET_GAME_WIDTH = 320;
+export const TARGET_GAME_HEIGHT = 180;
 
 // Size in pixels of each map tile
 export const TILE_SIZE = 8;

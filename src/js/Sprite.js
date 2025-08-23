@@ -34,6 +34,8 @@ export const Sprite = {
 
         Sprite.littlepigbox = SpriteSheet.littlepigbox.map(initBasicSprite, { x: 7, y: 5 });
 
+        Sprite.wip = SpriteSheet.wip.map(initBasicSprite, { x: 0, y: 0 });
+
         Sprite.explosiona = SpriteSheet.explosiona.map(initBasicSprite);
         Sprite.explosionb = SpriteSheet.explosionb.map(initBasicSprite);
 
