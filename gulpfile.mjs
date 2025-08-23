@@ -1,33 +1,33 @@
 // -----------------------------------------------------------------------------
 // Imports
 // -----------------------------------------------------------------------------
-const advpng            = require('imagemin-advpng');
-const chalk             = require('chalk');
-const childProcess      = require('child_process');
-const fs                = require('fs');
-const gulp              = require('gulp');
-const log               = require('fancy-log');
-const rollup            = require('rollup');
-const roadroller        = require('roadroller');
+import advpng from 'imagemin-advpng';
+import chalk from 'chalk';
+import childProcess from 'child_process';
+import fs from 'fs';
+import gulp from 'gulp';
+import log from 'fancy-log';
+import * as rollup from 'rollup';
+import * as roadroller from 'roadroller';
 
-const AsepriteCli       = require('./tools/aseprite-cli');
-const ImageDataParser   = require('./tools/image-data-parser');
-const LevelConverter    = require('./tools/level-converter');
+import AsepriteCli from './tools/aseprite-cli.js';
+import ImageDataParser from './tools/image-data-parser.js';
+import LevelConverter from './tools/level-converter.js';
 
 // -----------------------------------------------------------------------------
 // Gulp Plugins
 // -----------------------------------------------------------------------------
-const advzip            = require('gulp-advzip');
-const concat            = require('gulp-concat');
-const cleancss          = require('gulp-clean-css');
-const htmlmin           = require('gulp-htmlmin');
-const imagemin          = require('gulp-imagemin');
-const rename            = require('gulp-rename');
-const size              = require('gulp-size');
-const sourcemaps        = require('gulp-sourcemaps');
-const template          = require('gulp-template');
-const terser            = require('gulp-terser');
-const zip               = require('gulp-zip');
+import advzip from 'gulp-advzip';
+import concat from 'gulp-concat';
+import cleancss from 'gulp-clean-css';
+import htmlmin from 'gulp-htmlmin';
+import imagemin from 'gulp-imagemin';
+import rename from 'gulp-rename';
+import size from 'gulp-size';
+import sourcemaps from 'gulp-sourcemaps';
+import template from 'gulp-template';
+import terser from 'gulp-terser';
+import zip from 'gulp-zip';
 
 // -----------------------------------------------------------------------------
 // Flags
@@ -58,7 +58,8 @@ async function compileBuild() {
         });
     } catch (error) {
         // Use rollup's error output
-        require('./node_modules/rollup/dist/shared/loadConfigFile').handleError(error, true);
+        const { handleError } = await import('./node_modules/rollup/dist/shared/loadConfigFile.js');
+        handleError(error, true);
         throw error;
     }
 }
@@ -147,10 +148,6 @@ function buildCss() {
 // Assets Build
 // -----------------------------------------------------------------------------
 async function exportSpriteSheet() {
-    // Exporting the sprite sheet is the first step - using Aseprite, we take as input
-    // all of our source aseprite files, and spit out a single spritesheet PNG and a JSON
-    // file containing the x/y/w/h coordinates of the sprites in the spritesheet.
-
     let src = 'src/assets/*.aseprite';
     let png = 'src/assets/generated/spritesheet-gen.png';
     let data = 'src/assets/generated/spritesheet-gen.json';
@@ -164,10 +161,6 @@ async function exportSpriteSheet() {
 }
 
 async function generateSpriteSheetData() {
-    // After exporting the sprite sheet, we use the JSON data to update a source file used by
-    // our asset loader in the game. This way we can freely update images without ever
-    // hand-edting any coordinate data or worrying about the composition of the spritesheet.
-
     let data = 'src/assets/generated/spritesheet-gen.json';
     let image = 'dist/temp/sprites.png';
     let output = 'src/js/generated/SpriteSheet-gen.js';
@@ -176,9 +169,6 @@ async function generateSpriteSheetData() {
 }
 
 async function exportTileSheet() {
-    // The tile sheet is not actually used in the game, but makes it nice and neat to edit
-    // levels in Tiled. (TBD!)
-
     let src = 'src/assets/tiles.aseprite';
     let png = 'src/assets/generated/tiles-gen.png';
 
@@ -194,7 +184,6 @@ function copyAssets() {
     let pipeline = gulp.src('src/assets/generated/spritesheet-gen.png')
         .pipe(size({ title: 'spritesheet  pre' }));
 
-    // Fast Mode Shortcut
     if (!fast) {
         pipeline = pipeline
         .pipe(imagemin())
@@ -289,9 +278,6 @@ async function ready() {
     return;
     if (!watching) return;
 
-    // This function doesn't affect the build at all, it's something I use as the
-    // build gets longer and slower in watch mode -- it flashes and dings the terminal
-    // when it's safe to refresh my browser.
     const BELL = '\u0007';
     const REVERSE = '\x1B[?5h';
     const NORMAL = '\x1B[?5l';
@@ -307,29 +293,22 @@ async function ready() {
 function watch() {
     watching = true;
 
-    // The watch task watches for any file changes in the src/ folder, _except_ for
-    // edits to generated files.
     gulp.watch(['src/**', '!src/**/generated/**'], build);
 }
 
 // -----------------------------------------------------------------------------
 // Task List
 // -----------------------------------------------------------------------------
-module.exports = {
-    // Potentially useful subtasks
+export {
     compileBuild,
     minifyBuild,
-
-    // Core build steps
     buildJs,
     buildCss,
     buildAssets,
     buildHtml,
     buildZip,
-
-    // Primary entry points
     build,
-    watch,
-
-    default: gulp.series(build, watch)
+    watch
 };
+
+export default gulp.series(build, watch);
