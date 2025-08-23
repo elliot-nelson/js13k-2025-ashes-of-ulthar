@@ -24,73 +24,35 @@ import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
 
 export class GameScene {
-    constructor(levelNumber, replay) {
-        game.levelScreen = this;
-
-        this.levelNumber = levelNumber;
-        this.levelData = LevelData[this.levelNumber];
-        //this.tiles = this.levelData.floors[0].tiles.map(row => [...row]);
-        //this.tileshakemap = this.levelData.floors[0].tiles.map(row => row.map(x => ({ x: 0, y: 0 })));
+    constructor() {
+        game.gameScene = this;
         this.entities = [];
         this.screenshakes = [];
-        this.tileshakes = [];
-        this.superslamTiles = [];
+
         this.t = 0;
-        this.lastCloud = 0;
-        this.lightUpSlamTiles = 0;
-
-        //this.player = new Player(qr2xy({ q: this.levelData.spawn[0], r: this.levelData.spawn[1] }));
-        this.player = new Player(qr2xy({ q: 0, r: 0 }));
-
-        if (replay) {
-            replay.reset();
-            this.player.replay = replay;
-        } else {
-            this.replay = new Replay(levelNumber);
-            this.player.recording = this.replay;
-        }
-
-        this.addEntity(this.player);
-        this.addEntity(new StarParticle(this.player.pos));
-        this.addEntity(new StarParticle(this.player.pos));
-        this.addEntity(new StarParticle(this.player.pos));
-        this.addEntity(new StarParticle(this.player.pos));
-        this.addEntity(new CloudParticle(true));
-
-        this.littlePigs = 0;
-        this.littlePigsRescued = 0;
-
-        this.enemiesAlive = 0;
-
-        //for (const obj of this.levelData.floors[0].objects) {
-        for (const obj of []) {
-            continue;
-
-            if (obj.name === 'BOX') {
-                this.addEntity(new LittlePigBox({ q: obj.x, r: obj.y }));
-                this.littlePigs++;
-            } else if (obj.name === 'KNIGHT') {
-                this.addEntity(new Knight(qr2xy({ q: obj.x, r: obj.y })));
-                this.enemiesAlive++;
-            } else if (obj.name === 'HEDGEHOG') {
-                this.addEntity(new Hedgehog(qr2xy({ q: obj.x, r: obj.y })));
-                this.enemiesAlive++;
-            } else if (obj.name.startsWith('SIGN')) {
-                this.addEntity(new Sign({ q: obj.x, r: obj.y }, Number(obj.name.slice(4))));
-            } else if (obj.name === 'SLAM') {
-                this.superslamTiles.push(this.extractSuperslamTiles({ q: obj.x, r: obj.y }));
-            }
-        }
-
-        Camera.pos = { ...this.player.pos };
+        this.influence = 0;
+        this.workers = 0;
+        this.sanity = 100;
     }
 
     update() {
         this.t++;
 
-        if (this.t === 4) {
-            Audio.play(Audio.levelStart);
+        if (!this.nextSecond) {
+            this.nextSecond = this.t + 60;
         }
+
+        if (this.t >= this.nextSecond) {
+            this.sanity -= 1;
+            this.influence += 1;
+            this.nextSecond = this.t + 60;
+        }
+
+        if (this.t === 4) {
+        //    Audio.play(Audio.levelStart);
+        }
+
+        return;
 
         //let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
         let levelBottomY = 100;
@@ -160,6 +122,10 @@ export class GameScene {
         Viewport.ctx.drawImage(Sprite.wip[2].img, 0, 0);
         //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
         Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
+
+        Text.drawText(Viewport.ctx, 'SANITY ' + this.sanity, 70, 70, 1, Text.white);
+        Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
+        Text.drawText(Viewport.ctx, 'WORKERS' + this.workers, 70, 100, 1, Text.white);
 
         return;
 
@@ -461,5 +427,9 @@ export class GameScene {
             this.addEntity(new CloudParticle());
             this.lastCloud = this.t;
         }
+    }
+
+    nextWorkerCost() {
+        return 4 * Math.pow(1.3, this.workers);
     }
 }
