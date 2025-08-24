@@ -23,6 +23,10 @@ import { LevelData } from './generated/LevelData-gen';
 import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
 import { Button } from './Button';
+import { Input } from './input/Input';
+
+const BUTTON_RECRUIT_VILLAGER = 0;
+const BUTTON_HAHA = 1;
 
 export class GameScene {
     constructor() {
@@ -35,14 +39,29 @@ export class GameScene {
         this.workers = 0;
         this.sanity = 100;
 
-        this.buttons = [
-            new Button(20, 140, 'V', 'Recruit Villager'),
-            new Button(20, 140 + 12, 'W', 'Haha'),
-            new Button(20, 140 + 24, 'B', 'Chubby Bunny')
-        ];
+        this.buttons = [];
+        this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
+        this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
+        this.buttons.push(new Button(20, 140 + 24, 'B', 'Chubby Bunny'));
     }
 
     update() {
+        // Player input
+
+                // move
+        ///this.pos.x += this.vel.x;
+        ///this.pos.y += this.vel.y;
+
+        if (Input.pressed[Input.Action.RECRUIT_VILLAGER]) {
+            const cost = this.nextWorkerCost();
+            if (this.influence >= cost) {
+                this.influence -= cost;
+                this.workers++;
+            }
+        }
+
+        // Game ticks
+
         this.t++;
 
         if (!this.nextSecond) {
@@ -58,6 +77,10 @@ export class GameScene {
         if (this.t === 4) {
         //    Audio.play(Audio.levelStart);
         }
+
+        // Button UI Elements
+
+        this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
 
         return;
 
@@ -440,6 +463,6 @@ export class GameScene {
     }
 
     nextWorkerCost() {
-        return 4 * Math.pow(1.3, this.workers);
+        return Math.floor(4 * Math.pow(1.3, this.workers));
     }
 }

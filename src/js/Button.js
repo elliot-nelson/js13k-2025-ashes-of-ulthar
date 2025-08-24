@@ -38,8 +38,11 @@ export class Button {
     }
 
     draw() {
-        Viewport.ctx.drawImage(Sprite.button[0].img, this.u, this.v);
-        Text.drawText(Viewport.ctx, this.hotkey, this.u + 2, this.v + 2, 1, Text.palette[0]);
-        Text.drawText(Viewport.ctx, this.text.toUpperCase(), this.u + 11, this.v + 2, 1, Text.palette[4]);
+        const frame = this.active ? 0 : 2;
+        const colorIndex = this.active ? 4 : 2;
+        const bgColorIndex = this.active ? 0 : 2;
+        Viewport.ctx.drawImage(Sprite.button[frame].img, this.u, this.v);
+        Text.drawText(Viewport.ctx, this.hotkey, this.u + 2, this.v + 2, 1, Text.palette[bgColorIndex]);
+        Text.drawText(Viewport.ctx, this.text.toUpperCase(), this.u + 11, this.v + 2, 1, Text.palette[colorIndex]);
     }
 }

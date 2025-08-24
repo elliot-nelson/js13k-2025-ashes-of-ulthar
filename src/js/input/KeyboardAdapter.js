@@ -12,6 +12,7 @@ export const KeyboardAdapter = {
             KeyA:        Input.Action.LEFT,
             KeyS:        Input.Action.DOWN,
             KeyD:        Input.Action.RIGHT,
+            KeyV:        Input.Action.RECRUIT_VILLAGER,
             Space:       Input.Action.JUMP,
             Enter:       Input.Action.CONTINUE,
             ArrowUp:     Input.Action.UP,
