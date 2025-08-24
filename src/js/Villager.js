@@ -7,48 +7,15 @@ import { game } from './Game';
 import { Sprite } from './Sprite';
 import { clamp, xy2qr } from './Util';
 import { Viewport } from './Viewport';
+import { TweenChain } from './TweenChain';
 
-export const GATHERER = 1;
+export const WOODCUTTER = 1;
+export const STONECUTTER = 2;
+export const BUTCHER = 3;
+export const FIREKEEPER = 4;
+export const EFFIGYMAKER = 5;
 
-const JOB_DETAIL = {
-    xyz: [120, 60, 120]
-};
-
-const ROUNDTRIP = 60 * 5;
-
-export class Sunder {
-    constructor(tweenArray) {
-        this.t = -1;
-        this.tweenArray = tweenArray;
-    }
-
-    update() {
-        this.t++;
-
-        if (this.t < this.tweenArray[0][0]) {
-            this.value = this.tweenArray[0][2];
-            return;
-        }
-
-        if (this.t >= this.tweenArray[this.tweenArray.length - 1][1]) {
-            this.value = this.tweenArray[this.tweenArray.length - 1][3];
-            this.finished = true;
-            return;
-        }
-
-        for (let i = 0; i < this.tweenArray.length; i++) {
-            if (this.t >= this.tweenArray[i][0] && this.t < this.tweenArray[i][1]) {
-                this.value = (this.tweenArray[i][3] - this.tweenArray[i][2])
-                    * (this.t - this.tweenArray[i][0])
-                    / (this.tweenArray[i][1] - this.tweenArray[i][0])
-                    + this.tweenArray[i][2];
-                break;
-            }
-        }
-    }
-}
-
-export class GathererPath extends Sunder {
+export class WoodcutterTask extends TweenChain {
     constructor() {
         super([
             [0, 120, 0, 130],
@@ -56,41 +23,57 @@ export class GathererPath extends Sunder {
             [180, 300, 130, 0]
         ]);
     }
+
+    completeTask() {
+        game.gameScene.wood += 5;
+    }
 }
 
-export class Gatherer {
+export class StonecutterTask extends TweenChain {
     constructor() {
-        this.frame = 0;
-        this.t++;
+        super([
+            [0, 120, 0, 130],
+            [120, 180, 130, 130],
+            [180, 300, 130, 0]
+        ]);
     }
 
-    update() {
+    completeTask() {
+        game.gameScene.stone += 5;
     }
 }
-
 
 export class Villager {
     constructor() {
-        this.job = GATHERER;
+        this.job = WOODCUTTER;
         this.t = 0;
     }
 
     update() {
-        if (!this.path) {
-            this.path = new GathererPath();
+        if (!this.task) {
+            this.task = this.newTask();
         }
 
-        this.path.update();
-        console.log(this.path);
+        this.task.update();
 
-        this.pos = { u: 160 + this.path.value, v: 100 };
+        this.pos = { u: 160 + this.task.value, v: 100 };
 
-        if (this.path.finished) {
-            this.path = undefined;
+        if (this.task.finished) {
+            this.task.completeTask();
+            this.task = undefined;
         }
     }
 
     draw() {
         Viewport.ctx.drawImage(Sprite.villager[0].img, this.pos.u, this.pos.v);
+    }
+
+    newTask() {
+        switch (this.job) {
+            case WOODCUTTER:
+                return new WoodcutterTask();
+            case STONECUTTER:
+                return new StonecutterTask();
+        }
     }
 }

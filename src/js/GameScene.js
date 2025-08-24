@@ -39,6 +39,8 @@ export class GameScene {
         this.influence = 5;
         this.workers = 0;
         this.sanity = 100;
+        this.wood = 0;
+        this.stone = 0;
 
         this.buttons = [];
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
@@ -167,6 +169,9 @@ export class GameScene {
         Text.drawText(Viewport.ctx, 'SANITY ' + this.sanity, 70, 70, 1, Text.white);
         Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
         Text.drawText(Viewport.ctx, 'WORKERS' + this.workers, 70, 100, 1, Text.white);
+
+        Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
+        Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
 
         for (const villager of this.villagers) {
             villager.draw();
