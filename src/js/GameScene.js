@@ -24,6 +24,7 @@ import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
 import { Button } from './Button';
 import { Input } from './input/Input';
+import { Villager } from './Villager';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_HAHA = 1;
@@ -35,7 +36,7 @@ export class GameScene {
         this.screenshakes = [];
 
         this.t = 0;
-        this.influence = 0;
+        this.influence = 5;
         this.workers = 0;
         this.sanity = 100;
 
@@ -43,6 +44,8 @@ export class GameScene {
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
         this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
         this.buttons.push(new Button(20, 140 + 24, 'B', 'Chubby Bunny'));
+
+        this.villagers = [];
     }
 
     update() {
@@ -57,6 +60,7 @@ export class GameScene {
             if (this.influence >= cost) {
                 this.influence -= cost;
                 this.workers++;
+                this.villagers.push(new Villager());
             }
         }
 
@@ -72,6 +76,7 @@ export class GameScene {
             this.sanity -= 1;
             this.influence += 1;
             this.nextSecond = this.t + 60;
+
         }
 
         if (this.t === 4) {
@@ -81,6 +86,12 @@ export class GameScene {
         // Button UI Elements
 
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
+
+        // Villagres
+
+        for (const villager of this.villagers) {
+            villager.update();
+        }
 
         return;
 
@@ -157,9 +168,14 @@ export class GameScene {
         Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
         Text.drawText(Viewport.ctx, 'WORKERS' + this.workers, 70, 100, 1, Text.white);
 
+        for (const villager of this.villagers) {
+            villager.draw();
+        }
+
         for (const button of this.buttons) {
             button.draw();
         }
+
         return;
 
         let bottomSea = 4;
@@ -463,6 +479,6 @@ export class GameScene {
     }
 
     nextWorkerCost() {
-        return Math.floor(4 * Math.pow(1.3, this.workers));
+        return Math.floor(1 * Math.pow(1.3, this.workers));
     }
 }
