@@ -26,6 +26,20 @@ export class IdleTask extends TweenChain {
     completeTask() { }
 }
 
+export class ButcherTask extends TweenChain {
+    constructor() {
+        super([
+            { t1: 0, t2: 120, v1: 0, v2: -90 },
+            { t1: 120, t2: 180, v1: -90, v2: -90 },
+            { t1: 180, t2: 300, v1: -90, v2: 0 }
+        ]);
+    }
+
+    completeTask() {
+        game.gameScene.meat += 5;
+    }
+}
+
 export class WoodcutterTask extends TweenChain {
     constructor() {
         super([
@@ -56,7 +70,7 @@ export class StonecutterTask extends TweenChain {
 
 export class Villager {
     constructor() {
-        this.job = WOODCUTTER;
+        this.job = BUTCHER;
         this.t = 0;
     }
 
@@ -81,6 +95,8 @@ export class Villager {
 
     newTask() {
         switch (this.job) {
+            case BUTCHER:
+                return new ButcherTask();
             case WOODCUTTER:
                 return new WoodcutterTask();
             case STONECUTTER:

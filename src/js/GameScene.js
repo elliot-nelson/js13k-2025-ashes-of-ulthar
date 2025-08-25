@@ -196,6 +196,7 @@ export class GameScene {
 
         Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
         Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
+        Text.drawText(Viewport.ctx, 'MEAT ' + this.meat, 230, 130, 1, Text.white);
 
         for (const villager of this.villagers) {
             villager.draw();
