@@ -186,7 +186,7 @@ export class GameScene {
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.wip[2].img, 0, -32);
+        Viewport.ctx.drawImage(Sprite.wip[6].img, 0, -32);
         //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
         Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
 
@@ -292,7 +292,7 @@ export class GameScene {
 
     drawJobSelectUI() {
         const cornerX = (320-120)/2;
-        const cornerY = 118;
+        const cornerY = 121;
 
         const jobText = ['BUTCHER', 'WOODCUTTER', 'STONECUTTER', 'FLAMEKEEPER', 'TOTEMCARVER'];
 
