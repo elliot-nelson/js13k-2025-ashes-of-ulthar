@@ -181,6 +181,21 @@ export class GameScene {
             button.draw();
         }
 
+        Text.drawText(Viewport.ctx, 'WOODCUTTER   12', 240, 140 + 11 * 0, 1, Text.palette[3]);
+        Text.drawText(Viewport.ctx, 'STONECUTTER  07', 240, 140 + 11 * 1, 1, Text.palette[3]);
+        Text.drawText(Viewport.ctx, 'BUTCHER      03', 240, 140 + 11 * 2, 1, Text.palette[3]);
+        Text.drawText(Viewport.ctx, 'FLAMEKEEPER  03', 240, 140 + 11 * 3, 1, Text.palette[3]);
+        Text.drawText(Viewport.ctx, 'TOTEMCARVER  03', 240, 140 + 11 * 4, 1, Text.palette[3]);
+
+        Viewport.ctx.drawImage(Sprite.sanitybar[0].img, 320-18-5, -3);
+        Viewport.ctx.drawImage(Sprite.sanitybar[1].img, 320-18-5, -3);
+        Viewport.ctx.drawImage(Sprite.sanitybar[2].img,
+            0, 10,
+            18, 82-10,
+            320-18-5, -3 + 10,
+            18, 82-10
+        );
+
         return;
 
         let bottomSea = 4;
