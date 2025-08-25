@@ -9,11 +9,12 @@ import { clamp, xy2qr } from './Util';
 import { Viewport } from './Viewport';
 import { TweenChain } from './TweenChain';
 
-export const WOODCUTTER = 1;
-export const STONECUTTER = 2;
-export const BUTCHER = 3;
+export const IDLE = 0;
+export const BUTCHER = 1;
+export const WOODCUTTER = 2;
+export const STONECUTTER = 3;
 export const FIREKEEPER = 4;
-export const EFFIGYMAKER = 5;
+export const TOTEMCARVER = 5;
 
 export class WoodcutterTask extends TweenChain {
     constructor() {

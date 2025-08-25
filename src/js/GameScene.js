@@ -24,7 +24,7 @@ import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager } from './Villager';
+import { Villager, IDLE, BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_HAHA = 1;
@@ -39,6 +39,7 @@ export class GameScene {
         this.influence = 5;
         this.workers = 0;
         this.sanity = 100;
+        this.meat = 0;
         this.wood = 0;
         this.stone = 0;
 
@@ -48,7 +49,17 @@ export class GameScene {
         this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
         this.buttons.push(new Button(20, 140 + 24, 'B', 'Chubby Bunny'));
 
+        this.selectedJob = 0;
+
         this.villagers = [];
+
+        this.villagerCounts = [];
+        this.villagerCounts[IDLE] = 0;
+        this.villagerCounts[BUTCHER] = 0;
+        this.villagerCounts[WOODCUTTER] = 0;
+        this.villagerCounts[STONECUTTER] = 0;
+        this.villagerCounts[FIREKEEPER] = 0;
+        this.villagerCounts[TOTEMCARVER] = 0;
     }
 
     update() {
@@ -182,14 +193,9 @@ export class GameScene {
             button.draw();
         }
 
-        Text.drawText(Viewport.ctx, 'WOODCUTTER   12', 240, 140 + 11 * 0, 1, Text.palette[3]);
-        Text.drawText(Viewport.ctx, 'STONECUTTER  07', 240, 140 + 11 * 1, 1, Text.palette[3]);
-        Text.drawText(Viewport.ctx, 'BUTCHER      03', 240, 140 + 11 * 2, 1, Text.palette[3]);
-        Text.drawText(Viewport.ctx, 'FLAMEKEEPER  03', 240, 140 + 11 * 3, 1, Text.palette[3]);
-        Text.drawText(Viewport.ctx, 'TOTEMCARVER  03', 240, 140 + 11 * 4, 1, Text.palette[3]);
-
         this.drawSanityBar();
         this.drawInfluenceBar();
+        this.drawJobSelectUI();
 
         return;
 
@@ -270,6 +276,30 @@ export class GameScene {
             (320-80)/2 + 2, 3 + 3,
             k, 4
         );
+    }
+
+    drawJobSelectUI() {
+        const cornerX = (320-120)/2;
+        const cornerY = 118;
+
+        const jobText = ['BUTCHER', 'WOODCUTTER', 'STONECUTTER', 'FLAMEKEEPER', 'TOTEMCARVER'];
+
+        for (let i = 0; i < 5; i++) {
+            const color = this.selectedJob === i ? Text.palette[3] : Text.palette[2];
+            const numberText = String(this.villagerCounts[i + 1]);
+            const width = Text.measure(numberText).w;
+            Text.drawText(Viewport.ctx, jobText[i], cornerX + 4, cornerY + 4 + 11 * i, 1, color);
+            Text.drawText(Viewport.ctx, numberText, cornerX + 111 - width, cornerY + 4 + 11 * i, 1, color);
+        }
+
+        const leftArrow = this.villagerCounts[this.selectedJob + 1] > 0 ? 0 : 2;
+        const rightArrow = this.villagerCounts[IDLE] > 0 ? 1 : 3;
+
+        this.selectedJob = Math.floor((this.t / 20) % 5);
+
+        Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + this.selectedJob * 11);
+        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 96, cornerY + 4 + this.selectedJob * 11);
+        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 113, cornerY + 4 + this.selectedJob * 11);
     }
 
     drawTiles() {
