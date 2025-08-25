@@ -592,6 +592,16 @@ export class GameScene {
         return false;
     }
 
+    consumeMeat() {
+        if (this.meat > 0) {
+            this.meat--;
+        } else {
+            this.sanity--;
+
+            // TODO sanity loss animation, particles
+        }
+    }
+
     nextWorkerCost() {
         return Math.floor(1 * Math.pow(1.3, this.villagers.length));
     }

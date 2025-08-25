@@ -37,6 +37,7 @@ export class ButcherTask extends TweenChain {
 
     completeTask() {
         game.gameScene.meat += 5;
+        game.gameScene.consumeMeat();
     }
 }
 
@@ -51,26 +52,28 @@ export class WoodcutterTask extends TweenChain {
 
     completeTask() {
         game.gameScene.wood += 5;
+        game.gameScene.consumeMeat();
     }
 }
 
 export class StonecutterTask extends TweenChain {
     constructor() {
         super([
-            { t1: 0, t2: 120, v1: 0, v2: 130 },
-            { t1: 120, t2: 180, v1: 130, v2: 130 },
-            { t1: 180, t2: 300, v1: 130, v2: 0 }
+            { t1: 0, t2: 120, v1: 0, v2: -141 },
+            { t1: 120, t2: 180, v1: -141, v2: -141 },
+            { t1: 180, t2: 300, v1: -141, v2: 0 }
         ]);
     }
 
     completeTask() {
         game.gameScene.stone += 5;
+        game.gameScene.consumeMeat();
     }
 }
 
 export class Villager {
     constructor() {
-        this.job = BUTCHER;
+        this.job = STONECUTTER;
         this.t = 0;
     }
 
