@@ -9,23 +9,24 @@ export class TweenChain {
     update() {
         this.t++;
 
-        if (this.t < this.tweenArray[0][0]) {
-            this.value = this.tweenArray[0][2];
+        if (this.t < this.tweenArray[0].t1) {
+            this.value = this.tweenArray[0].v1;
             return;
         }
 
-        if (this.t >= this.tweenArray[this.tweenArray.length - 1][1]) {
-            this.value = this.tweenArray[this.tweenArray.length - 1][3];
+        if (this.t >= this.tweenArray[this.tweenArray.length - 1].t2) {
+            this.value = this.tweenArray[this.tweenArray.length - 1].v2;
             this.finished = true;
+            console.log('finishing');
             return;
         }
 
         for (let i = 0; i < this.tweenArray.length; i++) {
-            if (this.t >= this.tweenArray[i][0] && this.t < this.tweenArray[i][1]) {
-                this.value = (this.tweenArray[i][3] - this.tweenArray[i][2])
-                    * (this.t - this.tweenArray[i][0])
-                    / (this.tweenArray[i][1] - this.tweenArray[i][0])
-                    + this.tweenArray[i][2];
+            if (this.t >= this.tweenArray[i].t1 && this.t < this.tweenArray[i].t2) {
+                this.value = (this.tweenArray[i].v2 - this.tweenArray[i].v1)
+                    * (this.t - this.tweenArray[i].t1)
+                    / (this.tweenArray[i].t2 - this.tweenArray[i].t1)
+                    + this.tweenArray[i].v1;
                 break;
             }
         }

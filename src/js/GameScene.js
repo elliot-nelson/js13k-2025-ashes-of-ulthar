@@ -37,7 +37,6 @@ export class GameScene {
 
         this.t = 0;
         this.influence = 5;
-        this.workers = 0;
         this.sanity = 100;
         this.meat = 0;
         this.wood = 0;
@@ -50,16 +49,16 @@ export class GameScene {
         this.buttons.push(new Button(20, 140 + 24, 'B', 'Chubby Bunny'));
 
         this.selectedJob = 0;
+        this.displayedJobs = 5;
 
         this.villagers = [];
-
-        this.villagerCounts = [];
-        this.villagerCounts[IDLE] = 0;
-        this.villagerCounts[BUTCHER] = 0;
-        this.villagerCounts[WOODCUTTER] = 0;
-        this.villagerCounts[STONECUTTER] = 0;
-        this.villagerCounts[FIREKEEPER] = 0;
-        this.villagerCounts[TOTEMCARVER] = 0;
+        this.villagersWithJob = [];
+        this.villagersWithJob[IDLE] = [];
+        this.villagersWithJob[BUTCHER] = [];
+        this.villagersWithJob[WOODCUTTER] = [];
+        this.villagersWithJob[STONECUTTER] = [];
+        this.villagersWithJob[FIREKEEPER] = [];
+        this.villagersWithJob[TOTEMCARVER] = [];
     }
 
     update() {
@@ -70,13 +69,26 @@ export class GameScene {
         ///this.pos.y += this.vel.y;
 
         if (Input.pressed[Input.Action.RECRUIT_VILLAGER]) {
-            const cost = this.nextWorkerCost();
-            if (this.influence >= cost) {
-                this.influence -= cost;
-                this.workers++;
-                this.villagers.push(new Villager());
-            }
+            console.log(this.recruitVillager());
         }
+
+        if (Input.pressed[Input.Action.DOWN]) {
+            this.selectedJob = (this.selectedJob + 1) % this.displayedJobs;
+        }
+
+        if (Input.pressed[Input.Action.UP]) {
+            this.selectedJob = (this.selectedJob + this.displayedJobs - 1) % this.displayedJobs;
+        }
+
+        if (Input.pressed[Input.Action.RIGHT]) {
+            console.log(this.hireVillager(this.selectedJob));
+        }
+
+        if (Input.pressed[Input.Action.LEFT]) {
+            console.log(this.fireVillager(this.selectedJob));
+        }
+
+
 
         // Game ticks
 
@@ -180,7 +192,7 @@ export class GameScene {
 
         Text.drawText(Viewport.ctx, 'SANITY ' + this.sanity, 70, 70, 1, Text.white);
         Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
-        Text.drawText(Viewport.ctx, 'WORKERS' + this.workers, 70, 100, 1, Text.white);
+        Text.drawText(Viewport.ctx, 'WORKERS' + this.villagers.length, 70, 100, 1, Text.white);
 
         Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
         Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
@@ -286,16 +298,14 @@ export class GameScene {
 
         for (let i = 0; i < 5; i++) {
             const color = this.selectedJob === i ? Text.palette[3] : Text.palette[2];
-            const numberText = String(this.villagerCounts[i + 1]);
+            const numberText = String(this.villagersWithJob[i + 1].length);
             const width = Text.measure(numberText).w;
             Text.drawText(Viewport.ctx, jobText[i], cornerX + 4, cornerY + 4 + 11 * i, 1, color);
             Text.drawText(Viewport.ctx, numberText, cornerX + 111 - width, cornerY + 4 + 11 * i, 1, color);
         }
 
-        const leftArrow = this.villagerCounts[this.selectedJob + 1] > 0 ? 0 : 2;
-        const rightArrow = this.villagerCounts[IDLE] > 0 ? 1 : 3;
-
-        this.selectedJob = Math.floor((this.t / 20) % 5);
+        const leftArrow = this.villagersWithJob[this.selectedJob + 1].length > 0 ? 0 : 2;
+        const rightArrow = this.villagersWithJob[IDLE].length > 0 ? 1 : 3;
 
         Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + this.selectedJob * 11);
         Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 96, cornerY + 4 + this.selectedJob * 11);
@@ -547,7 +557,41 @@ export class GameScene {
         }
     }
 
+    recruitVillager() {
+        const cost = this.nextWorkerCost();
+        if (this.influence >= cost) {
+            this.influence -= cost;
+            const villager = new Villager();
+            this.villagers.push(villager);
+            this.villagersWithJob[WOODCUTTER].push(villager);
+            return true;
+        }
+        return false;
+    }
+
+    hireVillager() {
+        if (this.villagersWithJob[IDLE].length > 0) {
+            // TODO
+            const villager = this.villagersWithJob[IDLE].pop();
+            villager.job = this.selectedJob + 1;
+            this.villagersWithJob[this.selectedJob + 1].push(villager);
+            return true;
+        }
+        return false;
+    }
+
+    fireVillager() {
+        if (this.villagersWithJob[this.selectedJob + 1].length > 0) {
+            // TODO
+            const villager = this.villagersWithJob[this.selectedJob + 1].pop();
+            villager.job = IDLE;
+            this.villagersWithJob[IDLE].push(villager);
+            return true;
+        }
+        return false;
+    }
+
     nextWorkerCost() {
-        return Math.floor(1 * Math.pow(1.3, this.workers));
+        return Math.floor(1 * Math.pow(1.3, this.villagers.length));
     }
 }

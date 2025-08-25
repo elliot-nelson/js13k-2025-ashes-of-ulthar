@@ -16,12 +16,22 @@ export const STONECUTTER = 3;
 export const FIREKEEPER = 4;
 export const TOTEMCARVER = 5;
 
+export class IdleTask extends TweenChain {
+    constructor() {
+        super([
+            { t1: 0, t2: 30, v1: 0, v2: 0 }
+        ]);
+    }
+
+    completeTask() { }
+}
+
 export class WoodcutterTask extends TweenChain {
     constructor() {
         super([
-            [0, 120, 0, 130],
-            [120, 180, 130, 130],
-            [180, 300, 130, 0]
+            { t1: 0, t2: 120, v1: 0, v2: 130 },
+            { t1: 120, t2: 180, v1: 130, v2: 130 },
+            { t1: 180, t2: 300, v1: 130, v2: 0 }
         ]);
     }
 
@@ -33,9 +43,9 @@ export class WoodcutterTask extends TweenChain {
 export class StonecutterTask extends TweenChain {
     constructor() {
         super([
-            [0, 120, 0, 130],
-            [120, 180, 130, 130],
-            [180, 300, 130, 0]
+            { t1: 0, t2: 120, v1: 0, v2: 130 },
+            { t1: 120, t2: 180, v1: 130, v2: 130 },
+            { t1: 180, t2: 300, v1: 130, v2: 0 }
         ]);
     }
 
@@ -75,6 +85,8 @@ export class Villager {
                 return new WoodcutterTask();
             case STONECUTTER:
                 return new StonecutterTask();
+            default:
+                return new IdleTask();
         }
     }
 }
