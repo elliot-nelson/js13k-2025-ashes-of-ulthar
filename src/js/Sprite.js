@@ -39,6 +39,7 @@ export const Sprite = {
         Sprite.villager = SpriteSheet.villager.map(initBasicSprite, { x: 7, y: 21 });
         Sprite.button = SpriteSheet.button.map(initBasicSprite, { x: 0, y: 0 });
         Sprite.sanitybar = SpriteSheet.sanitybar.map(initBasicSprite, { x: 0, y: 0 });
+        Sprite.influencebar = SpriteSheet.influencebar.map(initBasicSprite, { x: 0, y: 0 });
 
         Sprite.explosiona = SpriteSheet.explosiona.map(initBasicSprite);
         Sprite.explosionb = SpriteSheet.explosionb.map(initBasicSprite);

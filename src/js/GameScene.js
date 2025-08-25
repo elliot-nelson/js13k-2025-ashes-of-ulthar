@@ -43,7 +43,8 @@ export class GameScene {
         this.stone = 0;
 
         this.buttons = [];
-        this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
+        //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
+        this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
         this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
         this.buttons.push(new Button(20, 140 + 24, 'B', 'Chubby Bunny'));
 
@@ -187,14 +188,8 @@ export class GameScene {
         Text.drawText(Viewport.ctx, 'FLAMEKEEPER  03', 240, 140 + 11 * 3, 1, Text.palette[3]);
         Text.drawText(Viewport.ctx, 'TOTEMCARVER  03', 240, 140 + 11 * 4, 1, Text.palette[3]);
 
-        Viewport.ctx.drawImage(Sprite.sanitybar[0].img, 320-18-5, -3);
-        Viewport.ctx.drawImage(Sprite.sanitybar[1].img, 320-18-5, -3);
-        Viewport.ctx.drawImage(Sprite.sanitybar[2].img,
-            0, 10,
-            18, 82-10,
-            320-18-5, -3 + 10,
-            18, 82-10
-        );
+        this.drawSanityBar();
+        this.drawInfluenceBar();
 
         return;
 
@@ -251,6 +246,30 @@ export class GameScene {
             let frame = (this.littlePigsRescued > i) ? 0 : 3;
             Viewport.ctx.drawImage(Sprite.littlepig[0][frame].img, Viewport.width - i * 11 - 13, 3);
         }
+    }
+
+
+    drawSanityBar() {
+        let k = Math.floor((this.sanity / 100) * 78);
+        Viewport.ctx.drawImage(Sprite.sanitybar[0].img, 320-18-5, -3);
+        Viewport.ctx.drawImage(Sprite.sanitybar[1].img, 320-18-5, -3);
+        Viewport.ctx.drawImage(Sprite.sanitybar[2].img,
+            0, 2 + (78 - k),
+            18, k,
+            320-18-5, -3 + 2 + (78 - k),
+            18, k
+        );
+    }
+
+    drawInfluenceBar() {
+        let k = Math.floor(Math.min(this.influence / this.nextWorkerCost(), 1) * 80);
+        Viewport.ctx.drawImage(Sprite.influencebar[0].img, (320-80)/2, 3);
+        Viewport.ctx.drawImage(Sprite.influencebar[1].img,
+            2, 3,
+            k, 4,
+            (320-80)/2 + 2, 3 + 3,
+            k, 4
+        );
     }
 
     drawTiles() {
