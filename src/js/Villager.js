@@ -72,8 +72,8 @@ export class StonecutterTask extends TweenChain {
 }
 
 export class Villager {
-    constructor() {
-        this.job = STONECUTTER;
+    constructor(job) {
+        this.job = job;
         this.t = 0;
     }
 

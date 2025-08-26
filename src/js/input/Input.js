@@ -19,6 +19,7 @@ export const Input = {
         LEFT: 13,
         RIGHT: 14,
         RECRUIT_VILLAGER: 101,
+        BUILD_BRIDGE: 102,
         JUMP: 22,
         ATTACK: 21,
         RELOAD: 30,

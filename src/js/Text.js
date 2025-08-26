@@ -90,6 +90,32 @@ export const Text = {
         }
     },
 
+    drawParagraph(ctx, text, u, v, width, scale = 1, font = Text.duotone, shadow) {
+        const lines = this.breakParagraph(text, width, scale);
+
+        for (let i = 0; i < lines.length; i++) {
+            this.drawText(ctx, lines[i], u, v + i * (C_HEIGHT + 2) * scale, scale, font, shadow);
+        }
+    },
+
+    breakParagraph(text, width, scale = 1) {
+        const lines = [];
+        let line = '';
+        const words = text.split(' ');
+        while (words.length > 0) {
+            const lineWidth = this.measure(line + ' ' + words[0], scale).w;
+            if (lineWidth > width) {
+                lines.push(line);
+                line = '';
+            }
+            line = line + ' ' + words.shift();
+        }
+        if (line.length > 0) {
+            lines.push(line);
+        }
+        return lines;
+    },
+
     measure(text, scale = 1) {
         let w = 0, h = 0;
 
@@ -121,7 +147,6 @@ export const Text = {
 };
 
 // Text utility functions
-
 
 function recolor(font, color) {
     let canvas = createCanvas(font.width, font.height);

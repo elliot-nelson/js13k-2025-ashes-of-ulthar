@@ -17,7 +17,7 @@ import { Sign } from './Sign';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
 import { StarParticle } from './StarParticle';
-import { clamp, qr2xy, uv2xy, xy2qr, xy2uv } from './Util';
+import { clamp, qr2xy, uv2xy, xy2qr, xy2uv, rgba } from './Util';
 import { Viewport } from './Viewport';
 import { LevelData } from './generated/LevelData-gen';
 import { Attack } from './systems/Attack';
@@ -28,6 +28,7 @@ import { Villager, IDLE, BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARV
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_HAHA = 1;
+const BUTTON_BUILD_BRIDGE = 2;
 
 export class GameScene {
     constructor() {
@@ -46,7 +47,7 @@ export class GameScene {
         //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
         this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
-        this.buttons.push(new Button(20, 140 + 24, 'B', 'Chubby Bunny'));
+        this.buttons[BUTTON_BUILD_BRIDGE] = new Button(240, 100, 'B', 'BUILD BRIDGE');
 
         this.selectedJob = 0;
         this.displayedJobs = 5;
@@ -59,6 +60,8 @@ export class GameScene {
         this.villagersWithJob[STONECUTTER] = [];
         this.villagersWithJob[FIREKEEPER] = [];
         this.villagersWithJob[TOTEMCARVER] = [];
+
+        this.techBridge = false;
     }
 
     update() {
@@ -70,6 +73,10 @@ export class GameScene {
 
         if (Input.pressed[Input.Action.RECRUIT_VILLAGER]) {
             console.log(this.recruitVillager());
+        }
+
+        if (Input.pressed[Input.Action.BUILD_BRIDGE]) {
+            console.log(this.buildBridge());
         }
 
         if (Input.pressed[Input.Action.DOWN]) {
@@ -87,6 +94,7 @@ export class GameScene {
         if (Input.pressed[Input.Action.LEFT]) {
             console.log(this.fireVillager(this.selectedJob));
         }
+
 
 
 
@@ -112,6 +120,8 @@ export class GameScene {
         // Button UI Elements
 
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
+        this.buttons[BUTTON_BUILD_BRIDGE].active = (this.wood >= 10);
+        this.buttons[BUTTON_BUILD_BRIDGE].visible = !this.techBridge && this.wood >= 10;
 
         // Villagres
 
@@ -186,7 +196,10 @@ export class GameScene {
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.wip[6].img, 0, -32);
+        Viewport.ctx.drawImage(Sprite.wip[9].img, 0, -32);
+        Viewport.ctx.drawImage(Sprite.bridge[0].img, 115, 148 - 32);
+
+
         //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
         Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
 
@@ -197,6 +210,7 @@ export class GameScene {
         Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
         Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
         Text.drawText(Viewport.ctx, 'MEAT ' + this.meat, 230, 130, 1, Text.white);
+
 
         for (const villager of this.villagers) {
             villager.draw();
@@ -209,6 +223,11 @@ export class GameScene {
         this.drawSanityBar();
         this.drawInfluenceBar();
         this.drawJobSelectUI();
+
+        Viewport.ctx.fillStyle = rgba(0, 0, 0, 0.6);
+        Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+        Text.drawParagraph(Viewport.ctx, 'The villagers are frail, and their sanity is fragile. Free the village before it runs out.'.toUpperCase(), 140, 100, 140, 1, Text.white);
 
         return;
 
@@ -562,9 +581,9 @@ export class GameScene {
         const cost = this.nextWorkerCost();
         if (this.influence >= cost) {
             this.influence -= cost;
-            const villager = new Villager();
+            const villager = new Villager(this.selectedJob || WOODCUTTER);
             this.villagers.push(villager);
-            this.villagersWithJob[WOODCUTTER].push(villager);
+            this.villagersWithJob[villager.job].push(villager);
             return true;
         }
         return false;
@@ -599,6 +618,15 @@ export class GameScene {
             this.sanity--;
 
             // TODO sanity loss animation, particles
+        }
+    }
+
+    buildBridge() {
+        if (this.wood >= 10 && !this.techBridge) {
+            this.wood -= 10;
+            this.techBridge = true;
+
+            // TODO build bridge animation
         }
     }
 
