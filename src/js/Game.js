@@ -103,7 +103,9 @@ export class Game {
         Viewport.ctx.setTransform(1, 0, 0, 1, 0, 0);
         Viewport.ctx.scale(Viewport.scale, Viewport.scale);
 
-        this.scene.draw();
+        for (let i = 0; i < this.scenes.length; i++) {
+            this.scenes[i].draw();
+        }
 
         Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
 

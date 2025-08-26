@@ -26,6 +26,8 @@ import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
 
+import { HelpScene } from './HelpScene';
+
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_HAHA = 1;
 const BUTTON_BUILD_BRIDGE = 2;
@@ -81,6 +83,7 @@ export class GameScene {
 
         if (Input.pressed[Input.Action.DOWN]) {
             this.selectedJob = (this.selectedJob + 1) % this.displayedJobs;
+            //game.scenes.push(new HelpScene(HelpScene.HELP_SANITY));
         }
 
         if (Input.pressed[Input.Action.UP]) {
@@ -94,9 +97,6 @@ export class GameScene {
         if (Input.pressed[Input.Action.LEFT]) {
             console.log(this.fireVillager(this.selectedJob));
         }
-
-
-
 
         // Game ticks
 
@@ -223,11 +223,6 @@ export class GameScene {
         this.drawSanityBar();
         this.drawInfluenceBar();
         this.drawJobSelectUI();
-
-        Viewport.ctx.fillStyle = rgba(0, 0, 0, 0.6);
-        Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
-
-        Text.drawParagraph(Viewport.ctx, 'The villagers are frail, and their sanity is fragile. Free the village before it runs out.'.toUpperCase(), 140, 100, 140, 1, Text.white);
 
         return;
 

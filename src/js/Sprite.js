@@ -44,6 +44,7 @@ export const Sprite = {
         Sprite.jobselect = SpriteSheet.jobselect.map(initBasicSprite, { x: 0, y: 0 });
         Sprite.bridge = SpriteSheet.bridge.map(initBasicSprite, { x: 0, y: 0 });
         Sprite.helpscroll = SpriteSheet.helpscroll.map(initBasicSprite, { x: 0, y: 0 });
+        Sprite.bigarrows = SpriteSheet.bigarrows.map(initBasicSprite, { x: 0, y: 0 });
 
         Sprite.explosiona = SpriteSheet.explosiona.map(initBasicSprite);
         Sprite.explosionb = SpriteSheet.explosionb.map(initBasicSprite);
