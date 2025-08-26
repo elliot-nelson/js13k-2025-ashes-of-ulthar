@@ -29,7 +29,7 @@ export class Button {
         this.v = v;
         this.hotkey = hotkey;
         this.text = text;
-        this.visible = true;
+        this.visible = false;
         this.active = false;
     }
 
@@ -38,6 +38,8 @@ export class Button {
     }
 
     draw() {
+        if (!this.visible) return;
+
         const frame = this.active ? 0 : 2;
         const colorIndex = this.active ? 4 : 2;
         const bgColorIndex = this.active ? 0 : 2;

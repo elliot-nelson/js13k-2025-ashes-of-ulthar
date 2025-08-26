@@ -36,8 +36,7 @@ export class ButcherTask extends TweenChain {
     }
 
     completeTask() {
-        game.gameScene.meat += 5;
-        game.gameScene.consumeMeat();
+        game.gameScene.gatherMeat();
     }
 }
 
@@ -51,8 +50,7 @@ export class WoodcutterTask extends TweenChain {
     }
 
     completeTask() {
-        game.gameScene.wood += 5;
-        game.gameScene.consumeMeat();
+        game.gameScene.gatherWood();
     }
 }
 
@@ -66,8 +64,7 @@ export class StonecutterTask extends TweenChain {
     }
 
     completeTask() {
-        game.gameScene.stone += 5;
-        game.gameScene.consumeMeat();
+        game.gameScene.gatherStone();
     }
 }
 

@@ -61,7 +61,15 @@ export class Game {
 
         if (delta >= 0) {
             this.frame++;
-            this.lastFrame = currentms - delta;
+            this.lastFrame = (currentms - delta);
+
+            // The above calculation is right for smoothing out frames, but if
+            // we end up far behind the currentms, we can "fast play" for a long time
+            // which is not desired. Fast-forward if we fall behind more than 5 frames.
+            if (currentms - this.lastFrame > 5 * 1000 / FPS) {
+                this.lastFrame = currentms;
+            }
+
             Viewport.resize();
             this.update();
             this.draw(Viewport.ctx);
@@ -107,10 +115,7 @@ export class Game {
             this.scenes[i].draw();
         }
 
-        Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
-
-        Viewport.ctx.fillStyle = 'black';
-        Viewport.ctx.fillRect(50, 50, 10, 10);
+        //Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
     }
 
     pause() {

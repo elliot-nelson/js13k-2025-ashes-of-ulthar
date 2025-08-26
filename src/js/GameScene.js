@@ -38,12 +38,21 @@ export class GameScene {
         this.entities = [];
         this.screenshakes = [];
 
+        // Clock
         this.t = 0;
         this.influence = 5;
         this.sanity = 100;
+
+        // Inventory
         this.meat = 0;
         this.wood = 0;
         this.stone = 0;
+
+        // Playthrough Stats
+        this.meatGathered = 0;
+        this.woodGathered = 0;
+        this.stoneGathered = 0;
+        this.villagersRecruited = 0;
 
         this.buttons = [];
         //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
@@ -102,15 +111,14 @@ export class GameScene {
 
         this.t++;
 
-        if (!this.nextSecond) {
-            this.nextSecond = this.t + 60;
+        if (!this.nextSanityTick) {
+            this.nextSanityTick = this.t + 12;
         }
 
-        if (this.t >= this.nextSecond) {
-            this.sanity -= 1;
-            this.influence += 1;
-            this.nextSecond = this.t + 60;
-
+        if (this.t >= this.nextSanityTick) {
+            this.sanity -= 0.2;
+            this.influence += 0.2;
+            this.nextSanityTick = this.t + 12;
         }
 
         if (this.t === 4) {
@@ -120,10 +128,12 @@ export class GameScene {
         // Button UI Elements
 
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
+        this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
+
         this.buttons[BUTTON_BUILD_BRIDGE].active = (this.wood >= 10);
         this.buttons[BUTTON_BUILD_BRIDGE].visible = !this.techBridge && this.wood >= 10;
 
-        // Villagres
+        // Villagers
 
         for (const villager of this.villagers) {
             villager.update();
@@ -197,11 +207,10 @@ export class GameScene {
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
         Viewport.ctx.drawImage(Sprite.wip[9].img, 0, -32);
-        Viewport.ctx.drawImage(Sprite.bridge[0].img, 115, 148 - 32);
 
-
-        //Sprite.drawViewportSprite(Sprite.viewportSprite2uv, { x: 0, y: 0 });
-        Text.drawText(Viewport.ctx, 'HELLO hello', 50, 10, 1, Text.white);
+        if (this.techBridge) {
+            Viewport.ctx.drawImage(Sprite.bridge[0].img, 115, 148 - 32);
+        }
 
         Text.drawText(Viewport.ctx, 'SANITY ' + this.sanity, 70, 70, 1, Text.white);
         Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
@@ -307,7 +316,8 @@ export class GameScene {
 
     drawJobSelectUI() {
         const cornerX = (320-120)/2;
-        const cornerY = 121;
+        const cornerY = 126;
+        const verticalMargin = 10;
 
         const jobText = ['BUTCHER', 'WOODCUTTER', 'STONECUTTER', 'FLAMEKEEPER', 'TOTEMCARVER'];
 
@@ -315,16 +325,16 @@ export class GameScene {
             const color = this.selectedJob === i ? Text.palette[3] : Text.palette[2];
             const numberText = String(this.villagersWithJob[i + 1].length);
             const width = Text.measure(numberText).w;
-            Text.drawText(Viewport.ctx, jobText[i], cornerX + 4, cornerY + 4 + 11 * i, 1, color);
-            Text.drawText(Viewport.ctx, numberText, cornerX + 111 - width, cornerY + 4 + 11 * i, 1, color);
+            Text.drawText(Viewport.ctx, jobText[i], cornerX + 4, cornerY + 4 + verticalMargin * i, 1, color);
+            Text.drawText(Viewport.ctx, numberText, cornerX + 111 - width, cornerY + 4 + verticalMargin * i, 1, color);
         }
 
         const leftArrow = this.villagersWithJob[this.selectedJob + 1].length > 0 ? 0 : 2;
         const rightArrow = this.villagersWithJob[IDLE].length > 0 ? 1 : 3;
 
-        Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + this.selectedJob * 11);
-        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 96, cornerY + 4 + this.selectedJob * 11);
-        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 113, cornerY + 4 + this.selectedJob * 11);
+        Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + this.selectedJob * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 96, cornerY + 4 + this.selectedJob * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 113, cornerY + 4 + this.selectedJob * verticalMargin);
     }
 
     drawTiles() {
@@ -576,11 +586,15 @@ export class GameScene {
         const cost = this.nextWorkerCost();
         if (this.influence >= cost) {
             this.influence -= cost;
+
             const villager = new Villager(this.selectedJob || WOODCUTTER);
             this.villagers.push(villager);
             this.villagersWithJob[villager.job].push(villager);
+            this.villagersRecruited++;
+
             return true;
         }
+
         return false;
     }
 
@@ -614,6 +628,24 @@ export class GameScene {
 
             // TODO sanity loss animation, particles
         }
+    }
+
+    gatherMeat() {
+        this.meat += 5;
+        this.meatGathered += 5;
+        this.consumeMeat();
+    }
+
+    gatherWood() {
+        this.wood += 5;
+        this.woodGathered += 5;
+        this.consumeMeat();
+    }
+
+    gatherStone() {
+        this.stone += 5;
+        this.stoneGathered += 5;
+        this.consumeMeat();
     }
 
     buildBridge() {
