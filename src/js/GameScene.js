@@ -4,7 +4,7 @@ import { Audio } from './Audio';
 import { BigArrowParticle } from './BigArrowParticle';
 import { Camera } from './Camera';
 import { CloudParticle } from './CloudParticle';
-import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, SANITY_POS } from './Constants';
+import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
 import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
 import { Hedgehog } from './Hedgehog';
@@ -48,18 +48,21 @@ export class GameScene {
         this.meat = 0;
         this.wood = 0;
         this.stone = 0;
+        this.torches = 0;
 
         // Playthrough Stats
         this.meatGathered = 0;
         this.woodGathered = 0;
         this.stoneGathered = 0;
         this.villagersRecruited = 0;
+        this.torchesCrafted = 0;
 
         this.buttons = [];
         //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
         this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
         this.buttons[BUTTON_BUILD_BRIDGE] = new Button(240, 100, 'B', 'BUILD BRIDGE');
+        //this.buttons[BUTTON_TORCHES] = new Button(240, 100, 'B', 'BUILD BRIDGE');
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
@@ -224,7 +227,7 @@ export class GameScene {
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.wip[9].img, 0, -32);
+        Viewport.ctx.drawImage(Sprite.wip[10].img, 0, -30);
 
         if (this.techBridge) {
             Viewport.ctx.drawImage(Sprite.bridge[0].img, 115, 148 - 32);
@@ -334,13 +337,12 @@ export class GameScene {
     }
 
     drawJobSelectUI() {
-        const cornerX = 8;
-        const cornerY = 126;
+        const cornerX = 7;
+        const cornerY = 120;
         const verticalMargin = 10;
 
-        const jobText = ['', 'BUTCHER', 'WOODCUTTER', 'STONECUTTER', 'FLAMEKEEPER', 'TOTEMCARVER'];
+        const jobText = ['', 'BUTCHER', 'WOODCUTTER', 'TALLOWER', 'STONECUTTER', 'FLAMEKEEPER', 'TALLOWCHANDLER'];
 
-        this.jobsDisplayed = [BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARVER];
         let selectedIdx = 0;
 
         for (let i = 0; i < this.jobsDisplayed.length; i++) {
@@ -352,21 +354,22 @@ export class GameScene {
             const numberText = String(this.villagersWithJob[this.jobsDisplayed[i]].length);
             const width = Text.measure(numberText).w;
             Text.drawText(Viewport.ctx, jobText[this.jobsDisplayed[i]], cornerX + 5, cornerY + 4 + verticalMargin * i, 1, color);
-            Text.drawText(Viewport.ctx, numberText, cornerX + 91 - width, cornerY + 4 + verticalMargin * i, 1, color);
+            Text.drawText(Viewport.ctx, numberText, cornerX + 92 - width, cornerY + 4 + verticalMargin * i, 1, color);
         }
 
         const leftArrow = this.villagersWithJob[this.selectedJob].length > 0 ? 0 : 2;
         const rightArrow = this.villagersWithJob[IDLE].length > 0 ? 1 : 3;
 
         Viewport.ctx.drawImage(Sprite.jobselect[1].img, cornerX, cornerY + selectedIdx * verticalMargin);
-        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 76, cornerY + 4 + selectedIdx * verticalMargin);
-        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 93, cornerY + 4 + selectedIdx * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 77, cornerY + 4 + selectedIdx * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 94, cornerY + 4 + selectedIdx * verticalMargin);
     }
 
     drawInventory() {
         let woodWidth = Text.measure(String(this.wood), 1).w;
         let meatWidth = Text.measure(String(this.meat), 1).w;
         let stoneWidth = Text.measure(String(this.stone), 1).w;
+        let torchWidth = Text.measure(String(this.torches), 1).w;
 
         Viewport.ctx.drawImage(Sprite.icons[0].img, INVENTORY_WOOD_POS.u - 60, INVENTORY_WOOD_POS.v - 1);
         Text.drawText(Viewport.ctx, 'WOOD', INVENTORY_WOOD_POS.u - 50, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
@@ -379,6 +382,10 @@ export class GameScene {
         Viewport.ctx.drawImage(Sprite.icons[1].img, INVENTORY_STONE_POS.u - 60, INVENTORY_STONE_POS.v - 1);
         Text.drawText(Viewport.ctx, 'STONE', INVENTORY_STONE_POS.u - 50, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
         Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
+
+        Viewport.ctx.drawImage(Sprite.icons[3].img, INVENTORY_TORCH_POS.u - 60, INVENTORY_TORCH_POS.v - 1);
+        Text.drawText(Viewport.ctx, 'TORCHES', INVENTORY_TORCH_POS.u - 50, INVENTORY_TORCH_POS.v, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.torches), INVENTORY_TORCH_POS.u - stoneWidth, INVENTORY_TORCH_POS.v, 1, Text.palette[4]);
     }
 
     drawTiles() {
@@ -649,7 +656,6 @@ export class GameScene {
     }
 
     hireVillager() {
-        let idx = this.jobsDisplayed.indexOf(this.selectedJob);
         if (this.villagersWithJob[IDLE].length > 0) {
             // TODO
             const villager = this.villagersWithJob[IDLE].pop();
@@ -661,10 +667,9 @@ export class GameScene {
     }
 
     fireVillager() {
-        let idx = this.jobsDisplayed.indexOf(this.selectedJob);
-        if (this.villagersWithJob[idx].length > 0) {
+        if (this.villagersWithJob[this.selectedJob].length > 0) {
             // TODO
-            const villager = this.villagersWithJob[idx].pop();
+            const villager = this.villagersWithJob[this.selectedJob].pop();
             villager.job = IDLE;
             this.villagersWithJob[IDLE].push(villager);
             return true;
@@ -694,6 +699,17 @@ export class GameScene {
         this.woodGathered += 5;
         this.consumeMeat();
         this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '+5', [4, 2]));
+    }
+
+    craftTorch() {
+        this.torches += 1;
+        this.torchesCrafted += 1;
+        this.wood -= 2;
+        this.meat -= 2;
+        this.consumeMeat();
+        this.entities.push(new TextFloatParticle({ u: INVENTORY_TORCH_POS.u + 6, v: INVENTORY_TORCH_POS.v }, '+1', [4, 2]));
+        this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-2', [4, 2]));
+        this.entities.push(new TextFloatParticle({ u: INVENTORY_MEAT_POS.u + 6, v: INVENTORY_MEAT_POS.v }, '-2', [4, 2]));
     }
 
     gatherStone() {

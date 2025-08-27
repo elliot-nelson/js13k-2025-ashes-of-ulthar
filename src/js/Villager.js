@@ -10,11 +10,12 @@ import { Viewport } from './Viewport';
 import { TweenChain } from './TweenChain';
 
 export const IDLE = 0;
-export const BUTCHER = 1;
-export const WOODCUTTER = 2;
-export const STONECUTTER = 3;
-export const FIREKEEPER = 4;
-export const TOTEMCARVER = 5;
+export const WOODCUTTER = 1;
+export const BUTCHER = 2;
+export const TALLOWER = 3;
+export const STONECUTTER = 4;
+export const FIREKEEPER = 5;
+export const TOTEMCARVER = 6;
 
 export class IdleTask extends TweenChain {
     constructor() {
@@ -51,6 +52,20 @@ export class WoodcutterTask extends TweenChain {
 
     completeTask() {
         game.gameScene.gatherWood();
+    }
+}
+
+export class TallowerTask extends TweenChain {
+    constructor() {
+        super([
+            { t1: 0, t2: 120, v1: 0, v2: 130 },
+            { t1: 120, t2: 180, v1: 130, v2: 130 },
+            { t1: 180, t2: 300, v1: 130, v2: 0 }
+        ]);
+    }
+
+    completeTask() {
+        game.gameScene.craftTorch();
     }
 }
 
