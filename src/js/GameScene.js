@@ -226,9 +226,9 @@ export class GameScene {
             Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
             Text.drawText(Viewport.ctx, 'WORKERS' + this.villagers.length, 70, 100, 1, Text.white);
 
-            Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
-            Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
-            Text.drawText(Viewport.ctx, 'MEAT ' + this.meat, 230, 130, 1, Text.white);
+            //Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
+            //Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
+            //Text.drawText(Viewport.ctx, 'MEAT ' + this.meat, 230, 130, 1, Text.white);
         }
 
 
@@ -243,6 +243,7 @@ export class GameScene {
         this.drawSanityBar();
         this.drawInfluenceBar();
         this.drawJobSelectUI();
+        this.drawInventory();
 
         return;
 
@@ -326,12 +327,13 @@ export class GameScene {
     }
 
     drawJobSelectUI() {
-        const cornerX = (320-120)/2;
+        const cornerX = 8;
         const cornerY = 126;
         const verticalMargin = 10;
 
         const jobText = ['', 'BUTCHER', 'WOODCUTTER', 'STONECUTTER', 'FLAMEKEEPER', 'TOTEMCARVER'];
 
+        this.jobsDisplayed = [BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARVER];
         let selectedIdx = 0;
 
         for (let i = 0; i < this.jobsDisplayed.length; i++) {
@@ -342,16 +344,38 @@ export class GameScene {
             const color = this.selectedJob === this.jobsDisplayed[i] ? Text.palette[3] : Text.palette[2];
             const numberText = String(this.villagersWithJob[this.jobsDisplayed[i]].length);
             const width = Text.measure(numberText).w;
-            Text.drawText(Viewport.ctx, jobText[this.jobsDisplayed[i]], cornerX + 4, cornerY + 4 + verticalMargin * i, 1, color);
-            Text.drawText(Viewport.ctx, numberText, cornerX + 111 - width, cornerY + 4 + verticalMargin * i, 1, color);
+            Text.drawText(Viewport.ctx, jobText[this.jobsDisplayed[i]], cornerX + 5, cornerY + 4 + verticalMargin * i, 1, color);
+            Text.drawText(Viewport.ctx, numberText, cornerX + 91 - width, cornerY + 4 + verticalMargin * i, 1, color);
         }
 
         const leftArrow = this.villagersWithJob[this.selectedJob].length > 0 ? 0 : 2;
         const rightArrow = this.villagersWithJob[IDLE].length > 0 ? 1 : 3;
 
-        Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + selectedIdx * verticalMargin);
-        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 96, cornerY + 4 + selectedIdx * verticalMargin);
-        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 113, cornerY + 4 + selectedIdx * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.jobselect[1].img, cornerX, cornerY + selectedIdx * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 76, cornerY + 4 + selectedIdx * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 93, cornerY + 4 + selectedIdx * verticalMargin);
+    }
+
+    drawInventory() {
+        let cornerX = 190;
+        let cornerY = 130;
+        let verticalMargin = 12;
+
+        let woodWidth = Text.measure(String(this.wood), 1).w;
+        let stoneWidth = Text.measure(String(this.stone), 1).w;
+        let meatWidth = Text.measure(String(this.meat), 1).w;
+
+        Viewport.ctx.drawImage(Sprite.icons[0].img, cornerX, cornerY);
+        Text.drawText(Viewport.ctx, 'WOOD', cornerX + 10, cornerY + 1, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.wood), cornerX + 60 - woodWidth, cornerY + 1, 1, Text.palette[4]);
+
+        Viewport.ctx.drawImage(Sprite.icons[2].img, cornerX, cornerY + verticalMargin * 1);
+        Text.drawText(Viewport.ctx, 'MEAT', cornerX + 10, cornerY + 1 + verticalMargin * 1, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.meat), cornerX + 60 - meatWidth, cornerY + 1 + verticalMargin * 1, 1, Text.palette[4]);
+
+        Viewport.ctx.drawImage(Sprite.icons[1].img, cornerX, cornerY + verticalMargin * 2);
+        Text.drawText(Viewport.ctx, 'STONE', cornerX + 10, cornerY + 1 + verticalMargin * 2, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.stone), cornerX + 60 - meatWidth, cornerY + 1 + verticalMargin * 2, 1, Text.palette[4]);
     }
 
     drawTiles() {
