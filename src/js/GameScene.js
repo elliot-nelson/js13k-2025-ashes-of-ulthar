@@ -25,6 +25,7 @@ import { Movement } from './systems/Movement';
 import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
+import { TextFloatParticle } from './TextFloatParticle';
 
 import { HelpScene } from './HelpScene';
 
@@ -148,6 +149,14 @@ export class GameScene {
             villager.update();
         }
 
+        // Entities
+
+        for (const entity of this.entities) {
+            entity.update();
+        }
+
+        this.entities = this.entities.filter(entity => !entity.cull);
+
         return;
 
         //let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
@@ -222,15 +231,9 @@ export class GameScene {
         }
 
         if (true) {
-            Text.drawText(Viewport.ctx, 'SANITY ' + this.sanity, 70, 70, 1, Text.white);
-            Text.drawText(Viewport.ctx, 'INFLUENCE ' + this.influence, 70, 90, 1, Text.white);
-            Text.drawText(Viewport.ctx, 'WORKERS' + this.villagers.length, 70, 100, 1, Text.white);
-
-            //Text.drawText(Viewport.ctx, 'WOOD ' + this.wood, 230, 110, 1, Text.white);
-            //Text.drawText(Viewport.ctx, 'STONE ' + this.stone, 230, 120, 1, Text.white);
-            //Text.drawText(Viewport.ctx, 'MEAT ' + this.meat, 230, 130, 1, Text.white);
+            let crunk = String(Math.floor(this.sanity)) + ',' + String(Math.floor(this.influence)) + ',' + String(this.villagers.length);
+            Text.drawText(Viewport.ctx, crunk, 3, 3, 1, Text.palette[1]);
         }
-
 
         for (const villager of this.villagers) {
             villager.draw();
@@ -244,6 +247,10 @@ export class GameScene {
         this.drawInfluenceBar();
         this.drawJobSelectUI();
         this.drawInventory();
+
+        for (const entity of this.entities) {
+            entity.draw();
+        }
 
         return;
 
@@ -689,12 +696,14 @@ export class GameScene {
         this.wood += 5;
         this.woodGathered += 5;
         this.consumeMeat();
+        this.entities.push(new TextFloatParticle({ u: 100, v: 100 }, '+5', [4, 2]));
     }
 
     gatherStone() {
         this.stone += 5;
         this.stoneGathered += 5;
         this.consumeMeat();
+        this.entities.push(new TextFloatParticle({ u: 100, v: 100 }, '+5', [4, 2]));
     }
 
     buildBridge() {
