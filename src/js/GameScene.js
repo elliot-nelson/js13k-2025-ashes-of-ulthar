@@ -4,7 +4,7 @@ import { Audio } from './Audio';
 import { BigArrowParticle } from './BigArrowParticle';
 import { Camera } from './Camera';
 import { CloudParticle } from './CloudParticle';
-import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE } from './Constants';
+import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, SANITY_POS } from './Constants';
 import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
 import { Hedgehog } from './Hedgehog';
@@ -364,25 +364,21 @@ export class GameScene {
     }
 
     drawInventory() {
-        let cornerX = 190;
-        let cornerY = 130;
-        let verticalMargin = 12;
-
         let woodWidth = Text.measure(String(this.wood), 1).w;
-        let stoneWidth = Text.measure(String(this.stone), 1).w;
         let meatWidth = Text.measure(String(this.meat), 1).w;
+        let stoneWidth = Text.measure(String(this.stone), 1).w;
 
-        Viewport.ctx.drawImage(Sprite.icons[0].img, cornerX, cornerY);
-        Text.drawText(Viewport.ctx, 'WOOD', cornerX + 10, cornerY + 1, 1, Text.palette[4]);
-        Text.drawText(Viewport.ctx, String(this.wood), cornerX + 60 - woodWidth, cornerY + 1, 1, Text.palette[4]);
+        Viewport.ctx.drawImage(Sprite.icons[0].img, INVENTORY_WOOD_POS.u - 60, INVENTORY_WOOD_POS.v - 1);
+        Text.drawText(Viewport.ctx, 'WOOD', INVENTORY_WOOD_POS.u - 50, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.wood), INVENTORY_WOOD_POS.u - woodWidth, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
 
-        Viewport.ctx.drawImage(Sprite.icons[2].img, cornerX, cornerY + verticalMargin * 1);
-        Text.drawText(Viewport.ctx, 'MEAT', cornerX + 10, cornerY + 1 + verticalMargin * 1, 1, Text.palette[4]);
-        Text.drawText(Viewport.ctx, String(this.meat), cornerX + 60 - meatWidth, cornerY + 1 + verticalMargin * 1, 1, Text.palette[4]);
+        Viewport.ctx.drawImage(Sprite.icons[2].img, INVENTORY_MEAT_POS.u - 60, INVENTORY_MEAT_POS.v - 1);
+        Text.drawText(Viewport.ctx, 'MEAT', INVENTORY_MEAT_POS.u - 50, INVENTORY_MEAT_POS.v, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.meat), INVENTORY_MEAT_POS.u - meatWidth, INVENTORY_MEAT_POS.v, 1, Text.palette[4]);
 
-        Viewport.ctx.drawImage(Sprite.icons[1].img, cornerX, cornerY + verticalMargin * 2);
-        Text.drawText(Viewport.ctx, 'STONE', cornerX + 10, cornerY + 1 + verticalMargin * 2, 1, Text.palette[4]);
-        Text.drawText(Viewport.ctx, String(this.stone), cornerX + 60 - meatWidth, cornerY + 1 + verticalMargin * 2, 1, Text.palette[4]);
+        Viewport.ctx.drawImage(Sprite.icons[1].img, INVENTORY_STONE_POS.u - 60, INVENTORY_STONE_POS.v - 1);
+        Text.drawText(Viewport.ctx, 'STONE', INVENTORY_STONE_POS.u - 50, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
+        Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
     }
 
     drawTiles() {
@@ -679,10 +675,10 @@ export class GameScene {
     consumeMeat() {
         if (this.meat > 0) {
             this.meat--;
+            this.entities.push(new TextFloatParticle({ u: INVENTORY_MEAT_POS.u + 6, v: INVENTORY_MEAT_POS.v }, '-1', [4, 2]));
         } else {
             this.sanity--;
-
-            // TODO sanity loss animation, particles
+            this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '-1', [0, 2]));
         }
     }
 
@@ -690,13 +686,14 @@ export class GameScene {
         this.meat += 5;
         this.meatGathered += 5;
         this.consumeMeat();
+        this.entities.push(new TextFloatParticle({ u: INVENTORY_MEAT_POS.u + 6, v: INVENTORY_MEAT_POS.v }, '+5', [4, 2]));
     }
 
     gatherWood() {
         this.wood += 5;
         this.woodGathered += 5;
         this.consumeMeat();
-        this.entities.push(new TextFloatParticle({ u: 100, v: 100 }, '+5', [4, 2]));
+        this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '+5', [4, 2]));
     }
 
     gatherStone() {
@@ -704,12 +701,14 @@ export class GameScene {
         this.stoneGathered += 5;
         this.consumeMeat();
         this.entities.push(new TextFloatParticle({ u: 100, v: 100 }, '+5', [4, 2]));
+        this.entities.push(new TextFloatParticle({ u: INVENTORY_STONE_POS.u + 6, v: INVENTORY_STONE_POS.v }, '+5', [4, 2]));
     }
 
     buildBridge() {
         if (this.wood >= 10 && !this.techBridge) {
             this.wood -= 10;
             this.techBridge = true;
+            this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
 
             // TODO build bridge animation
         }
