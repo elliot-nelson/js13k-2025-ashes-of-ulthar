@@ -20,6 +20,7 @@ export const Input = {
         RIGHT: 14,
         RECRUIT_VILLAGER: 101,
         BUILD_BRIDGE: 102,
+        BUILD_HALL: 103,
         JUMP: 22,
         ATTACK: 21,
         RELOAD: 30,

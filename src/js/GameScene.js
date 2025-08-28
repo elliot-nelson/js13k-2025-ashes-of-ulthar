@@ -24,14 +24,14 @@ import { Attack } from './systems/Attack';
 import { Movement } from './systems/Movement';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager, IDLE, BUTCHER, WOODCUTTER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
+import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 
 import { HelpScene } from './HelpScene';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
-const BUTTON_HAHA = 1;
-const BUTTON_BUILD_BRIDGE = 2;
+const BUTTON_REPAIR_BRIDGE = 1;
+const BUTTON_REPAIR_HALL = 2;
 
 export class GameScene {
     constructor() {
@@ -60,9 +60,8 @@ export class GameScene {
         this.buttons = [];
         //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
-        this.buttons[BUTTON_HAHA] = new Button(20, 140 + 12, 'W', 'Haha');
-        this.buttons[BUTTON_BUILD_BRIDGE] = new Button(240, 100, 'B', 'BUILD BRIDGE');
-        //this.buttons[BUTTON_TORCHES] = new Button(240, 100, 'B', 'BUILD BRIDGE');
+        this.buttons[BUTTON_REPAIR_BRIDGE] = new Button(240, 100, 'B', 'REPAIR BRIDGE');
+        this.buttons[BUTTON_REPAIR_HALL] = new Button(240, 100, 'T', 'REPAIR TALLOW HALL');
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
@@ -72,18 +71,22 @@ export class GameScene {
         this.villagersWithJob[IDLE] = [];
         this.villagersWithJob[BUTCHER] = [];
         this.villagersWithJob[WOODCUTTER] = [];
+        this.villagersWithJob[TALLOWER] = [];
         this.villagersWithJob[STONECUTTER] = [];
         this.villagersWithJob[FIREKEEPER] = [];
         this.villagersWithJob[TOTEMCARVER] = [];
 
         this.techBridge = false;
+        this.techTorches = false;
         this.techStone = false;
     }
 
     update() {
         // Set up displayed jobs
         if (this.techStone) {
-            this.jobsDisplayed = [BUTCHER, WOODCUTTER, STONECUTTER];
+            this.jobsDisplayed = [BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER];
+        } else if (this.techTorches) {
+            this.jobsDisplayed = [BUTCHER, WOODCUTTER, TALLOWER];
         } else if (this.techBridge) {
             this.jobsDisplayed = [BUTCHER, WOODCUTTER];
         } else {
@@ -102,6 +105,10 @@ export class GameScene {
 
         if (Input.pressed[Input.Action.BUILD_BRIDGE]) {
             console.log(this.buildBridge());
+        }
+
+        if (Input.pressed[Input.Action.BUILD_HALL]) {
+            console.log(this.buildHall());
         }
 
         if (Input.pressed[Input.Action.DOWN]) {
@@ -143,8 +150,11 @@ export class GameScene {
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
         this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
 
-        this.buttons[BUTTON_BUILD_BRIDGE].active = (this.wood >= 10);
-        this.buttons[BUTTON_BUILD_BRIDGE].visible = !this.techBridge && this.wood >= 10;
+        this.buttons[BUTTON_REPAIR_BRIDGE].active = (this.wood >= 10);
+        this.buttons[BUTTON_REPAIR_BRIDGE].visible = !this.techBridge && this.wood >= 10;
+
+        this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
+        this.buttons[BUTTON_REPAIR_HALL].visible = this.techBridge && !this.techTorches && this.wood >= 10;
 
         // Villagers
 
@@ -227,10 +237,18 @@ export class GameScene {
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.wip[10].img, 0, -30);
+        Viewport.ctx.drawImage(Sprite.wip[11].img, 0, -30);
 
         if (this.techBridge) {
-            Viewport.ctx.drawImage(Sprite.bridge[0].img, 115, 148 - 32);
+            Viewport.ctx.drawImage(Sprite.bridge[1].img, 112, 133 - 32);
+        } else {
+            Viewport.ctx.drawImage(Sprite.bridge[0].img, 112, 133 - 32);
+        }
+
+        if (this.techTorches) {
+            Viewport.ctx.drawImage(Sprite.factory[1].img, 198, 133 - 32);
+        } else {
+            Viewport.ctx.drawImage(Sprite.factory[0].img, 198, 133 - 32);
         }
 
         if (true) {
@@ -341,8 +359,6 @@ export class GameScene {
         const cornerY = 120;
         const verticalMargin = 10;
 
-        const jobText = ['', 'BUTCHER', 'WOODCUTTER', 'TALLOWER', 'STONECUTTER', 'FLAMEKEEPER', 'TALLOWCHANDLER'];
-
         let selectedIdx = 0;
 
         for (let i = 0; i < this.jobsDisplayed.length; i++) {
@@ -353,7 +369,7 @@ export class GameScene {
             const color = this.selectedJob === this.jobsDisplayed[i] ? Text.palette[3] : Text.palette[2];
             const numberText = String(this.villagersWithJob[this.jobsDisplayed[i]].length);
             const width = Text.measure(numberText).w;
-            Text.drawText(Viewport.ctx, jobText[this.jobsDisplayed[i]], cornerX + 5, cornerY + 4 + verticalMargin * i, 1, color);
+            Text.drawText(Viewport.ctx, Villager.JOB_NAMES[this.jobsDisplayed[i]], cornerX + 5, cornerY + 4 + verticalMargin * i, 1, color);
             Text.drawText(Viewport.ctx, numberText, cornerX + 92 - width, cornerY + 4 + verticalMargin * i, 1, color);
         }
 
@@ -721,12 +737,26 @@ export class GameScene {
     }
 
     buildBridge() {
-        if (this.wood >= 10 && !this.techBridge) {
+        const button = this.buttons[BUTTON_REPAIR_BRIDGE];
+
+        if (button.active && button.visible && this.wood >= 10 && !this.techBridge) {
             this.wood -= 10;
             this.techBridge = true;
             this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
 
             // TODO build bridge animation
+        }
+    }
+
+    buildHall() {
+        const button = this.buttons[BUTTON_REPAIR_HALL];
+
+        if (button.active && button.visible && this.wood >= 10 && !this.techTorches) {
+            this.wood -= 10;
+            this.techTorches = true;
+            this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
+
+            // TODO build hall animation
         }
     }
 

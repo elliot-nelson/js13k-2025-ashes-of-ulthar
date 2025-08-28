@@ -84,6 +84,8 @@ export class StonecutterTask extends TweenChain {
 }
 
 export class Villager {
+    static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'FIREKEEPER', 'TOTEMCARVER'];
+
     constructor(job) {
         this.job = job;
         this.t = 0;
@@ -114,6 +116,8 @@ export class Villager {
                 return new ButcherTask();
             case WOODCUTTER:
                 return new WoodcutterTask();
+            case TALLOWER:
+                return new TallowerTask();
             case STONECUTTER:
                 return new StonecutterTask();
             default:
