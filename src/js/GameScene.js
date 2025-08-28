@@ -28,6 +28,7 @@ import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER,
 import { TextFloatParticle } from './TextFloatParticle';
 
 import { HelpScene } from './HelpScene';
+import { DefeatScene } from './DefeatScene';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_REPAIR_BRIDGE = 1;
@@ -177,6 +178,10 @@ export class GameScene {
         }
 
         this.entities = this.entities.filter(entity => !entity.cull);
+
+        if (this.sanity < 0) {
+            this.playerLost();
+        }
 
         return;
 
@@ -777,5 +782,17 @@ export class GameScene {
 
     nextWorkerCost() {
         return Math.floor(1 * Math.pow(1.3, this.villagers.length));
+    }
+
+    playerLost() {
+        const stats = {
+            seconds: Math.floor(this.t / 60),
+            woodGathered: this.woodGathered,
+            meatGathered: this.meatGathered,
+            torchesCrafted: this.torchesCrafted,
+            stoneGathered: this.stoneGathered,
+        };
+        game.scenes.pop();
+        game.scenes.push(new DefeatScene(stats));
     }
 }

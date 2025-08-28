@@ -47,6 +47,7 @@ export const Sprite = {
         Sprite.bigarrows = SpriteSheet.bigarrows.map(initBasicSprite, { x: 0, y: 0 });
         Sprite.icons = SpriteSheet.icons.map(initBasicSprite, { x: 0, y: 0 });
         Sprite.factory = SpriteSheet.factory.map(initBasicSprite, { x: 0, y: 0 });
+        Sprite.defeat = SpriteSheet.defeat.map(initBasicSprite, { x: 0, y: 0 });
 
         Sprite.explosiona = SpriteSheet.explosiona.map(initBasicSprite);
         Sprite.explosionb = SpriteSheet.explosionb.map(initBasicSprite);
