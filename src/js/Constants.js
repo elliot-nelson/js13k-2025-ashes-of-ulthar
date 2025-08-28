@@ -12,8 +12,8 @@ export const TARGET_GAME_HEIGHT = 180;
 
 export const INVENTORY_WOOD_POS = { u: 250, v: 131 };
 export const INVENTORY_MEAT_POS = { u: 250, v: 143 };
-export const INVENTORY_STONE_POS = { u: 250, v: 155 };
-export const INVENTORY_TORCH_POS = { u: 250, v: 167 };
+export const INVENTORY_TORCH_POS = { u: 250, v: 155 };
+export const INVENTORY_STONE_POS = { u: 250, v: 167 };
 export const SANITY_POS = { u: 288, v: 9 };
 
 // Size in pixels of each map tile

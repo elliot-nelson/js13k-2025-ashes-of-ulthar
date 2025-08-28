@@ -58,9 +58,9 @@ export class WoodcutterTask extends TweenChain {
 export class TallowerTask extends TweenChain {
     constructor() {
         super([
-            { t1: 0, t2: 120, v1: 0, v2: 130 },
-            { t1: 120, t2: 180, v1: 130, v2: 130 },
-            { t1: 180, t2: 300, v1: 130, v2: 0 }
+            { t1: 0, t2: 120, v1: 0, v2: 47 },
+            { t1: 120, t2: 180, v1: 47, v2: 47 },
+            { t1: 180, t2: 300, v1: 47, v2: 0 }
         ]);
     }
 
