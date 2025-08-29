@@ -9,7 +9,6 @@ import { Sprite } from './Sprite';
 import { Text } from './Text';
 import { VictoryScene } from './VictoryScene';
 import { Viewport } from './Viewport';
-import { LevelData } from './generated/LevelData-gen';
 import { Input } from './input/Input';
 
 /**

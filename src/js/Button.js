@@ -15,7 +15,6 @@ import { Text } from './Text';
 import { StarParticle } from './StarParticle';
 import { clamp, qr2xy, uv2xy, xy2qr, xy2uv } from './Util';
 import { Viewport } from './Viewport';
-import { LevelData } from './generated/LevelData-gen';
 
 export class Button {
     constructor(u, v, hotkey, text) {

@@ -15,7 +15,6 @@ import { Text } from './Text';
 import { StarParticle } from './StarParticle';
 import { clamp, qr2xy, uv2xy, xy2qr, xy2uv, rgba } from './Util';
 import { Viewport } from './Viewport';
-import { LevelData } from './generated/LevelData-gen';
 import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
@@ -420,76 +419,6 @@ export class GameScene {
             Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
         }
 
-    }
-
-    drawTiles() {
-        return;
-
-        const offset = xy2uv({ x: 0, y: 0 });
-        const tiles = this.tiles;
-        const tileshakemap = this.tileshakemap;
-
-        // When we draw the tilesheet on the screen, we don't need to draw the ENTIRE tilesheet,
-        // so let's clamp what we draw the portion on-screen (and up to one tile off-screen,
-        // mostly for screenshake purposes).
-        const topleft = xy2qr(uv2xy({ u: 0, v: 0 }));
-        const bottomright = xy2qr(uv2xy({ u: TARGET_GAME_WIDTH, v: TARGET_GAME_HEIGHT }));
-        const r1 = clamp(topleft.r - 1, 0, tiles.length - 1);
-        const r2 = clamp(bottomright.r + 2, 0, tiles.length - 1);
-        const q1 = clamp(topleft.q - 1, 0, tiles[0].length - 1);
-        const q2 = clamp(bottomright.q + 2, 0, tiles[0].length - 1);
-
-        // "Background" tiles
-        for (let r = r1; r <= r2; r++) {
-            for (let q = q1; q <= q2; q++) {
-                // Bit of a hack here... if the tile is a [background tile], draw that background tile
-                // before we lay down tile outlines. But ALSO, separately, draw the [background tile]
-                // if the tile is going to shake and the tile ABOVE it is a [background tile]. This
-                // prevents unseemly sky showing through the castle interiors.
-                //
-                // (The real fix for this of course is to have multiple LAYERS of tiles, with bg and
-                // fg in separate layers, but nobody has space for that!)
-                if (tiles[r][q] === 6 || (r > 0 && tileshakemap[r][q].y > 0 && tiles[r - 1][q] === 6)) {
-                    Viewport.ctx.drawImage(Sprite.tiles[6].img,
-                        q * TILE_SIZE + offset.u,
-                        r * TILE_SIZE + offset.v);
-                }
-            }
-        }
-
-        // "Foreground" tile outlines
-        for (let r = r1; r <= r2; r++) {
-            for (let q = q1; q <= q2; q++) {
-                if (tiles[r][q] > 0 && tiles[r][q] !== 6) {
-                    let frame = 0;
-                    for (let i = 0; i < this.superslamTiles.length; i++) {
-                        if (r === this.superslamTiles[i].r && q >= this.superslamTiles[i].q1 && q <= this.superslamTiles[i].q2) {
-                            if (this.lightUpSlamTiles > 0) {
-                                frame++;
-                            }
-                            if (this.lightUpSlamTiles > 6) {
-                                frame++;
-                            }
-                        }
-                    }
-
-                    Viewport.ctx.drawImage(Sprite.tilebg[frame].img,
-                        q * TILE_SIZE + offset.u - 1 + tileshakemap[r][q].x,
-                        r * TILE_SIZE + offset.v - 1 + tileshakemap[r][q].y);
-                }
-            }
-        }
-
-        // "Foreground" tiles
-        for (let r = r1; r <= r2; r++) {
-            for (let q = q1; q <= q2; q++) {
-                if (tiles[r][q] > 0 && tiles[r][q] !== 6) {
-                    Viewport.ctx.drawImage(Sprite.tiles[tiles[r][q]].img,
-                        q * TILE_SIZE + offset.u + tileshakemap[r][q].x,
-                        r * TILE_SIZE + offset.v + tileshakemap[r][q].y);
-                }
-            }
-        }
     }
 
     drawTileShakemap() {

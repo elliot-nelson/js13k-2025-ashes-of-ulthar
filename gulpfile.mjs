@@ -13,7 +13,6 @@ import * as process from 'process';
 
 import AsepriteCli from './tools/aseprite-cli.js';
 import ImageDataParser from './tools/image-data-parser.js';
-import LevelConverter from './tools/level-converter.js';
 import HeightMapDataParser from './tools/height-map-data-parser.js';
 
 // -----------------------------------------------------------------------------
@@ -204,13 +203,6 @@ async function pngoutAssets() {
     // childProcess.execSync('pngout dist/temp/sprites.png');
 }
 
-async function generateLevelData() {
-    const levelGlob = 'src/assets/level*.tmx';
-    const outputFile = 'src/js/generated/LevelData-gen.js';
-
-    await LevelConverter.convert(levelGlob, outputFile);
-}
-
 async function generateHeightMapData() {
     let data = 'src/heightmap/heightmap.aseprite';
     let output = 'src/js/generated/HeightMapData-gen.js';
@@ -229,7 +221,6 @@ const buildAssets = gulp.series(
     copyAssets,
     pngoutAssets,
     generateSpriteSheetData,
-    generateLevelData,
     generateHeightMapData,
     copyFinalSprites
 );
