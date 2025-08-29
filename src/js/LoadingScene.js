@@ -43,7 +43,7 @@ export class LoadingScene {
         for (let i = 0; i < total; i++) {
             let frame = (loaded > i) ? 0 : 3;
             let y = Math.sin(i * Math.PI * 2 / 9 + (this.t * Math.PI * 2 / 60)) * 3;
-            Viewport.ctx.drawImage(Sprite.littlepig[0][frame].img, i * 12 + (Viewport.width - 120) / 2, Viewport.height / 2 - 3 + y);
+            //Viewport.ctx.drawImage(Sprite.littlepig[0][frame].img, i * 12 + (Viewport.width - 120) / 2, Viewport.height / 2 - 3 + y);
         }
 
         this.drawInstructions();
