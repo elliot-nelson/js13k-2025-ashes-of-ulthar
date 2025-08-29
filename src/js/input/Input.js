@@ -21,6 +21,7 @@ export const Input = {
         RECRUIT_VILLAGER: 101,
         BUILD_BRIDGE: 102,
         BUILD_HALL: 103,
+        BUILD_ALTAR: 104,
         JUMP: 22,
         ATTACK: 21,
         RELOAD: 30,

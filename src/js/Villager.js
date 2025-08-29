@@ -36,6 +36,7 @@ export class ButcherTask extends TweenChain {
             { t1: 120, t2: 180, v1: undefined, v2: -76, stagger: 20 },
             { t1: 180, t2: 300, v1: undefined, v2: 0 }
         ]);
+        this.layer = 3;
         this.frame = 0;
     }
 
@@ -60,6 +61,7 @@ export class WoodcutterTask extends TweenChain {
             { t1: 120, t2: 180, v1: undefined, v2: 140, stagger: 15 },
             { t1: 180, t2: 300, v1: undefined, v2: 0 }
         ]);
+        this.layer = 3;
         this.frame = 0;
     }
 
@@ -84,6 +86,17 @@ export class TallowerTask extends TweenChain {
             { t1: 120, t2: 180, v1: 47, v2: 47 },
             { t1: 180, t2: 300, v1: 47, v2: 0 }
         ]);
+        this.layer = 2;
+        this.frame = 0;
+    }
+
+    update() {
+        super.update();
+
+        const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + 7 + facing * VILLAGER_FRAMES;
+        //this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
     }
 
     completeTask() {
@@ -98,6 +111,17 @@ export class StonecutterTask extends TweenChain {
             { t1: 120, t2: 180, v1: -141, v2: -141 },
             { t1: 180, t2: 300, v1: -141, v2: 0 }
         ]);
+        this.layer = 3;
+        this.frame = 0;
+    }
+
+    update() {
+        super.update();
+
+        const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 5 + facing * VILLAGER_FRAMES : undefined;
     }
 
     completeTask() {
@@ -122,7 +146,7 @@ export class Villager {
         this.task.update();
 
         this.pos.u = 160 + this.task.value;
-        this.pos.v = HeightMapData[3][Math.floor(this.pos.u)] - 32 + 1;
+        this.pos.v = HeightMapData[this.task.layer][Math.floor(this.pos.u)] - 32 + 1;
         this.frame = this.task.frame || 0;
         this.equipmentframe = this.task.equipmentframe;
 

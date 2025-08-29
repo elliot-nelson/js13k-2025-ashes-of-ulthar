@@ -58,6 +58,7 @@ export class GameScene {
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
         this.buttons[BUTTON_REPAIR_BRIDGE] = new Button(240, 100, 'B', 'REPAIR BRIDGE');
         this.buttons[BUTTON_REPAIR_HALL] = new Button(240, 100, 'T', 'REPAIR TALLOW HALL');
+        this.buttons[BUTTON_BUILD_ALTAR] = new Button(240, 100, 'A', 'BUILD ALTAR');
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
@@ -75,6 +76,7 @@ export class GameScene {
         this.techBridge = false;
         this.techTorches = false;
         this.techStone = false;
+        this.techAltar = false;
     }
 
     update() {
@@ -109,6 +111,10 @@ export class GameScene {
 
         if (Input.pressed[Input.Action.BUILD_HALL]) {
             console.log(this.buildHall());
+        }
+
+        if (Input.pressed[Input.Action.BUILD_ALTAR]) {
+            console.log(this.buildAltar());
         }
 
         if (Input.pressed[Input.Action.DOWN]) {
@@ -159,6 +165,9 @@ export class GameScene {
 
         this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
         this.buttons[BUTTON_REPAIR_HALL].visible = this.techBridge && !this.techTorches && this.wood >= 10;
+
+        this.buttons[BUTTON_BUILD_ALTAR].active = (this.stone >= 10);
+        this.buttons[BUTTON_BUILD_ALTAR].visible = this.techTorches && !this.techAltar && this.stone >= 10;
 
         // Villagers
 
@@ -690,6 +699,18 @@ export class GameScene {
             this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
 
             // TODO build hall animation
+        }
+    }
+
+    buildAltar() {
+        const button = this.buttons[BUTTON_BUILD_ALTAR];
+
+        if (button.active && button.visible && this.stone >= 10 && !this.techAltar) {
+            this.stone -= 10;
+            this.techAltar = true;
+            this.entities.push(new TextFloatParticle({ u: INVENTORY_STONE_POS.u + 6, v: INVENTORY_STONE_POS.v }, '-10', [4, 2]));
+
+            // TODO build altar animation
         }
     }
 
