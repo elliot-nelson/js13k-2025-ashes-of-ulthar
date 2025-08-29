@@ -211,7 +211,7 @@ async function generateHeightMapData() {
 }
 
 function copyFinalSprites() {
-    return gulp.src('dist/temp/sprites.png')
+    return gulp.src('dist/temp/sprites.png', { encoding: false })
         .pipe(gulp.dest('dist/final'));
 }
 
