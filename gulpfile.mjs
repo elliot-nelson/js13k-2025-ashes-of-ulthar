@@ -14,6 +14,7 @@ import * as process from 'process';
 import AsepriteCli from './tools/aseprite-cli.js';
 import ImageDataParser from './tools/image-data-parser.js';
 import LevelConverter from './tools/level-converter.js';
+import HeightMapDataParser from './tools/height-map-data-parser.js';
 
 // -----------------------------------------------------------------------------
 // Gulp Plugins
@@ -210,6 +211,13 @@ async function generateLevelData() {
     await LevelConverter.convert(levelGlob, outputFile);
 }
 
+async function generateHeightMapData() {
+    let data = 'src/heightmap/heightmap.aseprite';
+    let output = 'src/js/generated/HeightMapData-gen.js';
+
+    await HeightMapDataParser.parse(data, output);
+}
+
 function copyFinalSprites() {
     return gulp.src('dist/temp/sprites.png')
         .pipe(gulp.dest('dist/final'));
@@ -222,6 +230,7 @@ const buildAssets = gulp.series(
     pngoutAssets,
     generateSpriteSheetData,
     generateLevelData,
+    generateHeightMapData,
     copyFinalSprites
 );
 

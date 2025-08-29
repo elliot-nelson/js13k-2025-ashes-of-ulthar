@@ -8,6 +8,7 @@ import { Sprite } from './Sprite';
 import { clamp, xy2qr } from './Util';
 import { Viewport } from './Viewport';
 import { TweenChain } from './TweenChain';
+import { HeightMapData } from './generated/HeightMapData-gen';
 
 export const IDLE = 0;
 export const WOODCUTTER = 1;
@@ -107,7 +108,8 @@ export class Villager {
     }
 
     draw() {
-        Viewport.ctx.drawImage(Sprite.villager[0].img, this.pos.u, this.pos.v);
+        let v = HeightMapData[3][Math.floor(this.pos.u)] - 32 - 16;
+        Viewport.ctx.drawImage(Sprite.villager[0].img, this.pos.u, v);
     }
 
     newTask() {

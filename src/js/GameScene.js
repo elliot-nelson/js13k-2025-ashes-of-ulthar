@@ -30,6 +30,8 @@ import { TextFloatParticle } from './TextFloatParticle';
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
 
+import { HeightMapData } from './generated/HeightMapData-gen';
+
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_REPAIR_BRIDGE = 1;
 const BUTTON_REPAIR_HALL = 2;
@@ -285,6 +287,11 @@ export class GameScene {
         for (const entity of this.entities) {
             entity.draw();
         }
+
+        // Preview walking path
+        /*for (let x = 0; x < 320; x++) {
+            Viewport.ctx.drawImage(Sprite.icons[1].img, x, HeightMapData[3][x]);
+        }*/
 
         return;
 
