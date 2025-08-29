@@ -26,20 +26,27 @@ export const Sprite = {
     },
 
     init() {
-        Sprite.wip = SpriteSheet.wip.map(initBasicSprite, { x: 0, y: 0 });
+        const defaultOpts = { anchor: { x: 0, y: 0 } };
 
-        Sprite.villager = SpriteSheet.villager.map(initBasicSprite, { x: 7, y: 21 });
-        Sprite.button = SpriteSheet.button.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.sanitybar = SpriteSheet.sanitybar.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.influencebar = SpriteSheet.influencebar.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.smallarrows = SpriteSheet.smallarrows.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.jobselect = SpriteSheet.jobselect.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.bridge = SpriteSheet.bridge.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.helpscroll = SpriteSheet.helpscroll.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.bigarrows = SpriteSheet.bigarrows.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.icons = SpriteSheet.icons.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.factory = SpriteSheet.factory.map(initBasicSprite, { x: 0, y: 0 });
-        Sprite.defeat = SpriteSheet.defeat.map(initBasicSprite, { x: 0, y: 0 });
+        Sprite.wip = initBasicSpriteArray(SpriteSheet.wip, defaultOpts);
+        Sprite.button = initBasicSpriteArray(SpriteSheet.button, defaultOpts);
+        Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
+        Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
+        Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
+        Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
+        Sprite.bridge = initBasicSpriteArray(SpriteSheet.bridge, defaultOpts);
+        Sprite.helpscroll = initBasicSpriteArray(SpriteSheet.helpscroll, defaultOpts);
+        Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
+        Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
+        Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
+        Sprite.defeat = initBasicSpriteArray(SpriteSheet.defeat, defaultOpts);
+
+        // Villager
+        Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
+        const villagerFrames = Sprite.villager.length;
+        for (let i = 0; i < villagerFrames; i++) {
+            Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
+        }
 
         Sprite.explosiona = SpriteSheet.explosiona.map(initBasicSprite);
         Sprite.explosionb = SpriteSheet.explosionb.map(initBasicSprite);
@@ -105,6 +112,14 @@ export const Sprite = {
     },
 
     viewportSprite2uv(sprite, pos) {
+        // HACK TODO
+        if (pos.u) {
+            return {
+                u: pos.u - sprite.anchor.x,
+                v: pos.v - sprite.anchor.y
+            };
+        }
+
         return {
             u: pos.x - sprite.anchor.x - Camera.pos.x + Viewport.center.u,
             v: pos.y - sprite.anchor.y - Camera.pos.y + Viewport.center.v
@@ -113,6 +128,10 @@ export const Sprite = {
 };
 
 // Sprite utility functions
+
+function initBasicSpriteArray(data, opts) {
+    return data.map(element => initBasicSprite(element, opts));
+}
 
 function initBasicSprite(data, opts) {
     return initDynamicSprite(loadCacheSlice(...data), opts);

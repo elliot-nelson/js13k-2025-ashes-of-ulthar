@@ -2,7 +2,7 @@
 
 import { Audio } from './Audio';
 import { BloodPoolParticle } from './BloodPoolParticle';
-import { GRAVITY, TILE_SIZE } from './Constants';
+import { GRAVITY, TILE_SIZE, VILLAGER_FRAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { clamp, xy2qr } from './Util';
@@ -23,6 +23,7 @@ export class IdleTask extends TweenChain {
         super([
             { t1: 0, t2: 30, v1: 0, v2: 0 }
         ]);
+        this.frame = 0;
     }
 
     completeTask() { }
@@ -31,10 +32,20 @@ export class IdleTask extends TweenChain {
 export class ButcherTask extends TweenChain {
     constructor() {
         super([
-            { t1: 0, t2: 120, v1: 0, v2: -90 },
-            { t1: 120, t2: 180, v1: -90, v2: -90 },
-            { t1: 180, t2: 300, v1: -90, v2: 0 }
+            { t1: 0, t2: 120, v1: 0, v2: -76, stagger: 20 },
+            { t1: 120, t2: 180, v1: undefined, v2: -76, stagger: 20 },
+            { t1: 180, t2: 300, v1: undefined, v2: 0 }
         ]);
+        this.frame = 0;
+    }
+
+    update() {
+        super.update();
+
+        const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 3 + facing * VILLAGER_FRAMES : undefined;
     }
 
     completeTask() {
@@ -45,10 +56,20 @@ export class ButcherTask extends TweenChain {
 export class WoodcutterTask extends TweenChain {
     constructor() {
         super([
-            { t1: 0, t2: 120, v1: 0, v2: 130 },
-            { t1: 120, t2: 180, v1: 130, v2: 130 },
-            { t1: 180, t2: 300, v1: 130, v2: 0 }
+            { t1: 0, t2: 120, v1: 0, v2: 140, stagger: 15 },
+            { t1: 120, t2: 180, v1: undefined, v2: 140, stagger: 15 },
+            { t1: 180, t2: 300, v1: undefined, v2: 0 }
         ]);
+        this.frame = 0;
+    }
+
+    update() {
+        super.update();
+
+        const facing = (this.t > 130 && this.t < 170) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
     }
 
     completeTask() {
@@ -90,6 +111,7 @@ export class Villager {
     constructor(job) {
         this.job = job;
         this.t = 0;
+        this.pos = { u: 0, v: 0 };
     }
 
     update() {
@@ -99,7 +121,10 @@ export class Villager {
 
         this.task.update();
 
-        this.pos = { u: 160 + this.task.value, v: 100 };
+        this.pos.u = 160 + this.task.value;
+        this.pos.v = HeightMapData[3][Math.floor(this.pos.u)] - 32 + 1;
+        this.frame = this.task.frame || 0;
+        this.equipmentframe = this.task.equipmentframe;
 
         if (this.task.finished) {
             this.task.completeTask();
@@ -108,8 +133,12 @@ export class Villager {
     }
 
     draw() {
-        let v = HeightMapData[3][Math.floor(this.pos.u)] - 32 - 16;
-        Viewport.ctx.drawImage(Sprite.villager[0].img, this.pos.u, v);
+        //Viewport.ctx.drawImage(Sprite.villager[this.frame].img, this.pos.u, v);
+        Sprite.drawViewportSprite(Sprite.villager[this.frame], this.pos);
+
+        if (this.equipmentframe > -1) {
+            Sprite.drawViewportSprite(Sprite.villager[this.equipmentframe], this.pos);
+        }
     }
 
     newTask() {

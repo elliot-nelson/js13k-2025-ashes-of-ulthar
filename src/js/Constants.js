@@ -16,6 +16,8 @@ export const INVENTORY_TORCH_POS = { u: 250, v: 155 };
 export const INVENTORY_STONE_POS = { u: 250, v: 167 };
 export const SANITY_POS = { u: 288, v: 9 };
 
+export const VILLAGER_FRAMES = 12;
+
 // Size in pixels of each map tile
 export const TILE_SIZE = 8;
 
