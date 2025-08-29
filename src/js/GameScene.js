@@ -7,21 +7,15 @@ import { CloudParticle } from './CloudParticle';
 import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
 import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
-import { Hedgehog } from './Hedgehog';
-import { Knight } from './Knight';
 import { LandingParticle } from './LandingParticle';
-import { LittlePigBox } from './LittlePigBox';
 import { Player } from './Player';
 import { Replay } from './Replay';
-import { Sign } from './Sign';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
 import { StarParticle } from './StarParticle';
 import { clamp, qr2xy, uv2xy, xy2qr, xy2uv, rgba } from './Util';
 import { Viewport } from './Viewport';
 import { LevelData } from './generated/LevelData-gen';
-import { Attack } from './systems/Attack';
-import { Movement } from './systems/Movement';
 import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
@@ -209,9 +203,6 @@ export class GameScene {
         for (const entity of entities) {
             entity.update();
         }
-
-        Movement.perform(this, entities);
-        Attack.perform(this, entities);
 
         for (let i = 0; i < this.entities.length; i++) {
             if (this.entities[i].cull) {
@@ -574,20 +565,6 @@ export class GameScene {
                 let y = slam.r * TILE_SIZE + TILE_SIZE + 1;
                 this.addEntity(new FallingDirtParticle({ x: x, y: y }));
             }
-        }
-    }
-
-    rescueLittlePig() {
-        this.littlePigsRescued++;
-
-        if (this.littlePigsRescued === this.littlePigs) {
-            if (game.levelScreen.player.recording) {
-                game.lastReplay = game.levelScreen.player.recording;
-            }
-            game.nextLevel++;
-            game.screens.pop();
-            game.scores[this.levelNumber].time = this.t;
-            game.scores[this.levelNumber].enemiesAlive = this.enemiesAlive;
         }
     }
 

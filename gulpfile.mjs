@@ -256,7 +256,7 @@ function buildZip() {
 
     return gulp.src(['dist/build/*', '!dist/build/*.map'])
         .pipe(size())
-        .pipe(zip('js13k-2023-harold-is-heavy.zip'))
+        .pipe(zip('js13k-2025-ulthar-rising.zip'))
         .pipe(advzip({ optimizationLevel: 4, iterations: 200 }))
         .pipe(s = size({ title: 'zip' }))
         .pipe(gulp.dest('dist/final'))
