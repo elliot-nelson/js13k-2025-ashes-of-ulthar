@@ -54,9 +54,6 @@ export const Sprite = {
             Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
         }
 
-        Sprite.explosiona = SpriteSheet.explosiona.map(initBasicSprite);
-        Sprite.explosionb = SpriteSheet.explosionb.map(initBasicSprite);
-
         Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
 
         Sprite.bigarrow = SpriteSheet.bigarrow.map(initBasicSprite);
