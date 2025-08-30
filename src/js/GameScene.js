@@ -264,10 +264,17 @@ export class GameScene {
     }
 
     draw() {
-        Viewport.ctx.fillStyle = '#0a1a2f';
-        Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+        // Terrain
 
-        Viewport.ctx.drawImage(Sprite.wip[14].img, 0, -30);
+        Viewport.ctx.fillStyle = '#40985e';
+        Viewport.ctx.fillRect(-5, 0, Viewport.width + 5, Viewport.height);
+
+        Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, -30);
+        Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, -30);
+        Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, -30);
+
+        Viewport.ctx.fillStyle = '#0a1a2f';
+        Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);
 
         // Bridge
 

@@ -35,7 +35,10 @@ export class DefeatScene {
     }
 
     draw() {
-        Viewport.ctx.drawImage(Sprite.defeat[12].img, 0, 0);
+        Viewport.ctx.fillStyle = '#0a1a2f';
+        Viewport.ctx.fillRect(-5, 0, Viewport.width + 5, Viewport.height);
+
+        Viewport.ctx.drawImage(Sprite.defeat[0].img, 0, 0);
 
         for (let i = 0; i < this.text.length; i++) {
             let width = Text.measure(this.text[i], 1).w;

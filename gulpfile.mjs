@@ -146,8 +146,24 @@ function buildCss() {
 // -----------------------------------------------------------------------------
 // Assets Build
 // -----------------------------------------------------------------------------
+async function exportTerrain() {
+    let src = 'src/assets/terrain.aseprite';
+    let out = 'src/assets/generated/terrain-{layer}.aseprite';
+
+    try {
+        await AsepriteCli.exec(`--batch ${src} --split-layers --save-as ${out}`);
+    } catch (e) {
+        log.error(e);
+        log.warn(chalk.red('Failed to export terrain layers, but building anyway...'));
+    }
+
+    if (fs.existsSync('src/assets/generated/terrain-BG.aseprite')) {
+        fs.unlinkSync('src/assets/generated/terrain-BG.aseprite');
+    }
+}
+
 async function exportSpriteSheet() {
-    let src = 'src/assets/*.aseprite';
+    let src = 'src/assets/*.aseprite src/assets/generated/terrain-*.aseprite';
     let png = 'src/assets/generated/spritesheet-gen.png';
     let data = 'src/assets/generated/spritesheet-gen.json';
 
@@ -216,6 +232,7 @@ function copyFinalSprites() {
 }
 
 const buildAssets = gulp.series(
+    exportTerrain,
     exportSpriteSheet,
     exportTileSheet,
     copyAssets,
