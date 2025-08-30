@@ -8,7 +8,6 @@ import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, I
 import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
 import { LandingParticle } from './LandingParticle';
-import { Player } from './Player';
 import { Replay } from './Replay';
 import { Sprite } from './Sprite';
 import { Text } from './Text';

@@ -1,7 +1,6 @@
 // Villager
 
 import { Audio } from './Audio';
-import { BloodPoolParticle } from './BloodPoolParticle';
 import { GRAVITY, TILE_SIZE, VILLAGER_FRAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';

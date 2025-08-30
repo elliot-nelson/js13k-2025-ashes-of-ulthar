@@ -8,11 +8,9 @@ import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE } from './Constants';
 import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
 import { LandingParticle } from './LandingParticle';
-import { Player } from './Player';
 import { Replay } from './Replay';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
-import { StarParticle } from './StarParticle';
 import { clamp, qr2xy, uv2xy, xy2qr, xy2uv } from './Util';
 import { Viewport } from './Viewport';
 

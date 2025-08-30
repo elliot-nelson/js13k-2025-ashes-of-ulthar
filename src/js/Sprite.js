@@ -59,10 +59,6 @@ export const Sprite = {
 
         Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
 
-        Sprite.star2 = SpriteSheet.star2.map(initBasicSprite);
-
-        Sprite.bleed = SpriteSheet.bleed.map(initBasicSprite, { x: 4, y: 0 });
-
         Sprite.bigarrow = SpriteSheet.bigarrow.map(initBasicSprite);
         Sprite.dirt = SpriteSheet.dirt.map(initBasicSprite);
 
