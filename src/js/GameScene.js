@@ -329,22 +329,6 @@ export class GameScene {
 
         return;
 
-        let bottomSea = 4;
-        let topSea = 14;
-        let percentage = Math.floor(clamp(this.player.pos.y / (this.tiles.length * TILE_SIZE), 0, Infinity) * (topSea - bottomSea) + bottomSea);
-
-        Viewport.ctx.fillStyle = '#4b3b9c';
-        Viewport.ctx.fillRect(0, Viewport.height - percentage, Viewport.width, percentage);
-
-        /*Viewport.ctx.fillStyle = '#8fcccb';
-        Viewport.ctx.fillRect(0, Viewport.height - percentage - 2, Viewport.width, 1);
-
-        Viewport.ctx.fillStyle = '#449489';
-        Viewport.ctx.fillRect(0, Viewport.height - percentage - 4, Viewport.width, 1);
-
-        Viewport.ctx.fillStyle = '#285763';
-        Viewport.ctx.fillRect(0, Viewport.height - percentage - 6, Viewport.width, 1);*/
-
         // Render screenshakes (canvas translation)
         let shakeX = 0, shakeY = 0;
         this.screenshakes.forEach(shake => {
@@ -358,32 +342,7 @@ export class GameScene {
         }
 
         this.drawTileShakemap();
-        this.drawTiles();
-
-        let overlayEntities = [];
-
-        for (let entity of this.entities) {
-            if (entity.z > -1) entity.draw();
-
-            if (entity.displayOverlay) {
-                overlayEntities.push(entity);
-            }
-        }
-
-        //Text.drawText(Viewport.ctx, `${this.littlePigsRescued}/${this.littlePigs}`, 180, 5, 1, Text.duotone, Text.black);
-        //Text.drawText(Viewport.ctx, 'PRESS mnop\nTO DO', 10, 100, 1, Text.tan, Text.shadow);
-
-        for (let entity of overlayEntities) {
-            entity.drawOverlay();
-        }
-
-        let pigsToShow = clamp(Math.floor(this.t / 5) - 5, 0, this.littlePigs);
-        for (let i = 0; i < pigsToShow; i++) {
-            let frame = (this.littlePigsRescued > i) ? 0 : 3;
-            Viewport.ctx.drawImage(Sprite.littlepig[0][frame].img, Viewport.width - i * 11 - 13, 3);
-        }
     }
-
 
     drawSanityBar() {
         let k = Math.floor((this.sanity / 100) * 78);
@@ -483,71 +442,6 @@ export class GameScene {
     addScreenShake(screenshake) {
         // This screen shake applies to the entire rendered screen, including GUI
         this.screenshakes.push(screenshake);
-    }
-
-    addTileShake(screenshake, originQR) {
-        let tiles = [];
-
-        for (let q = originQR.q; q >= 0; q--) {
-            if (this.tileIsPassable(q, originQR.r - 1) && !this.tileIsPassable(q, originQR.r)) {
-                tiles.push({ q: q, r: originQR.r });
-            } else {
-                break;
-            }
-        }
-        for (let q = originQR.q + 1; q < this.tiles[0].length; q++) {
-            if (this.tileIsPassable(q, originQR.r - 1) && !this.tileIsPassable(q, originQR.r)) {
-                tiles.push({ q: q, r: originQR.r });
-            } else {
-                break;
-            }
-        }
-
-        this.tileshakes.push({
-            screenshake: screenshake,
-            tiles: tiles,
-            s: 0
-        });
-    }
-
-    extractSuperslamTiles(originQR) {
-        let r = originQR.r;
-        let q1 = originQR.q;
-        let q2 = originQR.q;
-
-        for (let q = originQR.q; q >= 0; q--) {
-            if (this.tileIsPassable(q, originQR.r + 1) && !this.tileIsPassable(q, originQR.r)) {
-                q1 = q;
-            } else {
-                break;
-            }
-        }
-        for (let q = originQR.q + 1; q < this.tiles[0].length; q++) {
-            if (this.tileIsPassable(q, originQR.r + 1) && !this.tileIsPassable(q, originQR.r)) {
-                q2 = q;
-            } else {
-                break;
-            }
-        }
-
-        return {
-            r: r,
-            q1: q1,
-            q2: q2
-        };
-    }
-
-    spawnClouds() {
-        let clouds = this.entities.filter(entity => entity instanceof CloudParticle).length;
-        if (clouds < 1) {
-            this.addEntity(new CloudParticle());
-            this.lastCloud = this.t;
-        }
-
-        if (this.t - this.lastCloud > 60 * 5 && Math.random() < 0.01) {
-            this.addEntity(new CloudParticle());
-            this.lastCloud = this.t;
-        }
     }
 
     moveJobSelector(delta) {
