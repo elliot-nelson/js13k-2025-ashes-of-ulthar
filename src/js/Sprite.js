@@ -40,6 +40,8 @@ export const Sprite = {
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
         Sprite.defeat = initBasicSpriteArray(SpriteSheet.defeat, defaultOpts);
+        Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, defaultOpts);
+        Sprite.tree = initBasicSpriteArray(SpriteSheet.tree, defaultOpts);
 
         // Villager
         Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });

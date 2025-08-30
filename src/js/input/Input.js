@@ -22,6 +22,7 @@ export const Input = {
         BUILD_BRIDGE: 102,
         BUILD_HALL: 103,
         BUILD_ALTAR: 104,
+        SACRIFICE: 105,
         JUMP: 22,
         ATTACK: 21,
         RELOAD: 30,

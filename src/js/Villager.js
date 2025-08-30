@@ -17,6 +17,7 @@ export const TALLOWER = 3;
 export const STONECUTTER = 4;
 export const FIREKEEPER = 5;
 export const TOTEMCARVER = 6;
+export const SACRIFICE = 7;
 
 export class IdleTask extends TweenChain {
     constructor() {
@@ -129,6 +130,24 @@ export class StonecutterTask extends TweenChain {
     }
 }
 
+export class SacrificeTask extends TweenChain {
+    constructor() {
+        super([
+            { t1: 0, t2: 1, v1: 0, v2: 0 }
+        ]);
+        this.layer = 3;
+        this.frame = 0;
+    }
+
+    update() {
+        super.update();
+    }
+
+    completeTask(villager) {
+        game.gameScene.beginSacrifice(villager);
+    }
+}
+
 export class Villager {
     static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'FIREKEEPER', 'TOTEMCARVER'];
 
@@ -151,13 +170,12 @@ export class Villager {
         this.equipmentframe = this.task.equipmentframe;
 
         if (this.task.finished) {
-            this.task.completeTask();
+            this.task.completeTask(this);
             this.task = undefined;
         }
     }
 
     draw() {
-        //Viewport.ctx.drawImage(Sprite.villager[this.frame].img, this.pos.u, v);
         Sprite.drawViewportSprite(Sprite.villager[this.frame], this.pos);
 
         if (this.equipmentframe > -1) {
@@ -175,6 +193,8 @@ export class Villager {
                 return new TallowerTask();
             case STONECUTTER:
                 return new StonecutterTask();
+            case SACRIFICE:
+                return new SacrificeTask();
             default:
                 return new IdleTask();
         }

@@ -12,12 +12,12 @@ import { Player } from './Player';
 import { Replay } from './Replay';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
-import { StarParticle } from './StarParticle';
+import { SacrificeParticle } from './SacrificeParticle';
 import { clamp, qr2xy, uv2xy, xy2qr, xy2uv, rgba } from './Util';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
+import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER, SACRIFICE } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 
 import { HelpScene } from './HelpScene';
@@ -28,6 +28,7 @@ import { HeightMapData } from './generated/HeightMapData-gen';
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_REPAIR_BRIDGE = 1;
 const BUTTON_REPAIR_HALL = 2;
+const BUTTON_REPAIR_ALTAR = 3;
 
 export class GameScene {
     constructor() {
@@ -58,20 +59,21 @@ export class GameScene {
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
         this.buttons[BUTTON_REPAIR_BRIDGE] = new Button(240, 100, 'B', 'REPAIR BRIDGE');
         this.buttons[BUTTON_REPAIR_HALL] = new Button(240, 100, 'T', 'REPAIR TALLOW HALL');
-        this.buttons[BUTTON_BUILD_ALTAR] = new Button(240, 100, 'A', 'BUILD ALTAR');
+        this.buttons[BUTTON_REPAIR_ALTAR] = new Button(240, 100, 'A', 'BUILD ALTAR');
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
 
         this.villagers = [];
-        this.villagersWithJob = [];
-        this.villagersWithJob[IDLE] = [];
-        this.villagersWithJob[BUTCHER] = [];
-        this.villagersWithJob[WOODCUTTER] = [];
-        this.villagersWithJob[TALLOWER] = [];
-        this.villagersWithJob[STONECUTTER] = [];
-        this.villagersWithJob[FIREKEEPER] = [];
-        this.villagersWithJob[TOTEMCARVER] = [];
+        this.villagersWithJob = {
+            [IDLE]: [],
+            [BUTCHER]: [],
+            [WOODCUTTER]: [],
+            [TALLOWER]: [],
+            [STONECUTTER]: [],
+            [FIREKEEPER]: [],
+            [SACRIFICE]: []
+        };
 
         this.techBridge = false;
         this.techTorches = false;
@@ -133,6 +135,10 @@ export class GameScene {
             console.log(this.fireVillager(this.selectedJob));
         }
 
+        if (Input.pressed[Input.Action.SACRIFICE]) {
+            console.log(this.sacrificeVillager());
+        }
+
         if (Input.pressed[Input.Action.JUMP]) {
             this.sanity -= 10;
         }
@@ -166,8 +172,8 @@ export class GameScene {
         this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
         this.buttons[BUTTON_REPAIR_HALL].visible = this.techBridge && !this.techTorches && this.wood >= 10;
 
-        this.buttons[BUTTON_BUILD_ALTAR].active = (this.stone >= 10);
-        this.buttons[BUTTON_BUILD_ALTAR].visible = this.techTorches && !this.techAltar && this.stone >= 10;
+        this.buttons[BUTTON_REPAIR_ALTAR].active = (this.stone >= 10);
+        this.buttons[BUTTON_REPAIR_ALTAR].visible = this.techTorches && !this.techAltar && this.stone >= 10;
 
         // Villagers
 
@@ -180,8 +186,18 @@ export class GameScene {
         for (const entity of this.entities) {
             entity.update();
         }
-
         this.entities = this.entities.filter(entity => !entity.cull);
+
+        // Active Sacrifice
+
+        if (this.activeSacrifice) {
+            this.activeSacrifice.update();
+            if (this.activeSacrifice.cull) {
+                this.activeSacrifice = undefined;
+            }
+        }
+
+        // Check
 
         if (this.sanity < 0) {
             this.playerLost();
@@ -251,7 +267,9 @@ export class GameScene {
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.wip[11].img, 0, -30);
+        Viewport.ctx.drawImage(Sprite.wip[14].img, 0, -30);
+
+        // Bridge
 
         if (this.techBridge) {
             Viewport.ctx.drawImage(Sprite.bridge[1].img, 112, 133 - 32);
@@ -259,10 +277,26 @@ export class GameScene {
             Viewport.ctx.drawImage(Sprite.bridge[0].img, 112, 133 - 32);
         }
 
+        // Tallower Hall
+
         if (this.techTorches) {
             Viewport.ctx.drawImage(Sprite.factory[1].img, 198, 133 - 32);
         } else {
             Viewport.ctx.drawImage(Sprite.factory[0].img, 198, 133 - 32);
+        }
+
+        // Altar
+
+        this.techAltar = true;
+        if (this.activeSacrifice) {
+            this.activeSacrifice.draw();
+        } else {
+            if (this.techAltar) {
+                Viewport.ctx.drawImage(Sprite.altar[1].img, 103, 93 - 32);
+            } else {
+                Viewport.ctx.drawImage(Sprite.altar[0].img, 103, 93 - 32);
+            }
+            Viewport.ctx.drawImage(Sprite.tree[0].img, 110, 64 - 32);
         }
 
         if (true) {
@@ -635,6 +669,25 @@ export class GameScene {
         return false;
     }
 
+    sacrificeVillager() {
+        if (this.villagersWithJob[this.selectedJob].length > 0) {
+            // TODO
+            const villager = this.villagersWithJob[this.selectedJob].pop();
+            villager.job = SACRIFICE;
+            this.villagersWithJob[SACRIFICE].push(villager);
+            this.activeSacrifice = new SacrificeParticle();
+            return true;
+        }
+        return false;
+    }
+
+    beginSacrifice(villager) {
+        this.villagersWithJob[SACRIFICE].splice(this.villagersWithJob[SACRIFICE].indexOf(villager), 1);
+        this.villagers.splice(this.villagers.indexOf(villager), 1);
+        this.activeSacrifice.villager = villager;
+        console.log('VILLAGER DEAD');
+    }
+
     consumeMeat() {
         if (this.meat > 0) {
             this.meat--;
@@ -642,6 +695,13 @@ export class GameScene {
         } else {
             this.sanity--;
             this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '-1', [0, 2]));
+        }
+    }
+
+    grantSanity() {
+        if (this.sanity < 100) {
+            this.sanity++;
+            this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '+1', [0, 2]));
         }
     }
 
@@ -703,7 +763,7 @@ export class GameScene {
     }
 
     buildAltar() {
-        const button = this.buttons[BUTTON_BUILD_ALTAR];
+        const button = this.buttons[BUTTON_REPAIR_ALTAR];
 
         if (button.active && button.visible && this.stone >= 10 && !this.techAltar) {
             this.stone -= 10;
