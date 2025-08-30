@@ -28,10 +28,6 @@ export class VictoryScene {
         this.frames++;
 
         if (this.frames === 30) {
-            if (game.lastReplay) {
-                this.replay = game.lastReplay;
-                this.level = new GameScene(this.replay.levelNumber, this.replay);
-            }
         }
 
         if (this.level) this.level.update();
