@@ -1,13 +1,9 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { BigArrowParticle } from './BigArrowParticle';
 import { Camera } from './Camera';
-import { CloudParticle } from './CloudParticle';
 import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
-import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
-import { LandingParticle } from './LandingParticle';
 import { Replay } from './Replay';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -468,82 +464,6 @@ export class GameScene {
             Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
         }
 
-    }
-
-    drawTileShakemap() {
-        for (let r = 0; r < this.tileshakemap.length; r++) {
-            for (let q = 0; q < this.tileshakemap[0].length; q++) {
-                this.tileshakemap[r][q].x = 0;
-                this.tileshakemap[r][q].y = 0;
-            }
-        }
-
-        for (let i = 0; i < this.tileshakes.length; i++) {
-            let tileshake = this.tileshakes[i];
-            for (let tile of tileshake.tiles) {
-                //this.tileshakemap[tile.r][tile.q].x += tileshake.screenshake.x;
-                let k = 0;
-                if (tileshake.s < 9) k++;
-                if (tileshake.s < 6) k++;
-                if (tileshake.s < 4) k++;
-                if (tileshake.s < 2) k++;
-                this.tileshakemap[tile.r][tile.q].y += k;
-            }
-        }
-    }
-
-    tileIsPassable(q, r) {
-        return true;
-        if (r < 0 || r >= this.tiles.length) return true;
-        if (q < 0 || q >= this.tiles[0].length) return true;
-        return this.tiles[r][q] < 1 || this.tiles[r][q] === 6;
-    }
-
-    entityIsOnSolidGround(entity) {
-        let qr = xy2qr({ x: entity.pos.x, y: entity.pos.y + entity.bb[1].y });
-
-        return !this.tileIsPassable(qr.q, qr.r);
-    }
-
-    landedOnTile(tile, superslamFlag) {
-        if (superslamFlag) {
-            for (let i = 0; i < this.superslamTiles.length; i++) {
-                let slam = this.superslamTiles[i];
-                if (tile.r === slam.r && tile.q >= slam.q1 && tile.q <= slam.q2) {
-                    for (let q = slam.q1; q <= slam.q2; q++) {
-                        this.tiles[slam.r + 1][q] = this.tiles[slam.r][q];
-                        this.tiles[slam.r][q] = this.tiles[slam.r + 1][q] === 5 ? 6 : 0;
-
-                        let xy = this.player.pos;
-                        this.addEntity(new BigArrowParticle({ x: xy.x, y: xy.y }));
-                    }
-                }
-            }
-        }
-
-        for (let entity of this.entities) {
-            if (entity.landedOnTile) entity.landedOnTile(tile);
-        }
-
-        this.addEntity(new LandingParticle(this.player.pos));
-        this.addEntity(new LandingParticle(this.player.pos));
-        this.addEntity(new LandingParticle(this.player.pos));
-        this.addEntity(new LandingParticle(this.player.pos));
-
-        this.lightUpSlamTiles = 12;
-
-        this.fallingDirtCounter = 4;
-    }
-
-    spawnFallingDirt() {
-        for (let i = 0; i < this.superslamTiles.length; i++) {
-            let slam = this.superslamTiles[i];
-            if (!this.tileIsPassable(slam.q1, slam.r)) {
-                let x = (slam.q1 + Math.random() * (slam.q2 + 1 - slam.q1)) * TILE_SIZE;
-                let y = slam.r * TILE_SIZE + TILE_SIZE + 1;
-                this.addEntity(new FallingDirtParticle({ x: x, y: y }));
-            }
-        }
     }
 
     addEntity(entity) {

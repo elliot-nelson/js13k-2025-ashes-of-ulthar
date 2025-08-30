@@ -60,14 +60,11 @@ export const Sprite = {
         Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
 
         Sprite.bigarrow = SpriteSheet.bigarrow.map(initBasicSprite);
-        Sprite.dirt = SpriteSheet.dirt.map(initBasicSprite);
 
         // Base pixel font and icons (see `Text.init` for additional variations)
         Sprite.font = initBasicSprite(SpriteSheet.font4[0]);
         //Sprite.icon_mouse_lmb = initBasicSprite(SpriteSheet.icon_mouse[0]);
         //Sprite.icon_mouse_rmb = initBasicSprite(SpriteSheet.icon_mouse[1]);
-
-        Sprite.clouds = SpriteSheet.clouds.map(initBasicSprite);
 
         // Enemies
 

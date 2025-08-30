@@ -163,7 +163,11 @@ async function exportTerrain() {
 }
 
 async function exportSpriteSheet() {
-    let src = 'src/assets/*.aseprite src/assets/generated/terrain-*.aseprite';
+    const assetFiles = fs.readdirSync('src/assets').filter(file => file.endsWith('.aseprite') && file != 'terrain.aseprite').map(file => `src/assets/${file}`);
+    const terrainFiles = fs.readdirSync('src/assets/generated').filter(file => file.match(/^terrain-.*\.aseprite$/)).map(file => `src/assets/generated/${file}`);
+
+    //let src = 'src/assets/*.aseprite src/assets/generated/terrain-*.aseprite';
+    let src = [...assetFiles, ...terrainFiles].join(' ');
     let png = 'src/assets/generated/spritesheet-gen.png';
     let data = 'src/assets/generated/spritesheet-gen.json';
 

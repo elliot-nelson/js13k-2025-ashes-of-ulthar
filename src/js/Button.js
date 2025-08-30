@@ -1,13 +1,9 @@
 // Button
 
 import { Audio } from './Audio';
-import { BigArrowParticle } from './BigArrowParticle';
 import { Camera } from './Camera';
-import { CloudParticle } from './CloudParticle';
 import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE } from './Constants';
-import { FallingDirtParticle } from './FallingDirtParticle';
 import { game } from './Game';
-import { LandingParticle } from './LandingParticle';
 import { Replay } from './Replay';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
