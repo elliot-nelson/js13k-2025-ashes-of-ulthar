@@ -16,8 +16,6 @@ import { TextFloatParticle } from './TextFloatParticle';
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
 
-import { HeightMapData } from './generated/HeightMapData-gen';
-
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_REPAIR_BRIDGE = 1;
 const BUTTON_REPAIR_HALL = 2;
@@ -195,65 +193,6 @@ export class GameScene {
         if (this.sanity < 0) {
             this.playerLost();
         }
-
-        return;
-
-        //let levelBottomY = qr2xy({ q: 0, r: this.tiles.length - 1 }).y;
-        let levelBottomY = 100;
-        let cameraMaxY = levelBottomY - (TARGET_GAME_HEIGHT / 2);
-
-        /*Camera.forceTarget = {
-            x: this.player.pos.x,
-            y: Math.min(this.player.pos.y, cameraMaxY)
-        };*/
-        //Camera.update();
-
-        Camera.pos.x = (Camera.pos.x * 0.92 + this.player.pos.x * 0.08);
-        Camera.pos.y = Math.min((Camera.pos.y * 0.92 + this.player.pos.y * 0.08), cameraMaxY);
-
-        if (this.player.pos.y > levelBottomY) {
-            this.player.dieFalling(levelBottomY);
-        }
-
-        let entities = [...this.entities];
-
-        for (const entity of entities) {
-            entity.update();
-        }
-
-        for (let i = 0; i < this.entities.length; i++) {
-            if (this.entities[i].cull) {
-                this.entities.splice(i, 1);
-                i--;
-            }
-        }
-
-        // Tick screenshakes and cull finished screenshakes
-        for (let i = 0; i < this.screenshakes.length; i++) {
-            if (!this.screenshakes[i].update()) {
-                this.screenshakes.splice(i, 1);
-                i--;
-            }
-        }
-
-        // Tick tileshakes and cull finished tileshakes
-        for (let i = 0; i < this.tileshakes.length; i++) {
-            if ((this.tileshakes[i].s++ > 15)) {
-                this.tileshakes.splice(i, 1);
-                i--;
-            }
-        }
-
-        if (this.fallingDirtCounter > 0) {
-            this.fallingDirtCounter--;
-            this.spawnFallingDirt();
-        }
-
-        if (this.lightUpSlamTiles > 0) {
-            this.lightUpSlamTiles--;
-        }
-
-        this.spawnClouds();
     }
 
     draw() {
@@ -322,27 +261,6 @@ export class GameScene {
         for (const entity of this.entities) {
             entity.draw();
         }
-
-        // Preview walking path
-        /*for (let x = 0; x < 320; x++) {
-            Viewport.ctx.drawImage(Sprite.icons[1].img, x, HeightMapData[3][x]);
-        }*/
-
-        return;
-
-        // Render screenshakes (canvas translation)
-        let shakeX = 0, shakeY = 0;
-        this.screenshakes.forEach(shake => {
-            shakeX += shake.x;
-            shakeY += shake.y;
-        });
-        Viewport.ctx.translate(shakeX, shakeY);
-
-        for (let entity of this.entities) {
-            if (entity.z === -1) entity.draw();
-        }
-
-        this.drawTileShakemap();
     }
 
     drawSanityBar() {

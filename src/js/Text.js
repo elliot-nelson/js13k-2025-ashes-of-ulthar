@@ -39,10 +39,12 @@ export const Text = {
         Text.white = Sprite.font.img;
         Text.black = recolor(Text.white, rgba(0, 0, 0, 1));
         Text.shadow = recolor(Text.white, rgba(44, 27, 46, 1));
-        Text.tan = recolor(Text.white, rgba(209, 180, 140, 1));
-        Text.pig = recolor(Text.white, rgba(227, 66, 98, 1));
-        Text.duotone = recolorDuotone(Text.white, '#f2b63d', '#fff4e0');
-        Text.duotone_red = recolorDuotone(Text.white, '#ffaa5e', '#ffd4a3', rgba(255, 0, 0, 0.7));
+
+        //Text.tan = recolor(Text.white, rgba(209, 180, 140, 1));
+        //Text.pig = recolor(Text.white, rgba(227, 66, 98, 1));
+        //Text.duotone = recolorDuotone(Text.white, '#f2b63d', '#fff4e0');
+        //Text.duotone_red = recolorDuotone(Text.white, '#ffaa5e', '#ffd4a3', rgba(255, 0, 0, 0.7));
+
         Text.palette = [
             recolor(Text.white, '#0a1a2f'),
             recolor(Text.white, '#04373b'),
@@ -52,7 +54,7 @@ export const Text = {
         ];
     },
 
-    drawText(ctx, text, u, v, scale = 1, font = Text.duotone, shadow) {
+    drawText(ctx, text, u, v, scale = 1, font = Text.white, shadow) {
         for (let c of this.charactersToDraw(text, scale)) {
             if (C_ICONS[c.c]) {
                 ctx.drawImage(
@@ -90,7 +92,7 @@ export const Text = {
         }
     },
 
-    drawParagraph(ctx, text, u, v, width, scale = 1, font = Text.duotone, shadow) {
+    drawParagraph(ctx, text, u, v, width, scale = 1, font = Text.white, shadow) {
         const lines = this.breakParagraph(text, width, scale);
 
         for (let i = 0; i < lines.length; i++) {
@@ -152,23 +154,6 @@ function recolor(font, color) {
     let canvas = createCanvas(font.width, font.height);
     canvas.ctx.fillStyle = color;
     canvas.ctx.fillRect(0, 0, font.width, font.height);
-    canvas.ctx.globalCompositeOperation = 'destination-in';
-    canvas.ctx.drawImage(font, 0, 0);
-    return canvas.canvas;
-}
-
-function recolorDuotone(font, topColor, bottomColor, tint) {
-    // Note: shortcut assumes that the font image is exactly 2 rows of characters.
-    let canvas = createCanvas(font.width, font.height);
-    canvas.ctx.fillStyle = bottomColor;
-    canvas.ctx.fillRect(0, 0, font.width, font.height);
-    canvas.ctx.fillStyle = topColor;
-    canvas.ctx.fillRect(0, 0, font.width, 1);
-    canvas.ctx.fillRect(0, C_HEIGHT + 1, font.width, 1);
-    if (tint) {
-        canvas.ctx.fillStyle = tint;
-        canvas.ctx.fillRect(0, 0, font.width, font.height);
-    }
     canvas.ctx.globalCompositeOperation = 'destination-in';
     canvas.ctx.drawImage(font, 0, 0);
     return canvas.canvas;

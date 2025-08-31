@@ -69,7 +69,7 @@ export const KeyboardAdapter = {
     },
 
     reset() {
-        KeyboardAdapter.direction = KeyboardAdapter.arrowDirections[0];
+        //KeyboardAdapter.direction = 0;
         for (let action of Object.values(Input.Action)) {
             KeyboardAdapter.held[action] = false;
         }

@@ -81,7 +81,7 @@ export const Input = {
         }
 
         //this.pointer = pointerAdapter.pointer;
-        this.direction = KeyboardAdapter.direction;
+        //this.direction = KeyboardAdapter.direction;
         //this.direction = this.gamepad.direction.m > 0 ? this.gamepad.direction : this.keyboard.direction;
     },
 

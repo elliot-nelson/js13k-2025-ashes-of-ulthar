@@ -153,3 +153,15 @@
 [20:37:44] Starting 'ready'...
 [20:37:44] Finished 'ready' after 135 μs
 [20:37:44] Finished 'build' after 8.3 s
+
+[20:44:30] Finished 'buildHtml' after 4.82 ms
+[20:44:30] Starting 'buildZip'...
+[20:44:30] all files 19 kB
+       14481       14253  98% js13k-2025-ulthar-rising.zip
+       14481       14253  98%
+[20:44:31] zip all files 14.3 kB
+[20:44:31] 941 bytes over
+[20:44:31] Finished 'buildZip' after 519 ms
+[20:44:31] Starting 'ready'...
+[20:44:31] Finished 'ready' after 178 μs
+[20:44:31] Finished 'build' after 9.96 s
