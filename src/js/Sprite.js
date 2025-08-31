@@ -45,6 +45,8 @@ export const Sprite = {
             initBasicSprite(SpriteSheet['terrain-FG2'][0]),
             initBasicSprite(SpriteSheet['terrain-FG3'][0])
         ];
+        //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
+        //Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 49, '#1a644e');
 
         // Villager
         Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
@@ -159,3 +161,13 @@ function flipHorizontal(source) {
     canvas.ctx.drawImage(source, 0, 0);
     return canvas.canvas;
 }
+
+/*function augmentTerrain(source, lines, color) {
+    let w = source.width, h = source.height;
+    let canvas = createCanvas(source.width, source.height);
+    canvas.ctx.drawImage(source, 0, 0, w, h, 0, 0, w, h);
+    canvas.ctx.fillStyle = color;
+    canvas.ctx.fillRect(0, h - lines, w, lines);
+    return canvas.canvas;
+}
+*/
