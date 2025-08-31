@@ -10,20 +10,9 @@ import { VillagerChunkParticle } from './VillagerChunkParticle';
 export class SacrificeParticle {
     constructor(villager) {
         this.t = -1;
-        this.pos = { u: 103, v: 123 };
         this.d = 30;
-        this.frame = 1;
-        this.treeframe = 0;
-        this.villager = villager;
-
-        this.canvas = createCanvas(20, 180);
-        this.canvas.ctx.fillStyle = '#00ffff';
-        this.canvas.ctx.fillRect(0, 0, 20, 180);
-        this.canvas.ctx.fillStyle = '#ffffff';
-
-        this.pos = { u: 10, v: 0 };
-
         this.winkframe = 3;
+        this.villager = villager;
     }
 
     update() {
@@ -52,7 +41,7 @@ export class SacrificeParticle {
             game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
         }
 
-        this.villager.pos.v -= 0.3;
+        this.villager.pos.v -= 0.2;
     }
 
     draw() {

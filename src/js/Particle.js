@@ -32,15 +32,5 @@ export class Particle {
     draw() {
 
         Viewport.ctx.drawImage(Sprite.particle[0].img, this.pos.u, this.pos.v);
-
-        return;
-
-        Viewport.ctx.drawImage(Sprite.altar[this.frame].img, 103, 93 - 32);
-
-        Viewport.ctx.drawImage(Sprite.tree[this.treeframe].img, 110, 64 - 32);
-
-        if (this.villager && this.t <= 95) {
-            Viewport.ctx.drawImage(Sprite.altar[5].img, this.pos.u, this.pos.v - 32);
-        }
     }
 }

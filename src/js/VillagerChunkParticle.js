@@ -41,15 +41,5 @@ export class VillagerChunkParticle {
 
     draw() {
         Sprite.drawViewportSprite(Sprite.villagerchunk[this.frame], this.pos, this.a);
-
-        return;
-
-        Viewport.ctx.drawImage(Sprite.altar[this.frame].img, 103, 93 - 32);
-
-        Viewport.ctx.drawImage(Sprite.tree[this.treeframe].img, 110, 64 - 32);
-
-        if (this.villager && this.t <= 95) {
-            Viewport.ctx.drawImage(Sprite.altar[5].img, this.pos.u, this.pos.v - 32);
-        }
     }
 }

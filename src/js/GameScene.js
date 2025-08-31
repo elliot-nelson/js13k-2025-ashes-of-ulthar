@@ -13,7 +13,6 @@ import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER, SACRIFICE } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
-import { VillagerDeathParticle } from './VillagerDeathParticle';
 
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
@@ -243,7 +242,6 @@ export class GameScene {
             } else {
                 Viewport.ctx.drawImage(Sprite.altar[0].img, 103, 93 - 32);
             }
-            Viewport.ctx.drawImage(Sprite.tree[0].img, 110, 64 - 32);
         }
 
         if (true) {
@@ -424,17 +422,6 @@ export class GameScene {
             this.villagers.splice(this.villagers.indexOf(villager), 1);
 
             this.entities.push(new SacrificeParticle(villager));
-
-
-            /*this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());
-            this.entities.push(new VillagerDeathParticle());*/
 
             //villager.job = SACRIFICE;
             //this.villagersWithJob[SACRIFICE].push(villager);
