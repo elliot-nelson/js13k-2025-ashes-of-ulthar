@@ -192,3 +192,13 @@ VVV after revamp
 [18:58:55] 915 bytes over
 [18:58:55] Finished 'buildZip' after 516 ms
 [18:58:55] Starting 'ready'...
+
+[19:01:59] Starting 'buildZip'...
+[19:01:59] all files 18.6 kB
+       14173       13959  98% js13k-2025-ulthar-rising.zip
+       14173       13959  98%
+[19:02:00] zip all files 14 kB
+[19:02:00] 647 bytes over
+[19:02:00] Finished 'buildZip' after 500 ms
+[19:02:00] Starting 'ready'...
+[19:02:00] Finished 'ready' after 145 μs

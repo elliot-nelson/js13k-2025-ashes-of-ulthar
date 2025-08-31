@@ -45,7 +45,6 @@ export const Sprite = {
             initBasicSprite(SpriteSheet['terrain-FG3'][0])
         ];
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
-        Sprite.beam = [initDynamicSprite(createBeam(), defaultOpts)];
 
         //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
         //Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 49, '#1a644e');
@@ -163,19 +162,6 @@ function flipHorizontal(source) {
     canvas.ctx.translate(source.width, 0);
     canvas.ctx.scale(-1, 1);
     canvas.ctx.drawImage(source, 0, 0);
-    return canvas.canvas;
-}
-
-function createBeam() {
-    let canvas = createCanvas(15, 180);
-    canvas.ctx.fillStyle = rgba(209, 203, 149, 0.5);
-    canvas.ctx.fillRect(0, 0, 15, 180);
-    for (let i = 0; i < 100; i++) {
-        let x = Math.floor(Math.random() * 15);
-        let y = Math.floor(Math.random() * 180);
-        let z = Math.floor(Math.random() * 45);
-        canvas.ctx.fillRect(x, y, 1, z);
-    }
     return canvas.canvas;
 }
 
