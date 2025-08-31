@@ -1,12 +1,7 @@
 // Button
 
-import { Audio } from './Audio';
-import { Camera } from './Camera';
-import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE } from './Constants';
-import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
-import { clamp, qr2xy, uv2xy, xy2qr, xy2uv } from './Util';
 import { Viewport } from './Viewport';
 
 export class Button {

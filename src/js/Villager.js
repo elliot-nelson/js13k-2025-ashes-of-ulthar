@@ -1,10 +1,9 @@
 // Villager
 
 import { Audio } from './Audio';
-import { GRAVITY, TILE_SIZE, VILLAGER_FRAMES } from './Constants';
+import { VILLAGER_FRAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
-import { clamp, xy2qr } from './Util';
 import { Viewport } from './Viewport';
 import { TweenChain } from './TweenChain';
 import { HeightMapData } from './generated/HeightMapData-gen';

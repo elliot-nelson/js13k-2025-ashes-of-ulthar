@@ -5,7 +5,6 @@ import { rgba, createCanvas } from './Util';
 import { SpriteSheet } from './generated/SpriteSheet-gen';
 import { Viewport } from './Viewport';
 import { Camera } from './Camera';
-import { TILE_SIZE } from './Constants';
 
 /**
  * Sprite

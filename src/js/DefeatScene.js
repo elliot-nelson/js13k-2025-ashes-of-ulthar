@@ -1,11 +1,8 @@
 // DefeatScene
 
+import { game } from './Game';
 import { Text } from './Text';
 import { Viewport } from './Viewport';
-import { rgba, createCanvas, clamp, partialText, uv2xy, xy2qr, xy2uv, qr2xy, centerxy } from './Util';
-import { game } from './Game';
-import { Audio } from './Audio';
-import { GameScene } from './GameScene';
 import { Sprite } from './Sprite';
 import { Input } from './input/Input';
 

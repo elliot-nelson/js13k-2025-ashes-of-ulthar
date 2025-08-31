@@ -1,6 +1,5 @@
 // IntroScene
 
-import { GRAVITY, TERMINAL_VELOCITY } from './Constants';
 import { game } from './Game';
 import { LoadingScene } from './LoadingScene';
 import { ScreenShake } from './ScreenShake';
@@ -38,50 +37,6 @@ export class IntroScene {
             game.scenes.pop();
             game.scenes.push(new LoadingScene());
         }
-
-        /*
-        this.vel[0].y = clamp(this.vel[0].y + GRAVITY, 0, TERMINAL_VELOCITY);
-        if (this.pos[0].y > 15) {
-            this.vel[1].y = clamp(this.vel[1].y + GRAVITY, 0, TERMINAL_VELOCITY);
-        }
-        if (this.pos[1].y > 15) {
-            this.vel[2].y = clamp(this.vel[2].y + GRAVITY, 0, TERMINAL_VELOCITY);
-        }
-
-        if (this.pos[0].y < 45) {
-            this.pos[0].y += this.vel[0].y;
-        } else if (!this.screenshakes[0]) {
-            this.screenshakes[0] = new ScreenShake(12, 0, 3);
-        }
-        if (this.pos[1].y < 60) {
-            this.pos[1].y += this.vel[1].y;
-        } else if (!this.screenshakes[1]) {
-            this.screenshakes[1] = new ScreenShake(12, 0, 3);
-        }
-        if (this.pos[2].y < 75) {
-            this.pos[2].y += this.vel[2].y;
-        } else if (!this.screenshakes[2]) {
-            this.screenshakes[2] = new ScreenShake(12, 0, 3);
-        }
-            */
-
-        /*
-        if (this.fadet >= 0) this.fadet++;
-
-        if (this.fadet > 30) {
-            game.screens.pop();
-            game.screens.push(new LoadingScreen());
-        }
-
-        if (Input.pressed[Input.Action.JUMP] || Input.pressed[Input.Action.CONTINUE]) {
-            this.fadet = 0;
-        }
-
-        for (let i = 0; i < 3; i++) {
-            if (this.screenshakes[i]) {
-                this.screenshakes[i].update();
-            }
-        }*/
     }
 
     draw() {

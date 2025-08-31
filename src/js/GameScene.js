@@ -2,12 +2,11 @@
 
 import { Audio } from './Audio';
 import { Camera } from './Camera';
-import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, TILE_SIZE, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
+import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
 import { SacrificeParticle } from './SacrificeParticle';
-import { clamp, qr2xy, uv2xy, xy2qr, xy2uv, rgba } from './Util';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
