@@ -39,12 +39,15 @@ export const Sprite = {
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
         Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, defaultOpts);
         Sprite.tree = initBasicSpriteArray(SpriteSheet.tree, defaultOpts);
+        Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
         Sprite.terrain = [
             initBasicSprite(SpriteSheet['terrain-FG1'][0]),
             initBasicSprite(SpriteSheet['terrain-FG2'][0]),
             initBasicSprite(SpriteSheet['terrain-FG3'][0])
         ];
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
+        Sprite.beam = [initDynamicSprite(createBeam(), defaultOpts)];
+
         //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
         //Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 49, '#1a644e');
 
@@ -54,6 +57,8 @@ export const Sprite = {
         for (let i = 0; i < villagerFrames; i++) {
             Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
         }
+        Sprite.villagerdeath = initBasicSpriteArray(SpriteSheet.villagerdeath, { anchor: { x: 6, y: 21 } });
+        Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
 
         Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
 
@@ -159,6 +164,19 @@ function flipHorizontal(source) {
     canvas.ctx.translate(source.width, 0);
     canvas.ctx.scale(-1, 1);
     canvas.ctx.drawImage(source, 0, 0);
+    return canvas.canvas;
+}
+
+function createBeam() {
+    let canvas = createCanvas(15, 180);
+    canvas.ctx.fillStyle = rgba(209, 203, 149, 0.5);
+    canvas.ctx.fillRect(0, 0, 15, 180);
+    for (let i = 0; i < 100; i++) {
+        let x = Math.floor(Math.random() * 15);
+        let y = Math.floor(Math.random() * 180);
+        let z = Math.floor(Math.random() * 45);
+        canvas.ctx.fillRect(x, y, 1, z);
+    }
     return canvas.canvas;
 }
 

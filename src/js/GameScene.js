@@ -12,6 +12,8 @@ import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER, SACRIFICE } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
+import { Particle } from './Particle';
+import { VillagerDeathParticle } from './VillagerDeathParticle';
 
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
@@ -416,21 +418,38 @@ export class GameScene {
 
     sacrificeVillager() {
         if (this.villagersWithJob[this.selectedJob].length > 0) {
-            // TODO
+            // TODO - pick right villager
             const villager = this.villagersWithJob[this.selectedJob].pop();
-            villager.job = SACRIFICE;
-            this.villagersWithJob[SACRIFICE].push(villager);
-            this.activeSacrifice = new SacrificeParticle();
+
+            this.villagers.splice(this.villagers.indexOf(villager), 1);
+
+            this.entities.push(new SacrificeParticle(villager));
+
+
+            /*this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());
+            this.entities.push(new VillagerDeathParticle());*/
+
+            //villager.job = SACRIFICE;
+            //this.villagersWithJob[SACRIFICE].push(villager);
+            //this.activeSacrifice = new SacrificeParticle();
+            console.log('VILLAGER DEAD');
             return true;
         }
         return false;
     }
 
     beginSacrifice(villager) {
+        return;
+
         this.villagersWithJob[SACRIFICE].splice(this.villagersWithJob[SACRIFICE].indexOf(villager), 1);
-        this.villagers.splice(this.villagers.indexOf(villager), 1);
         this.activeSacrifice.villager = villager;
-        console.log('VILLAGER DEAD');
     }
 
     consumeMeat() {
@@ -443,10 +462,10 @@ export class GameScene {
         }
     }
 
-    grantSanity() {
+    grantSanity(value) {
         if (this.sanity < 100) {
-            this.sanity++;
-            this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '+1', [0, 2]));
+            this.sanity = Math.min(100, this.sanity + value);
+            this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '+' + value, [0, 2]));
         }
     }
 
