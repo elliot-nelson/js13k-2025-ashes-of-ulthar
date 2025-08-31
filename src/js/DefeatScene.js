@@ -38,11 +38,15 @@ export class DefeatScene {
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(-5, 0, Viewport.width + 5, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.defeat[0].img, 0, 0);
+        const gameOverWidth = Text.measure('GAME OVER', 2).w;
+        Text.drawText(Viewport.ctx, 'GAME OVER', (Viewport.width - gameOverWidth) / 2, 10, 2, Text.palette[4]);
+
+        //Viewport.ctx.drawImage(Sprite.blackcat[1].img, 160, 73 - 30);
+        Viewport.ctx.drawImage(Sprite.blackcat[1].img, 160, 61 - 30);
 
         for (let i = 0; i < this.text.length; i++) {
             let width = Text.measure(this.text[i], 1).w;
-            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, 30 + i * 10, 1, Text.white, Text.shadow);
+            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, 80 + i * 10, 1, Text.palette[4]);
         }
     }
 }

@@ -267,6 +267,8 @@ export class GameScene {
         Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, -30);
         Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, -30);
 
+        Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
+
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);
 

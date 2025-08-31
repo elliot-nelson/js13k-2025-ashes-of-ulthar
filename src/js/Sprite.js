@@ -28,6 +28,7 @@ export const Sprite = {
     init() {
         const defaultOpts = { anchor: { x: 0, y: 0 } };
 
+        Sprite.blackcat = initBasicSpriteArray(SpriteSheet.blackcat, defaultOpts);
         Sprite.button = initBasicSpriteArray(SpriteSheet.button, defaultOpts);
         Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
         Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
@@ -38,7 +39,6 @@ export const Sprite = {
         Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
-        Sprite.defeat = initBasicSpriteArray(SpriteSheet.defeat, defaultOpts);
         Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, defaultOpts);
         Sprite.tree = initBasicSpriteArray(SpriteSheet.tree, defaultOpts);
         Sprite.terrain = [
