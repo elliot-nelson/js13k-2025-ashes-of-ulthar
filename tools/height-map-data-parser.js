@@ -55,11 +55,17 @@ const HeightMapDataParser = {
             heightmap[layer][w - 1] = orig[w - 1];
             heightmap[layer][w - 2] = orig[w - 2];
 
-        for (let x = 2; x < w - 2; x++) {
+            for (let x = 2; x < w - 2; x++) {
                 //heightmap[layer][x] = Math.floor((orig[x - 2] + orig[x - 1] + orig[x] + orig[x + 1] + orig[x + 2]) / 5);
                 heightmap[layer][x] = Math.floor((orig[x - 1] + orig[x] + orig[x + 1]) / 3);
             }
         }
+
+        // HACK: We don't use the background (0) layer for villagers
+        heightmap[0] = [];
+
+        // HACK: We don't use the furthest-back (1) layer for villagers
+        heightmap[1] = [];
 
         return heightmap;
     },
