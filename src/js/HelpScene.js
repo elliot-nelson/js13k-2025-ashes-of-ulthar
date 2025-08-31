@@ -10,25 +10,48 @@ import { Input } from './input/Input';
 import { Sprite } from './Sprite';
 
 export class HelpScene {
-    static HELP_SANITY = 0;
+    static pagesUnlocked = 4;
+    static help = [
+        {
+            title: 'SANITY',
+            text: 'The sanity of the village is already eroding. If it runs out before you accomplish your mission, you lose.',
+            arrow: [278, 38]
+        },
+        {
+            title: 'INFLUENCE',
+            text: 'Use your influence to control villagers. The more villagers you have, the longer it takes to gain another.',
+            arrow: [100, 3]
+        },
+        {
+            title: 'JOBS',
+            text: 'Use the arrow keys to switch jobs and change the number of villagers assigned to a job. As you unlock additional jobs, adjust the number of villagers assigned to accomplish your goals.',
+            arrow: [65, 122]
+        },
+        {
+            title: 'RESOURCES',
+            text: 'Resources are produced constantly by villagers each turn. Some resources consume other resources to produce, so watch resource levels carefully.',
+            arrow: [170, 128]
+        }
+    ];
 
-    static Scenes = {
-        [HelpScene.HELP_SANITY]:{
-        text: 'The villagers are frail, and their sanity is fragile. Free the village before it runs out.'.toUpperCase(),
-        uScroll: 120,
-        vScroll: 30,
-        uArrow: 278,
-        vArrow: 38
-    }
-    };
-
-    constructor(helpStep) {
-        this.helpStep = helpStep;
-        this.scene = HelpScene.Scenes[helpStep];
+    constructor(page) {
+        this.page = page || 0;
+        this.t = 0;
     }
 
     update() {
-        if (Input.pressed[Input.Action.JUMP] || Input.pressed[Input.Action.CONTINUE]) {
+        this.t++;
+        this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
+
+        if (Input.pressed[Input.Action.RIGHT]) {
+            this.page = (this.page + 1) % HelpScene.pagesUnlocked;
+        }
+
+        if (Input.pressed[Input.Action.LEFT]) {
+            this.page = (this.page + HelpScene.pagesUnlocked - 1) % HelpScene.pagesUnlocked;
+        }
+
+        if (Input.pressed[Input.Action.MENU]) {
             game.scenes.pop();
         }
     }
@@ -37,15 +60,19 @@ export class HelpScene {
         Viewport.ctx.fillStyle = rgba(0, 0, 0, 0.66);
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        Viewport.ctx.drawImage(Sprite.helpscroll[0].img, this.scene.uScroll, this.scene.vScroll);
-        Text.drawParagraph(Viewport.ctx, 'The villagers are frail, and their sanity is fragile. Free the village before it runs out.'.toUpperCase(), this.scene.uScroll + 4, this.scene.vScroll + 3, 140, 1, Text.palette[4]);
+        const page = HelpScene.help[this.page];
 
-        Viewport.ctx.drawImage(Sprite.bigarrows[0].img, this.scene.uArrow, this.scene.vArrow);
+        const titleText = page.title.toUpperCase();
+        const titleWidth = Text.measure(titleText, 1).w;
+        Text.drawText(Viewport.ctx, titleText, (Viewport.width - titleWidth) / 2, 35, 1, Text.palette[4]);
+        Text.drawParagraph(Viewport.ctx, page.text.toUpperCase(), 80, 50, 180, 1, Text.palette[4]);
 
-        if (this.helpStep === HelpScene.HELP_SANITY) {
-            game.gameScene.drawSanityBar();
+        if (page.arrow) {
+            Viewport.ctx.drawImage(Sprite.bigarrows[0].img, page.arrow[0] + this.bounceX, page.arrow[1]);
         }
 
-        return;
+        const helpText = `HELP PAGE ${this.page + 1}/${HelpScene.pagesUnlocked}    \\l\\r MORE HELP    \\e BACK`;
+        const helpWidth = Text.measure(helpText, 1).w;
+        Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }
 }

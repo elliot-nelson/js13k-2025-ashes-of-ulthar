@@ -29,10 +29,14 @@ const C_SHIFT = {
     88: 6, // X
     89: 6, // Y
     109: 6, // m (up)
-    111: 6, // o (down)
+    111: 6, // o (down),
+    1108: 10, // left arrow key
+    1114: 10, // right arrow key
+    1101: 19 // escape key
 };
 
-const C_ICONS = {};
+const C_ICONS = {
+};
 
 export const Text = {
     init() {
@@ -52,6 +56,10 @@ export const Text = {
             recolor(Text.white, '#40985c'),
             recolor(Text.white, '#d1cb95')
         ];
+
+        C_ICONS[1108] = Sprite.keys[0];
+        C_ICONS[1114] = Sprite.keys[1];
+        C_ICONS[1101] = Sprite.keys[2];
     },
 
     drawText(ctx, text, u, v, scale = 1, font = Text.white, shadow) {
@@ -60,7 +68,7 @@ export const Text = {
                 ctx.drawImage(
                     C_ICONS[c.c].img,
                     u + c.u,
-                    v + c.v - (C_ICONS[c.c].img.height + 4) / 2
+                    v + c.v - Math.floor((C_ICONS[c.c].img.height) / 2) + 2
                 );
             } else {
                 let k = (c.c - 32) * FONT_SHEET_C_WIDTH;
@@ -136,9 +144,16 @@ export const Text = {
             let c = text.charCodeAt(idx);
 
             if (c === 10) {
+                // Newline
                 u = 0;
                 v += (C_HEIGHT + 2) * scale;
                 continue;
+            }
+
+            if (c === 92) {
+                // Backslash
+                idx++;
+                c = 1000 + text.charCodeAt(idx);
             }
 
             yield { c, u, v };

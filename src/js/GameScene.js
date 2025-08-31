@@ -134,6 +134,10 @@ export class GameScene {
             this.sanity -= 10;
         }
 
+        if (Input.pressed[Input.Action.HELP]) {
+            game.scenes.push(new HelpScene());
+        }
+
         // Game ticks
 
         this.t++;
@@ -249,8 +253,11 @@ export class GameScene {
             villager.draw();
         }
 
-        for (const button of this.buttons) {
-            button.draw();
+        if (game.scene === this) {
+            // Hide button prompts if Help Screen is displayed, to avoid confusion
+            for (const button of this.buttons) {
+                button.draw();
+            }
         }
 
         this.drawSanityBar();

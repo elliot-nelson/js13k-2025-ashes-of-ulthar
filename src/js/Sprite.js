@@ -34,7 +34,6 @@ export const Sprite = {
         Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
         Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
         Sprite.bridge = initBasicSpriteArray(SpriteSheet.bridge, defaultOpts);
-        Sprite.helpscroll = initBasicSpriteArray(SpriteSheet.helpscroll, defaultOpts);
         Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
@@ -45,6 +44,7 @@ export const Sprite = {
             initBasicSprite(SpriteSheet['terrain-FG2'][0]),
             initBasicSprite(SpriteSheet['terrain-FG3'][0])
         ];
+        Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
         //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
         //Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 49, '#1a644e');
 

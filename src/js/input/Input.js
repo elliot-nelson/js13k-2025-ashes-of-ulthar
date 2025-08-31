@@ -23,6 +23,7 @@ export const Input = {
         BUILD_HALL: 103,
         BUILD_ALTAR: 104,
         SACRIFICE: 105,
+        HELP: 106,
         JUMP: 22,
         ATTACK: 21,
         RELOAD: 30,
