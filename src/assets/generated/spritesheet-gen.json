@@ -171,21 +171,12 @@
     "duration": 100
    },
    {
-    "filename": "jobselect 0.aseprite",
-    "frame": { "x": 0, "y": 142, "w": 120, "h": 14 },
+    "filename": "jobselect.aseprite",
+    "frame": { "x": 0, "y": 142, "w": 101, "h": 14 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 120, "h": 14 },
-    "sourceSize": { "w": 120, "h": 14 },
-    "duration": 100
-   },
-   {
-    "filename": "jobselect 1.aseprite",
-    "frame": { "x": 120, "y": 142, "w": 120, "h": 14 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 120, "h": 14 },
-    "sourceSize": { "w": 120, "h": 14 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 101, "h": 14 },
+    "sourceSize": { "w": 101, "h": 14 },
     "duration": 100
    },
    {
@@ -272,15 +263,6 @@
    {
     "filename": "sanitybar 1.aseprite",
     "frame": { "x": 18, "y": 166, "w": 18, "h": 82 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 82 },
-    "sourceSize": { "w": 18, "h": 82 },
-    "duration": 100
-   },
-   {
-    "filename": "sanitybar 2.aseprite",
-    "frame": { "x": 36, "y": 166, "w": 18, "h": 82 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 82 },

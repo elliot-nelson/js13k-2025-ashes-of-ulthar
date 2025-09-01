@@ -1,6 +1,6 @@
 // Text
 
-import { Sprite } from './Sprite';
+import { Sprite, recolor } from './Sprite';
 import { rgba, createCanvas } from './Util';
 
 const C_WIDTH = 5;
@@ -165,14 +165,3 @@ export const Text = {
         }
     }
 };
-
-// Text utility functions
-
-function recolor(font, color) {
-    let canvas = createCanvas(font.width, font.height);
-    canvas.ctx.fillStyle = color;
-    canvas.ctx.fillRect(0, 0, font.width, font.height);
-    canvas.ctx.globalCompositeOperation = 'destination-in';
-    canvas.ctx.drawImage(font, 0, 0);
-    return canvas.canvas;
-}

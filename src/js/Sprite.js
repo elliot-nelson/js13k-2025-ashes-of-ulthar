@@ -30,6 +30,7 @@ export const Sprite = {
         Sprite.blackcat = initBasicSpriteArray(SpriteSheet.blackcat, defaultOpts);
         Sprite.button = initBasicSpriteArray(SpriteSheet.button, defaultOpts);
         Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
+        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, '#0a1a2f'), defaultOpts);
         Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
         Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
         Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
@@ -157,7 +158,7 @@ function loadCacheSlice(x, y, w, h) {
     return sliceCanvas.canvas;
 }
 
-function flipHorizontal(source) {
+export function flipHorizontal(source) {
     let canvas = createCanvas(source.width, source.height);
     canvas.ctx.translate(source.width, 0);
     canvas.ctx.scale(-1, 1);
@@ -174,3 +175,12 @@ function flipHorizontal(source) {
     return canvas.canvas;
 }
 */
+
+export function recolor(source, color) {
+    let canvas = createCanvas(source.width, source.height);
+    canvas.ctx.fillStyle = color;
+    canvas.ctx.fillRect(0, 0, source.width, source.height);
+    canvas.ctx.globalCompositeOperation = 'destination-in';
+    canvas.ctx.drawImage(source, 0, 0);
+    return canvas.canvas;
+}

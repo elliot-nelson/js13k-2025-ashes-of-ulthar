@@ -318,7 +318,7 @@ export class GameScene {
         const leftArrow = this.villagersWithJob[this.selectedJob].length > 0 ? 0 : 2;
         const rightArrow = this.villagersWithJob[IDLE].length > 0 ? 1 : 3;
 
-        Viewport.ctx.drawImage(Sprite.jobselect[1].img, cornerX, cornerY + selectedIdx * verticalMargin);
+        Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + selectedIdx * verticalMargin);
         Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 77, cornerY + 4 + selectedIdx * verticalMargin);
         Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 94, cornerY + 4 + selectedIdx * verticalMargin);
     }
