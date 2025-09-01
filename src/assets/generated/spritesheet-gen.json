@@ -514,29 +514,29 @@
    },
    {
     "filename": "terrain-FG1.aseprite",
-    "frame": { "x": 0, "y": 319, "w": 320, "h": 180 },
+    "frame": { "x": 0, "y": 319, "w": 320, "h": 150 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 180 },
-    "sourceSize": { "w": 320, "h": 180 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 150 },
+    "sourceSize": { "w": 320, "h": 150 },
     "duration": 100
    },
    {
     "filename": "terrain-FG2.aseprite",
-    "frame": { "x": 0, "y": 499, "w": 320, "h": 180 },
+    "frame": { "x": 0, "y": 469, "w": 320, "h": 150 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 180 },
-    "sourceSize": { "w": 320, "h": 180 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 150 },
+    "sourceSize": { "w": 320, "h": 150 },
     "duration": 100
    },
    {
     "filename": "terrain-FG3.aseprite",
-    "frame": { "x": 0, "y": 679, "w": 320, "h": 180 },
+    "frame": { "x": 0, "y": 619, "w": 320, "h": 150 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 180 },
-    "sourceSize": { "w": 320, "h": 180 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 150 },
+    "sourceSize": { "w": 320, "h": 150 },
     "duration": 100
    }
  ],
@@ -545,7 +545,7 @@
   "version": "1.3.7-arm64",
   "image": "spritesheet-gen.png",
   "format": "RGBA8888",
-  "size": { "w": 320, "h": 859 },
+  "size": { "w": 320, "h": 769 },
   "scale": "1"
  }
 }

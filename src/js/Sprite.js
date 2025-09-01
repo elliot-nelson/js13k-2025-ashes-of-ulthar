@@ -5,6 +5,7 @@ import { rgba, createCanvas } from './Util';
 import { SpriteSheet } from './generated/SpriteSheet-gen';
 import { Viewport } from './Viewport';
 import { Camera } from './Camera';
+import { TARGET_GAME_HEIGHT } from './Constants';
 
 /**
  * Sprite
@@ -47,6 +48,9 @@ export const Sprite = {
         ];
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
 
+        //Sprite.terrain[0].img = shiftTerrain(Sprite.terrain[0].img, 30);
+        //Sprite.terrain[1].img = shiftTerrain(Sprite.terrain[1].img, 30);
+        //Sprite.terrain[2].img = shiftTerrain(Sprite.terrain[2].img, 30);
         //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
         //Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 49, '#1a644e');
 
@@ -163,6 +167,14 @@ export function flipHorizontal(source) {
     canvas.ctx.translate(source.width, 0);
     canvas.ctx.scale(-1, 1);
     canvas.ctx.drawImage(source, 0, 0);
+    return canvas.canvas;
+}
+
+function shiftTerrain(source, lines) {
+    // To save space, the source image cuts out 30 lines of "space" we don't
+    // fill in. This is just transparent.
+    let canvas = createCanvas(source.width, TARGET_GAME_HEIGHT);
+    canvas.ctx.drawImage(source, 0, 0, source.width, source.height, 0, lines, source.width);
     return canvas.canvas;
 }
 
