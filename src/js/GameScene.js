@@ -18,9 +18,11 @@ import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
-const BUTTON_REPAIR_BRIDGE = 1;
-const BUTTON_REPAIR_HALL = 2;
-const BUTTON_REPAIR_ALTAR = 3;
+const BUTTON_SACRIFICE_VILLAGER = 1;
+const BUTTON_REPAIR_BRIDGE = 2;
+const BUTTON_REPAIR_HALL = 3;
+const BUTTON_REPAIR_ALTAR = 4;
+const BUTTON_HELP = 5;
 
 export class GameScene {
     constructor() {
@@ -47,11 +49,16 @@ export class GameScene {
         this.torchesCrafted = 0;
 
         this.buttons = [];
-        //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(20, 140, 'V', 'Recruit Villager');
-        this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
-        this.buttons[BUTTON_REPAIR_BRIDGE] = new Button(240, 100, 'B', 'REPAIR BRIDGE');
-        this.buttons[BUTTON_REPAIR_HALL] = new Button(240, 100, 'T', 'REPAIR TALLOW HALL');
-        this.buttons[BUTTON_REPAIR_ALTAR] = new Button(240, 100, 'A', 'BUILD ALTAR');
+        //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
+        //this.buttons[BUTTON_SACRIFICE_VILLAGER] = new Button((320-80)/2, 15, 'S', 'Sacrifice Villager');
+        this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(5, 3, 'V', 'Recruit Villager');
+        this.buttons[BUTTON_SACRIFICE_VILLAGER] = new Button(5, 13, 'S', 'Sacrifice Villager');
+        this.buttons[BUTTON_REPAIR_BRIDGE] = new Button(5, 23, 'B', 'REPAIR BRIDGE');
+        this.buttons[BUTTON_REPAIR_HALL] = new Button(5, 33, 'T', 'REPAIR TALLOW HALL');
+        this.buttons[BUTTON_REPAIR_ALTAR] = new Button(5, 43, 'A', 'BUILD ALTAR');
+        this.buttons[BUTTON_HELP] = new Button(285, 168, 'H', 'HELP');
+        this.buttons[BUTTON_HELP].visible = true;
+        this.buttons[BUTTON_HELP].active = true;
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
@@ -63,8 +70,7 @@ export class GameScene {
             [WOODCUTTER]: [],
             [TALLOWER]: [],
             [STONECUTTER]: [],
-            [FIREKEEPER]: [],
-            [SACRIFICE]: []
+            [FIREKEEPER]: []
         };
 
         this.techBridge = false;
@@ -162,6 +168,9 @@ export class GameScene {
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
         this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
 
+        this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
+        this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_SACRIFICE_VILLAGER].active);
+
         this.buttons[BUTTON_REPAIR_BRIDGE].active = (this.wood >= 10);
         this.buttons[BUTTON_REPAIR_BRIDGE].visible = !this.techBridge && this.wood >= 10;
 
@@ -170,6 +179,14 @@ export class GameScene {
 
         this.buttons[BUTTON_REPAIR_ALTAR].active = (this.stone >= 10);
         this.buttons[BUTTON_REPAIR_ALTAR].visible = this.techTorches && !this.techAltar && this.stone >= 10;
+
+        let visibleButtonY = 3;
+        for (let i = 0; i < 5; i++) {
+            if (this.buttons[i].visible) {
+                this.buttons[i].y = visibleButtonY;
+                visibleButtonY += 10;
+            }
+        }
 
         // Villagers
 
@@ -183,15 +200,6 @@ export class GameScene {
             entity.update();
         }
         this.entities = this.entities.filter(entity => !entity.cull);
-
-        // Active Sacrifice
-
-        if (this.activeSacrifice) {
-            this.activeSacrifice.update();
-            if (this.activeSacrifice.cull) {
-                this.activeSacrifice = undefined;
-            }
-        }
 
         // Check
 
@@ -233,15 +241,10 @@ export class GameScene {
 
         // Altar
 
-        this.techAltar = true;
-        if (this.activeSacrifice) {
-            this.activeSacrifice.draw();
-        } else {
-            if (this.techAltar) {
-                Viewport.ctx.drawImage(Sprite.altar[1].img, 103, 93 - 32);
-            } else {
-                Viewport.ctx.drawImage(Sprite.altar[0].img, 103, 93 - 32);
-            }
+        if (this.techAltar) {
+            let altarY = Math.floor(Math.sin(this.t / 25) * 2);
+            Viewport.ctx.drawImage(Sprite.altar[0].img, 238, 116 - 30);
+            Viewport.ctx.drawImage(Sprite.altar[1].img, 238, 115 - 30 + altarY);
         }
 
         if (true) {
@@ -430,13 +433,6 @@ export class GameScene {
             return true;
         }
         return false;
-    }
-
-    beginSacrifice(villager) {
-        return;
-
-        this.villagersWithJob[SACRIFICE].splice(this.villagersWithJob[SACRIFICE].indexOf(villager), 1);
-        this.activeSacrifice.villager = villager;
     }
 
     consumeMeat() {

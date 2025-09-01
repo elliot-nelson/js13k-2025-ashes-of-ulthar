@@ -18,6 +18,8 @@ const C_SHIFT = {
     32: 3, // Space ( )
     33: 3, // Bang (!)
     39: 2, // Apostrophe (')
+    40: 3, // Open Paren (
+    41: 3, // Close Paren )
     44: 3, // Comma (,)
     46: 3, // Period (.)
     47: 6, // Slash (/)
@@ -28,6 +30,7 @@ const C_SHIFT = {
     87: 6, // W
     88: 6, // X
     89: 6, // Y
+    91: 4, // [ (s)
     109: 6, // m (up)
     111: 6, // o (down),
     1108: 10, // left arrow key

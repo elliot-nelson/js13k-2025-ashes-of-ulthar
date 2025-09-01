@@ -37,7 +37,7 @@ export const Sprite = {
         Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
-        Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, defaultOpts);
+        Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, { anchor: { x: 9, y: 28 } });
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
         Sprite.terrain = [
             initBasicSprite(SpriteSheet['terrain-FG1'][0]),
