@@ -13,6 +13,7 @@ import { Input } from './input/Input';
 import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER, SACRIFICE } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
+import { WinkParticle } from './WinkParticle';
 
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
@@ -389,6 +390,7 @@ export class GameScene {
             this.villagersWithJob[villager.job].push(villager);
             this.villagersRecruited++;
 
+            this.entities.push(new WinkParticle());
             return true;
         }
 
@@ -425,6 +427,7 @@ export class GameScene {
             this.villagers.splice(this.villagers.indexOf(villager), 1);
 
             this.entities.push(new SacrificeParticle(villager));
+            this.entities.push(new WinkParticle());
 
             //villager.job = SACRIFICE;
             //this.villagersWithJob[SACRIFICE].push(villager);
