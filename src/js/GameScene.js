@@ -210,14 +210,40 @@ export class GameScene {
     }
 
     draw() {
-        // Terrain
+        // Background
 
         Viewport.ctx.fillStyle = '#40985e';
         Viewport.ctx.fillRect(-5, 0, Viewport.width + 5, Viewport.height);
 
+        // Layer 3 (farthest)
+
         Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, 0);
+
+        // Layer 2 (middle)
+
         Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, 0);
+
+        for (const villager of this.villagers) {
+            // Sorry, it's weird, the layers 0-3 are backwards
+            // for the villager layers.
+            if (villager.layer === 2) {
+                villager.draw();
+            }
+        }
+
+        // Layer 1 (closest)
+
         Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, 0);
+
+        for (const villager of this.villagers) {
+            // Sorry, it's weird, the layers 0-3 are backwards
+            // for the villager layers.
+            if (villager.layer === 3) {
+                villager.draw();
+            }
+        }
+
+        // Black cat perch
 
         Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
 
@@ -248,14 +274,11 @@ export class GameScene {
             Viewport.ctx.drawImage(Sprite.altar[1].img, 238, 115 - 30 + altarY);
         }
 
-        if (true) {
+        /*
+            // (Debug) raw numbers
             let crunk = String(Math.floor(this.sanity)) + ',' + String(Math.floor(this.influence)) + ',' + String(this.villagers.length);
             Text.drawText(Viewport.ctx, crunk, 3, 3, 1, Text.palette[1]);
-        }
-
-        for (const villager of this.villagers) {
-            villager.draw();
-        }
+        */
 
         if (game.scene === this) {
             // Hide button prompts if Help Screen is displayed, to avoid confusion

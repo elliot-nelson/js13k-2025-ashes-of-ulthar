@@ -23,6 +23,7 @@ export class IdleTask extends TweenChain {
             { t1: 0, t2: 30, v1: 0, v2: 0 }
         ]);
         this.frame = 0;
+        this.layer = 3;
     }
 
     completeTask() { }
@@ -128,24 +129,6 @@ export class StonecutterTask extends TweenChain {
     }
 }
 
-export class SacrificeTask extends TweenChain {
-    constructor() {
-        super([
-            { t1: 0, t2: 1, v1: 0, v2: 0 }
-        ]);
-        this.layer = 3;
-        this.frame = 0;
-    }
-
-    update() {
-        super.update();
-    }
-
-    completeTask(villager) {
-        game.gameScene.beginSacrifice(villager);
-    }
-}
-
 export class Villager {
     static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'FIREKEEPER', 'TOTEMCARVER'];
 
@@ -162,8 +145,9 @@ export class Villager {
 
         this.task.update();
 
+        this.layer = this.task.layer;
         this.pos.u = 160 + this.task.value;
-        this.pos.v = HeightMapData[this.task.layer][Math.floor(this.pos.u)] - 32 + 1;
+        this.pos.v = HeightMapData[this.layer][Math.floor(this.pos.u)] - 32 + 1;
         this.frame = this.task.frame || 0;
         this.equipmentframe = this.task.equipmentframe;
 
