@@ -9,52 +9,60 @@ import { Viewport } from './Viewport';
 
 export class LoadingScene {
     constructor() {
-        this.text = [
-            'HAROLD',
-            'IS',
-            'HEAVY'
-        ];
         this.t = -12;
     }
 
     update() {
         this.t++;
 
+        let ratio = Math.min(1, this.t / 40);
+        this.y = Math.floor((1-ratio) * 100);
+
+
         if (this.t === 36) {
             //Audio.initTracks();
         }
 
-        if (this.t > 15) {
+        if (this.t > 42) {
             game.scenes.pop();
         }
     }
 
     draw() {
-        Viewport.ctx.fillStyle = '#2c1b2e';
-        Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+        Viewport.ctx.fillStyle = '#0a1a2f';
+        if (this.t === 9) {
+            Viewport.ctx.fillStyle = '#d1cb95';
+        } else if (this.t > 5) {
+            Viewport.ctx.fillStyle = '#40985e';
+        }
+        Viewport.ctx.fillRect(0, 0, 320, 180);
 
-        Viewport.ctx.fillStyle = '#457cd6';
-        Viewport.ctx.fillRect(Viewport.width / 2 - 65, Viewport.height / 2 - 8, 130, 16);
-        Viewport.ctx.fillRect(Viewport.width / 2 - 64, Viewport.height / 2 - 9, 128, 18);
+        if (this.t < 5) return;
 
-        let total = 10;
-        let loaded = clamp(this.t / 6, 0, 10);
+        // Layer 3 (farthest)
 
-        for (let i = 0; i < total; i++) {
-            let frame = (loaded > i) ? 0 : 3;
-            let y = Math.sin(i * Math.PI * 2 / 9 + (this.t * Math.PI * 2 / 60)) * 3;
-            //Viewport.ctx.drawImage(Sprite.littlepig[0][frame].img, i * 12 + (Viewport.width - 120) / 2, Viewport.height / 2 - 3 + y);
+        Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, this.y * 0.8 * 0.8);
+
+        // Layer 2 (middle)
+
+        Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, this.y * 0.8);
+
+        // Layer 1 (closest)
+
+        Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, this.y);
+
+        // Black cat perch
+
+        if (this.t >= 9) {
+            Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
         }
 
-        this.drawInstructions();
-    }
-
-    drawInstructions() {
-        let text = 'LOADING...';
-        let width = Text.measure(text, 1).w;
-
-        if (this.t % 30 < 24) {
-            Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, Viewport.height / 20 + 25, Text.duotone, Text.shadow);
+        if (this.t <= 9) {
+            for (let i = 0; i < 10; i++) {
+                let x = Math.random() * 40 - 20 + 160 + 9;
+                let y = Math.random() * 20 - 10 + 73 - 30 + 16;
+                Viewport.ctx.drawImage(Sprite.particle[0].img, x, y);
+            }
         }
     }
 }

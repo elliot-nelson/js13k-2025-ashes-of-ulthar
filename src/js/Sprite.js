@@ -49,6 +49,10 @@ export const Sprite = {
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
 
         //Sprite.terrain[0].img = shiftTerrain(Sprite.terrain[0].img, 30);
+        Sprite.terrain[0].img = augmentTerrain(Sprite.terrain[0].img, 30, '#0a1a2f');
+        Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
+        Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 30, '#1a644e');
+
         //Sprite.terrain[1].img = shiftTerrain(Sprite.terrain[1].img, 30);
         //Sprite.terrain[2].img = shiftTerrain(Sprite.terrain[2].img, 30);
         //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
@@ -178,15 +182,13 @@ function shiftTerrain(source, lines) {
     return canvas.canvas;
 }
 
-/*function augmentTerrain(source, lines, color) {
-    let w = source.width, h = source.height;
-    let canvas = createCanvas(source.width, source.height);
-    canvas.ctx.drawImage(source, 0, 0, w, h, 0, 0, w, h);
+function augmentTerrain(source, lines, color) {
+    let canvas = createCanvas(320, 180);
+    canvas.ctx.drawImage(source, 0, 0);
     canvas.ctx.fillStyle = color;
-    canvas.ctx.fillRect(0, h - lines, w, lines);
+    canvas.ctx.fillRect(0, 180 - lines, 320, lines);
     return canvas.canvas;
 }
-*/
 
 export function recolor(source, color) {
     let canvas = createCanvas(source.width, source.height);
