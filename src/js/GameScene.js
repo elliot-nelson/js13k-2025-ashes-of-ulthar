@@ -17,6 +17,7 @@ import { WinkParticle } from './WinkParticle';
 
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
+import { AshParticle } from './AshParticle';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
@@ -78,6 +79,10 @@ export class GameScene {
         this.techTorches = false;
         this.techStone = false;
         this.techAltar = false;
+
+        this.entities.push(new AshParticle());
+        this.entities.push(new AshParticle());
+        this.entities.push(new AshParticle());
     }
 
     update() {
@@ -207,6 +212,12 @@ export class GameScene {
         if (this.sanity < 0) {
             this.playerLost();
         }
+
+        // Ash Particles
+
+        if (this.t % 20 === 0) {
+            this.entities.push(new AshParticle());
+        }
     }
 
     draw() {
@@ -287,14 +298,14 @@ export class GameScene {
             }
         }
 
+        for (const entity of this.entities) {
+            entity.draw();
+        }
+
         this.drawSanityBar();
         this.drawInfluenceBar();
         this.drawJobSelectUI();
         this.drawInventory();
-
-        for (const entity of this.entities) {
-            entity.draw();
-        }
     }
 
     drawSanityBar() {
