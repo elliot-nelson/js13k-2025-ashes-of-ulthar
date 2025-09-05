@@ -374,3 +374,12 @@ remove a switch.
 [19:14:13] Finished 'build' after 7.72 s
 
 === here: deleted some unused input code ===
+
+[19:29:17] Starting 'buildZip'...
+[19:29:17] all files 18 kB
+       13695       13510  98% js13k-2025-ulthar-rising.zip
+       13695       13510  98%
+[19:29:17] zip all files 13.5 kB
+[19:29:17] 198 bytes over
+[19:29:17] Finished 'buildZip' after 490 ms
+[19:29:17] Starting 'ready'...

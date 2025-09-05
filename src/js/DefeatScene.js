@@ -26,7 +26,7 @@ export class DefeatScene {
     update() {
         this.frames++;
 
-        if (Input.pressed[Input.Action.JUMP]) {
+        if (Input.pressed['Space']) {
             game.scenes.pop();
         }
     }

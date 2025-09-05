@@ -43,15 +43,15 @@ export class HelpScene {
         this.t++;
         this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
 
-        if (Input.pressed[Input.Action.RIGHT]) {
+        if (Input.pressed['ArrowRight']) {
             this.page = (this.page + 1) % HelpScene.pagesUnlocked;
         }
 
-        if (Input.pressed[Input.Action.LEFT]) {
+        if (Input.pressed['ArrowLeft']) {
             this.page = (this.page + HelpScene.pagesUnlocked - 1) % HelpScene.pagesUnlocked;
         }
 
-        if (Input.pressed[Input.Action.MENU]) {
+        if (Input.pressed['Escape']) {
             game.scenes.pop();
         }
     }

@@ -86,12 +86,12 @@ export class Game {
         Input.update();
 
         // Handle special keys that are screen-independent
-        if (Input.pressed[Input.Action.MUSIC_TOGGLE]) {
+        /*if (Input.pressed[Input.Action.MUSIC_TOGGLE]) {
             Audio.musicEnabled = !Audio.musicEnabled;
         }
         if (Input.pressed[Input.Action.SFX_TOGGLE]) {
             Audio.sfxEnabled = !Audio.sfxEnabled;
-        }
+        }*/
 
         // Hand off control to the current "screen" (for example, game screen or menu)
         if (this.scenes.length === 0) {

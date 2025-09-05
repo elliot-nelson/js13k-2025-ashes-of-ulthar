@@ -99,47 +99,47 @@ export class GameScene {
         ///this.pos.x += this.vel.x;
         ///this.pos.y += this.vel.y;
 
-        if (Input.pressed[Input.Action.RECRUIT_VILLAGER]) {
+        if (Input.pressed['KeyV']) {
             this.recruitVillager();
         }
 
-        if (Input.pressed[Input.Action.BUILD_BRIDGE]) {
+        if (Input.pressed['KeyB']) {
             this.buildBridge();
         }
 
-        if (Input.pressed[Input.Action.BUILD_HALL]) {
+        if (Input.pressed['KeyT']) {
             this.buildHall();
         }
 
-        if (Input.pressed[Input.Action.BUILD_ALTAR]) {
+        if (Input.pressed['KeyA']) {
             this.buildAltar();
         }
 
-        if (Input.pressed[Input.Action.DOWN]) {
+        if (Input.pressed['ArrowDown']) {
             this.moveJobSelector(1);
         }
 
-        if (Input.pressed[Input.Action.UP]) {
+        if (Input.pressed['ArrowUp']) {
             this.moveJobSelector(-1);
         }
 
-        if (Input.pressed[Input.Action.RIGHT]) {
+        if (Input.pressed['ArrowRight']) {
             this.hireVillager(this.selectedJob);
         }
 
-        if (Input.pressed[Input.Action.LEFT]) {
+        if (Input.pressed['ArrowLeft']) {
             this.fireVillager(this.selectedJob);
         }
 
-        if (Input.pressed[Input.Action.SACRIFICE]) {
+        if (Input.pressed['KeyS']) {
             this.sacrificeVillager();
         }
 
-        if (Input.pressed[Input.Action.JUMP]) {
+        if (Input.pressed['Space']) {
             this.sanity -= 10;
         }
 
-        if (Input.pressed[Input.Action.HELP]) {
+        if (Input.pressed['KeyH']) {
             game.scenes.push(new HelpScene());
         }
 
