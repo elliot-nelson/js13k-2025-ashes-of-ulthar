@@ -1,7 +1,6 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { Camera } from './Camera';
 import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
@@ -10,7 +9,7 @@ import { SacrificeParticle } from './SacrificeParticle';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER, SACRIFICE } from './Villager';
+import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
@@ -108,19 +107,19 @@ export class GameScene {
         ///this.pos.y += this.vel.y;
 
         if (Input.pressed[Input.Action.RECRUIT_VILLAGER]) {
-            console.log(this.recruitVillager());
+            this.recruitVillager();
         }
 
         if (Input.pressed[Input.Action.BUILD_BRIDGE]) {
-            console.log(this.buildBridge());
+            this.buildBridge();
         }
 
         if (Input.pressed[Input.Action.BUILD_HALL]) {
-            console.log(this.buildHall());
+            this.buildHall();
         }
 
         if (Input.pressed[Input.Action.BUILD_ALTAR]) {
-            console.log(this.buildAltar());
+            this.buildAltar();
         }
 
         if (Input.pressed[Input.Action.DOWN]) {
@@ -132,15 +131,15 @@ export class GameScene {
         }
 
         if (Input.pressed[Input.Action.RIGHT]) {
-            console.log(this.hireVillager(this.selectedJob));
+            this.hireVillager(this.selectedJob);
         }
 
         if (Input.pressed[Input.Action.LEFT]) {
-            console.log(this.fireVillager(this.selectedJob));
+            this.fireVillager(this.selectedJob);
         }
 
         if (Input.pressed[Input.Action.SACRIFICE]) {
-            console.log(this.sacrificeVillager());
+            this.sacrificeVillager();
         }
 
         if (Input.pressed[Input.Action.JUMP]) {
@@ -466,7 +465,7 @@ export class GameScene {
             //villager.job = SACRIFICE;
             //this.villagersWithJob[SACRIFICE].push(villager);
             //this.activeSacrifice = new SacrificeParticle();
-            console.log('VILLAGER DEAD');
+            //console.log('VILLAGER DEAD');
             return true;
         }
         return false;

@@ -148,7 +148,7 @@ function buildCss() {
 // -----------------------------------------------------------------------------
 async function exportTerrain() {
     let src = 'src/assets/terrain.aseprite';
-    let out = 'src/assets/generated/terrain-{layer}.aseprite';
+    let out = 'src/assets/generated/terrain_{layer}.aseprite';
 
     try {
         await AsepriteCli.exec(`--batch ${src} --split-layers --save-as ${out}`);
@@ -157,14 +157,14 @@ async function exportTerrain() {
         log.warn(chalk.red('Failed to export terrain layers, but building anyway...'));
     }
 
-    if (fs.existsSync('src/assets/generated/terrain-BG.aseprite')) {
-        fs.unlinkSync('src/assets/generated/terrain-BG.aseprite');
+    if (fs.existsSync('src/assets/generated/terrain_BG.aseprite')) {
+        fs.unlinkSync('src/assets/generated/terrain_BG.aseprite');
     }
 }
 
 async function exportSpriteSheet() {
     const assetFiles = fs.readdirSync('src/assets').filter(file => file.endsWith('.aseprite') && file != 'terrain.aseprite').map(file => `src/assets/${file}`);
-    const terrainFiles = fs.readdirSync('src/assets/generated').filter(file => file.match(/^terrain-.*\.aseprite$/)).map(file => `src/assets/generated/${file}`);
+    const terrainFiles = fs.readdirSync('src/assets/generated').filter(file => file.match(/^terrain_.*\.aseprite$/)).map(file => `src/assets/generated/${file}`);
 
     //let src = 'src/assets/*.aseprite src/assets/generated/terrain-*.aseprite';
     let src = [...assetFiles, ...terrainFiles].join(' ');

@@ -15,7 +15,6 @@ export const TALLOWER = 3;
 export const STONECUTTER = 4;
 export const FIREKEEPER = 5;
 export const TOTEMCARVER = 6;
-export const SACRIFICE = 7;
 
 export class IdleTask extends TweenChain {
     constructor() {
@@ -129,6 +128,14 @@ export class StonecutterTask extends TweenChain {
     }
 }
 
+export const TaskClass = {
+    [WOODCUTTER]: WoodcutterTask,
+    [BUTCHER]: ButcherTask,
+    [TALLOWER]: TallowerTask,
+    [STONECUTTER]: StonecutterTask,
+    [IDLE]: IdleTask
+};
+
 export class Villager {
     static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'FIREKEEPER', 'TOTEMCARVER'];
 
@@ -140,7 +147,7 @@ export class Villager {
 
     update() {
         if (!this.task) {
-            this.task = this.newTask();
+            this.task = new TaskClass[this.job]();
         }
 
         this.task.update();
@@ -166,19 +173,6 @@ export class Villager {
     }
 
     newTask() {
-        switch (this.job) {
-            case BUTCHER:
-                return new ButcherTask();
-            case WOODCUTTER:
-                return new WoodcutterTask();
-            case TALLOWER:
-                return new TallowerTask();
-            case STONECUTTER:
-                return new StonecutterTask();
-            case SACRIFICE:
-                return new SacrificeTask();
-            default:
-                return new IdleTask();
-        }
+        return new TaskClass[this.job]();
     }
 }

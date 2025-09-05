@@ -513,7 +513,7 @@
     "duration": 100
    },
    {
-    "filename": "terrain-FG1.aseprite",
+    "filename": "terrain_FG1.aseprite",
     "frame": { "x": 0, "y": 319, "w": 320, "h": 150 },
     "rotated": false,
     "trimmed": false,
@@ -522,7 +522,7 @@
     "duration": 100
    },
    {
-    "filename": "terrain-FG2.aseprite",
+    "filename": "terrain_FG2.aseprite",
     "frame": { "x": 0, "y": 469, "w": 320, "h": 150 },
     "rotated": false,
     "trimmed": false,
@@ -531,7 +531,7 @@
     "duration": 100
    },
    {
-    "filename": "terrain-FG3.aseprite",
+    "filename": "terrain_FG3.aseprite",
     "frame": { "x": 0, "y": 619, "w": 320, "h": 150 },
     "rotated": false,
     "trimmed": false,

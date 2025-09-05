@@ -2,6 +2,7 @@
 
 import { Sprite, recolor } from './Sprite';
 import { rgba, createCanvas } from './Util';
+import { PALETTE } from './Constants';
 
 const C_WIDTH = 5;
 const C_HEIGHT = 5;
@@ -52,13 +53,7 @@ export const Text = {
         //Text.duotone = recolorDuotone(Text.white, '#f2b63d', '#fff4e0');
         //Text.duotone_red = recolorDuotone(Text.white, '#ffaa5e', '#ffd4a3', rgba(255, 0, 0, 0.7));
 
-        Text.palette = [
-            recolor(Text.white, '#0a1a2f'),
-            recolor(Text.white, '#04373b'),
-            recolor(Text.white, '#1a644c'),
-            recolor(Text.white, '#40985c'),
-            recolor(Text.white, '#d1cb95')
-        ];
+        Text.palette = PALETTE.map(color => recolor(Text.white, color));
 
         C_ICONS[1108] = Sprite.keys[0];
         C_ICONS[1114] = Sprite.keys[1];

@@ -19,3 +19,11 @@ export const VILLAGER_FRAMES = 12;
 //
 // Other constants below, like gravity, foot speed, etc., are represented as movement PER FRAME.
 export const FPS = 42;
+
+export const PALETTE = [
+  '#0a1a2f',
+  '#04373b',
+  '#1a644c',
+  '#40985c',
+  '#d1cb95'
+];

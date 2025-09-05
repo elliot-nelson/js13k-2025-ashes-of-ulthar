@@ -82,7 +82,6 @@ export class LoadingScene {
 
         Viewport.ctx.globalAlpha = Math.floor((1-(this.t/42)) * 100) / 100;
         const k = Math.floor((1-(this.t/42)) * 100) / 100;
-        console.log(k);
         Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(0, 0, 320, 180);
         Viewport.ctx.globalAlpha = 1;

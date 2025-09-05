@@ -4,8 +4,7 @@ import { game } from './Game';
 import { rgba, createCanvas } from './Util';
 import { SpriteSheet } from './generated/SpriteSheet-gen';
 import { Viewport } from './Viewport';
-import { Camera } from './Camera';
-import { TARGET_GAME_HEIGHT } from './Constants';
+import { TARGET_GAME_HEIGHT, PALETTE } from './Constants';
 
 /**
  * Sprite
@@ -26,12 +25,12 @@ export const Sprite = {
     },
 
     init() {
+        // Standard (no special ops) sprites
         const defaultOpts = { anchor: { x: 0, y: 0 } };
-
+        Sprite.font = initBasicSprite(SpriteSheet.font4[0]);
+        Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
         Sprite.blackcat = initBasicSpriteArray(SpriteSheet.blackcat, defaultOpts);
         Sprite.button = initBasicSpriteArray(SpriteSheet.button, defaultOpts);
-        Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
-        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, '#0a1a2f'), defaultOpts);
         Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
         Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
         Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
@@ -39,24 +38,27 @@ export const Sprite = {
         Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
-        Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, { anchor: { x: 9, y: 28 } });
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
-        Sprite.terrain = [
-            initBasicSprite(SpriteSheet['terrain-FG1'][0]),
-            initBasicSprite(SpriteSheet['terrain-FG2'][0]),
-            initBasicSprite(SpriteSheet['terrain-FG3'][0])
-        ];
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
 
-        //Sprite.terrain[0].img = shiftTerrain(Sprite.terrain[0].img, 30);
-        Sprite.terrain[0].img = augmentTerrain(Sprite.terrain[0].img, 30, '#0a1a2f');
-        Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
-        Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 30, '#1a644e');
+        // Custom anchors
+        Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, { anchor: { x: 9, y: 28 } });
+        Sprite.villagerdeath = initBasicSpriteArray(SpriteSheet.villagerdeath, { anchor: { x: 6, y: 21 } });
+        Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
 
-        //Sprite.terrain[1].img = shiftTerrain(Sprite.terrain[1].img, 30);
-        //Sprite.terrain[2].img = shiftTerrain(Sprite.terrain[2].img, 30);
-        //Sprite.terrain[1].img = augmentTerrain(Sprite.terrain[1].img, 30, '#04373b');
-        //Sprite.terrain[2].img = augmentTerrain(Sprite.terrain[2].img, 49, '#1a644e');
+        // Sanity bar handling
+        Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
+        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, '#0a1a2f'), defaultOpts);
+
+        // Terrain handling
+        Sprite.terrain = [
+            initBasicSprite(SpriteSheet.terrain_FG1[0]),
+            initBasicSprite(SpriteSheet.terrain_FG2[0]),
+            initBasicSprite(SpriteSheet.terrain_FG3[0])
+        ];
+        for (let i = 0; i < 3; i++) {
+            Sprite.terrain[i].img = augmentTerrain(Sprite.terrain[i].img, 30, PALETTE[i]);
+        }
 
         // Villager
         Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
@@ -64,13 +66,6 @@ export const Sprite = {
         for (let i = 0; i < villagerFrames; i++) {
             Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
         }
-        Sprite.villagerdeath = initBasicSpriteArray(SpriteSheet.villagerdeath, { anchor: { x: 6, y: 21 } });
-        Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
-
-        Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
-
-        // Base pixel font and icons (see `Text.init` for additional variations)
-        Sprite.font = initBasicSprite(SpriteSheet.font4[0]);
     },
 
     /**
@@ -121,8 +116,8 @@ export const Sprite = {
         }
 
         return {
-            u: pos.x - sprite.anchor.x - Camera.pos.x + Viewport.center.u,
-            v: pos.y - sprite.anchor.y - Camera.pos.y + Viewport.center.v
+            u: pos.x - sprite.anchor.x - (0) /*Camera.pos.x*/ + Viewport.center.u,
+            v: pos.y - sprite.anchor.y - (0) /*Camera.pos.y*/ + Viewport.center.v
         };
     }
 };

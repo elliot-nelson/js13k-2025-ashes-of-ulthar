@@ -20,7 +20,7 @@ export class VictoryScene {
         ];
         this.frames = 0;
 
-        this.text[this.text.length - 1] = `SPEEDRUN SCORE    ${game.speedrunScore()}*`;
+        //this.text[this.text.length - 1] = `SPEEDRUN SCORE    ${game.speedrunScore()}*`;
     }
 
     update() {

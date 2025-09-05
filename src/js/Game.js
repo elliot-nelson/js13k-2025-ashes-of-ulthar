@@ -1,7 +1,6 @@
 // Game
 
 import { Audio } from './Audio';
-import { Camera } from './Camera';
 import { FPS } from './Constants';
 import { IntroScene } from './IntroScene';
 import { GameScene } from './GameScene';
@@ -23,7 +22,7 @@ export class Game {
             Input.init();
             Audio.init();
 
-            Camera.init();
+            //Camera.init();
 
             window.addEventListener('blur', () => this.pause());
             window.addEventListener('focus', () => this.unpause());
@@ -127,27 +126,6 @@ export class Game {
         if (!this.paused) return;
         this.paused = false;
         Audio.unpause();
-    }
-
-    restartLevel() {
-        this.scenes.pop();
-    }
-
-    speedrunScore() {
-        let score = 100000;
-
-        for (let i = 0; i < this.scores.length; i++) {
-            score -= this.scores[i].time;
-            score -= this.scores[i].enemiesAlive * 5 * 60;
-        }
-
-        let scoreText = String(score);
-        if (scoreText.length > 3) {
-
-            scoreText = scoreText.slice(0, scoreText.length - 3) + ',' + scoreText.slice(scoreText.length - 3);
-        }
-
-        return scoreText;
     }
 }
 
