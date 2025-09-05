@@ -65,14 +65,7 @@ export class GameScene {
         this.jobsDisplayed = [WOODCUTTER];
 
         this.villagers = [];
-        this.villagersWithJob = {
-            [IDLE]: [],
-            [BUTCHER]: [],
-            [WOODCUTTER]: [],
-            [TALLOWER]: [],
-            [STONECUTTER]: [],
-            [FIREKEEPER]: []
-        };
+        this.villagersWithJob = [[], [], [], [], [], [], [], []];
 
         this.techBridge = false;
         this.techTorches = false;

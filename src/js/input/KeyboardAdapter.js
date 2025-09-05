@@ -47,10 +47,10 @@ export const KeyboardAdapter = {
                 KeyboardAdapter.held[k] = false;
             }
 
-            if (event.key >= '1' && event.key <= '9') {
+            /*if (event.key >= '1' && event.key <= '9') {
                 game.nextLevel = Number(event.key) - 1;
                 game.screens.pop();
-            }
+            }*/
         });
 
         KeyboardAdapter.reset();
@@ -60,11 +60,11 @@ export const KeyboardAdapter = {
         // For keyboards, we want to convert the state of the various arrow keys being held down
         // into a directional vector. We use the browser's event to handle the held state of
         // the other action buttons, so we don't need to process them here.
-        let state =
+        /*let state =
             (KeyboardAdapter.held[Input.Action.UP] ? 1 : 0) +
             (KeyboardAdapter.held[Input.Action.DOWN] ? 2 : 0) +
             (KeyboardAdapter.held[Input.Action.LEFT] ? 4 : 0) +
-            (KeyboardAdapter.held[Input.Action.RIGHT] ? 8 : 0);
+            (KeyboardAdapter.held[Input.Action.RIGHT] ? 8 : 0);*/
 
         //KeyboardAdapter.direction = KeyboardAdapter.arrowDirections[state];
     },
@@ -74,5 +74,7 @@ export const KeyboardAdapter = {
         for (let action of Object.values(Input.Action)) {
             KeyboardAdapter.held[action] = false;
         }
+        //KeyboardAdapter.held = [];
+        //KeyboardAdapter.held.length = 0;
     }
 };
