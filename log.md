@@ -383,3 +383,19 @@ remove a switch.
 [19:29:17] 198 bytes over
 [19:29:17] Finished 'buildZip' after 490 ms
 [19:29:17] Starting 'ready'...
+
+=== found and deleted code not used! keep it up ===
+
+[19:40:51] Starting 'buildCss'...
+[19:40:51] Finished 'buildCss' after 11 ms
+[19:40:51] Starting 'buildHtml'...
+[19:40:51] Finished 'buildHtml' after 6.27 ms
+[19:40:51] Starting 'buildZip'...
+[19:40:51] all files 17.9 kB
+       13668       13481  98% js13k-2025-ulthar-rising.zip
+       13668       13481  98%
+[19:40:51] zip all files 13.5 kB
+[19:40:51] 169 bytes over
+[19:40:51] Finished 'buildZip' after 480 ms
+[19:40:51] Starting 'ready'...
+[19:40:51] Finished 'ready' after 192 μs

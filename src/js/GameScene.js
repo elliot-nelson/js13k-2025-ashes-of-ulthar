@@ -79,14 +79,15 @@ export class GameScene {
 
     update() {
         // Set up displayed jobs
+        this.jobsDisplayed = [WOODCUTTER];
+        if (this.techBridge) {
+            this.jobsDisplayed.push(BUTCHER);
+        }
+        if (this.techTorches) {
+            this.jobsDisplayed.push(TALLOWER);
+        }
         if (this.techStone) {
-            this.jobsDisplayed = [BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER];
-        } else if (this.techTorches) {
-            this.jobsDisplayed = [BUTCHER, WOODCUTTER, TALLOWER];
-        } else if (this.techBridge) {
-            this.jobsDisplayed = [BUTCHER, WOODCUTTER];
-        } else {
-            this.jobsDisplayed = [WOODCUTTER];
+            this.jobsDisplayed.push(STONECUTTER);
         }
 
         if (this.torches > 0 && !this.techStone) {
@@ -378,21 +379,6 @@ export class GameScene {
             Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
         }
 
-    }
-
-    addEntity(entity) {
-        if (!entity.z) {
-            entity.z = 1;
-        }
-
-        for (let i = 0; i < this.entities.length; i++) {
-            if (this.entities[i].z > entity.z) {
-                this.entities.splice(i, 0, entity);
-                return;
-            }
-        }
-
-        this.entities.push(entity);
     }
 
     addScreenShake(screenshake) {
