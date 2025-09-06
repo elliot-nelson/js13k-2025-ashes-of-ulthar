@@ -86,10 +86,11 @@ export class Game {
         Input.update();
 
         // Handle special keys that are screen-independent
-        /*if (Input.pressed[Input.Action.MUSIC_TOGGLE]) {
+        if (Input.pressed['KeyM']) {
+            console.log('KeyM - toggling music');
             Audio.musicEnabled = !Audio.musicEnabled;
         }
-        if (Input.pressed[Input.Action.SFX_TOGGLE]) {
+        /*if (Input.pressed[Input.Action.SFX_TOGGLE]) {
             Audio.sfxEnabled = !Audio.sfxEnabled;
         }*/
 

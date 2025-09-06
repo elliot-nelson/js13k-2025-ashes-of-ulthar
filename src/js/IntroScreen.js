@@ -1,16 +1,15 @@
-// IntroScene
+// IntroScreen
 
-import { PALETTE } from './Constants';
+import { GRAVITY, TERMINAL_VELOCITY } from './Constants';
 import { game } from './Game';
-import { LoadingScene } from './LoadingScene';
+import { LoadingScreen } from './LoadingScreen';
 import { ScreenShake } from './ScreenShake';
 import { Text } from './Text';
 import { clamp } from './Util';
-import { Sprite } from './Sprite';
 import { Viewport } from './Viewport';
 import { Input } from './input/Input';
 
-export class IntroScene {
+export class IntroScreen {
     constructor() {
         this.text = [
             'HAROLD',
@@ -35,28 +34,50 @@ export class IntroScene {
     update() {
         this.t++;
 
-        if (this.fadet >= 0) this.fadet++;
-
-        if (this.fadet > 10) {
-            game.scenes.pop();
-            game.scenes.push(new LoadingScene());
-            console.log('popping');
+        /*this.vel[0].y = clamp(this.vel[0].y + GRAVITY, 0, TERMINAL_VELOCITY);
+        if (this.pos[0].y > 15) {
+            this.vel[1].y = clamp(this.vel[1].y + GRAVITY, 0, TERMINAL_VELOCITY);
+        }
+        if (this.pos[1].y > 15) {
+            this.vel[2].y = clamp(this.vel[2].y + GRAVITY, 0, TERMINAL_VELOCITY);
         }
 
-        if (Input.pressed['Space']) {
-            console.log('space');
+        if (this.pos[0].y < 45) {
+            this.pos[0].y += this.vel[0].y;
+        } else if (!this.screenshakes[0]) {
+            this.screenshakes[0] = new ScreenShake(12, 0, 3);
+        }
+        if (this.pos[1].y < 60) {
+            this.pos[1].y += this.vel[1].y;
+        } else if (!this.screenshakes[1]) {
+            this.screenshakes[1] = new ScreenShake(12, 0, 3);
+        }
+        if (this.pos[2].y < 75) {
+            this.pos[2].y += this.vel[2].y;
+        } else if (!this.screenshakes[2]) {
+            this.screenshakes[2] = new ScreenShake(12, 0, 3);
+        }*/
+
+        if (this.fadet >= 0) this.fadet++;
+
+        if (this.fadet > 30) {
+            game.screens.pop();
+            game.screens.push(new LoadingScreen());
+        }
+
+        if (Input.pressed[Input.Action.JUMP] || Input.pressed[Input.Action.CONTINUE]) {
             this.fadet = 0;
         }
 
-/*
-        if (this.t > 10) {
-            game.scenes.pop();
-            game.scenes.push(new LoadingScene());
+        /*for (let i = 0; i < 3; i++) {
+            if (this.screenshakes[i]) {
+                this.screenshakes[i].update();
+            }
         }*/
     }
 
     draw() {
-        Viewport.ctx.fillStyle = PALETTE[3];
+        Viewport.ctx.fillStyle = '#457cd6';
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
         let shakeX = 0, shakeY = 0;
@@ -83,22 +104,8 @@ export class IntroScene {
         }
 
         if (this.pos[2].y > 50) {
-        //    this.drawInstructions();
+            this.drawInstructions();
         }
-
-            Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
-
-        let text = 'PRESS SPACE TO PLAY';
-        let width = Text.measure(text, 1).w;
-        Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, Viewport.height - 10, 1, Text.white);
-
-//        let text = 'PRESS SPACE OR ENTER TO START';
-  //      let width = Text.measure(text, 1).w;
-
-/*        if (this.t % 30 < 24) {
-            Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, Viewport.height - 10, 1, Text.white, Text.shadow);
-        }*/
-
 
         // Fade to load screen
         if (this.fadet >= 0) {

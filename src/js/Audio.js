@@ -2,7 +2,7 @@
 
 import { ZZFX } from './lib/zzfx';
 import { CPlayer } from './lib/player-small';
-import { song } from './songs/ThirteenthCenturyVibes';
+import { song } from './songs/VillageHusk';
 
 export const TRACK_COMBAT = 5;
 export const TRACK_WAVE = 6;
@@ -30,6 +30,7 @@ export const Audio = {
     },
 
     initContext() {
+        console.log('initContext()');
         if (Audio.contextCreated) return;
 
         // In Safari, ensure our target AudioContext is created inside a
@@ -41,6 +42,7 @@ export const Audio = {
         Audio.gain_ = Audio.ctx.createGain();
         Audio.gain_.connect(Audio.ctx.destination);
         ZZFX.destination = Audio.gain_;
+        console.log(Audio.ctx);
 
         Audio.contextCreated = true;
     },
@@ -50,40 +52,25 @@ export const Audio = {
         // user has interacted at least once (and that interaction called initContext above),
         // so we know it's safe to interact with the audio context.
         if (!Audio.musicPlaying) {
+            console.log('starting music');
             this.player = new CPlayer();
             this.player.init(song);
+            console.log('music started');
 
             for (;;) {
                 if (this.player.generate() === 1) break;
+                console.log('generating');
             }
 
-            this.musicGainNodes = [];
-            this.songSources = [];
-
-            for (let i = 0; i < song.numChannels; i++) {
-                let buffer = this.player.createAudioBuffer(Audio.ctx, i);
-                this.songSource = Audio.ctx.createBufferSource();
-
-                let gainNode = Audio.ctx.createGain();
-                gainNode.connect(Audio.gain_);
-                this.musicGainNodes.push(gainNode);
-
-                /*if (i === TRACK_COMBAT || i === TRACK_WAVE) {
-                    gainNode.gain.value = 0;
-                }*/
-
-                this.songSource.buffer = buffer;
-                this.songSource.loop = true;
-                this.songSource.connect(gainNode);
-                this.songSources.push(this.songSource);
-            }
+            this.musicGainNode = Audio.ctx.createGain();
+            this.musicGainNode.connect(Audio.gain_);
+            this.songSource = Audio.ctx.createBufferSource();
+            this.songSource.buffer = this.player.createAudioBuffer(Audio.ctx);
+            this.songSource.loop = true;
+            this.songSource.connect(this.musicGainNode);
 
             this.musicStartTime = Audio.ctx.currentTime + 0.1;
-
-            for (let i = 0; i < song.numChannels; i++) {
-                this.songSources[i].start(this.musicStartTime);
-                // comment out music
-            }
+            this.songSource.start(this.musicStartTime);
 
             Audio.musicPlaying = true;
         }

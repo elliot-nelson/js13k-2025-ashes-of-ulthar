@@ -25,7 +25,7 @@ export class LoadingScene {
         this.y = Math.floor((1-ratio) * 100);
 
         if (this.t === 36) {
-            //Audio.initTracks();
+            Audio.initTracks();
         }
 
         if (this.t > 42) {
