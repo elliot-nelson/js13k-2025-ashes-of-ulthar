@@ -63,6 +63,10 @@ export const Sprite = {
         // Villager
         Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
         const villagerFrames = Sprite.villager.length;
+        Sprite.villager[1].img = copySpriteFrame(Sprite.villager[0].img, Sprite.villager[1].img, 22, 28);
+        Sprite.villager[8].img = copySpriteFrame(Sprite.villager[7].img, Sprite.villager[8].img, 22, 29);
+        Sprite.villager[9].img = copySpriteFrame(Sprite.villager[7].img, Sprite.villager[9].img, 22, 29);
+        Sprite.villager[11].img = copySpriteFrame(Sprite.villager[10].img, Sprite.villager[11].img, 22, 29);
         for (let i = 0; i < villagerFrames; i++) {
             Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
         }
@@ -174,6 +178,13 @@ function shiftTerrain(source, lines) {
     // fill in. This is just transparent.
     let canvas = createCanvas(source.width, TARGET_GAME_HEIGHT);
     canvas.ctx.drawImage(source, 0, 0, source.width, source.height, 0, lines, source.width);
+    return canvas.canvas;
+}
+
+function copySpriteFrame(source, dest, w, h) {
+    let canvas = createCanvas(dest.width, dest.height);
+    canvas.ctx.drawImage(dest, 0, 0);
+    canvas.ctx.drawImage(source, 0, 0, w, h, 0, 0, w, h);
     return canvas.canvas;
 }
 
