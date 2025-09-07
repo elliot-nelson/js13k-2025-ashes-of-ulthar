@@ -2,10 +2,7 @@
 
 import { PALETTE } from './Constants';
 import { game } from './Game';
-import { LoadingScene } from './LoadingScene';
-import { ScreenShake } from './ScreenShake';
 import { Text } from './Text';
-import { clamp } from './Util';
 import { Sprite } from './Sprite';
 import { Viewport } from './Viewport';
 import { Input } from './input/Input';
@@ -15,22 +12,6 @@ import { GameScene } from './GameScene';
 
 export class IntroScene {
     constructor() {
-        this.text = [
-            'HAROLD',
-            'IS',
-            'HEAVY'
-        ];
-        this.pos = [
-            { y: -20 },
-            { y: -20 },
-            { y: -20 }
-        ];
-        this.vel = [
-            { y: 0 },
-            { y: 0 },
-            { y: 0 }
-        ];
-        this.screenshakes = [];
         this.t = 0;
         this.fadet = -1;
         this.entities = [];
