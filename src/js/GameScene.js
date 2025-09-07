@@ -71,10 +71,6 @@ export class GameScene {
         this.techTorches = false;
         this.techStone = false;
         this.techAltar = false;
-
-        this.entities.push(new AshParticle());
-        this.entities.push(new AshParticle());
-        this.entities.push(new AshParticle());
     }
 
     update() {
@@ -195,10 +191,12 @@ export class GameScene {
 
         // Entities
 
-        for (const entity of this.entities) {
-            entity.update();
+        if (this.t > 35) {
+            for (const entity of this.entities) {
+                entity.update();
+            }
+            this.entities = this.entities.filter(entity => !entity.cull);
         }
-        this.entities = this.entities.filter(entity => !entity.cull);
 
         // Check
 
@@ -208,54 +206,65 @@ export class GameScene {
 
         // Ash Particles
 
-        if (this.t % 20 === 0) {
+        if (this.entities.length < 33) {
             this.entities.push(new AshParticle());
         }
     }
 
     draw() {
+        let terrainY = this.t > 36 ? 0 : (285 - 285 * this.t / 36);
+
         // Background
 
         Viewport.ctx.fillStyle = '#40985e';
-        Viewport.ctx.fillRect(-5, 0, Viewport.width + 5, Viewport.height);
+        Viewport.ctx.fillRect(0, 0, Viewport.width + 5, Viewport.height);
 
         // Layer 3 (farthest)
 
-        Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, 0);
+        Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, Math.floor(0 + terrainY * 0.8 * 0.8));
+
+        for (let entity of this.entities) {
+            if (entity.layer === 3) entity.draw();
+        }
+
+        for (let villager of this.villagers) {
+            if (villager.layer === 2) villager.draw();
+        }
 
         // Layer 2 (middle)
 
-        Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, 0);
+        Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, Math.floor(0 + terrainY * 0.8));
 
-        for (const villager of this.villagers) {
-            // Sorry, it's weird, the layers 0-3 are backwards
-            // for the villager layers.
-            if (villager.layer === 2) {
-                villager.draw();
-            }
+        for (let entity of this.entities) {
+            if (entity.layer === 2) entity.draw();
+        }
+
+        for (let villager of this.villagers) {
+            if (villager.layer === 2) villager.draw();
         }
 
         // Layer 1 (closest)
 
-        Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, 0);
+        Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, Math.floor(0 + terrainY));
 
-        for (const villager of this.villagers) {
-            // Sorry, it's weird, the layers 0-3 are backwards
-            // for the villager layers.
-            if (villager.layer === 3) {
-                villager.draw();
-            }
+        for (let entity of this.entities) {
+            if (entity.layer === 1) entity.draw();
+        }
+
+        for (let villager of this.villagers) {
+            if (villager.layer === 1) villager.draw();
         }
 
         // Black cat perch
 
         Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
 
-        Viewport.ctx.fillStyle = '#0a1a2f';
-        Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);
+        /*Viewport.ctx.fillStyle = '#0a1a2f';
+        Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);*/
 
         // Bridge
 
+        if (this.t > 40) {
         if (this.techBridge) {
             Viewport.ctx.drawImage(Sprite.bridge[1].img, 112, 133 - 32);
         } else {
@@ -291,14 +300,11 @@ export class GameScene {
             }
         }
 
-        for (const entity of this.entities) {
-            entity.draw();
-        }
-
         this.drawSanityBar();
         this.drawInfluenceBar();
         this.drawJobSelectUI();
         this.drawInventory();
+        }
     }
 
     drawSanityBar() {

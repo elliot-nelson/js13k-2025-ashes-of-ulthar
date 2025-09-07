@@ -9,6 +9,9 @@ import { clamp } from './Util';
 import { Sprite } from './Sprite';
 import { Viewport } from './Viewport';
 import { Input } from './input/Input';
+import { AshParticle } from './AshParticle';
+import { Audio } from './Audio';
+import { GameScene } from './GameScene';
 
 export class IntroScene {
     constructor() {
@@ -30,6 +33,7 @@ export class IntroScene {
         this.screenshakes = [];
         this.t = 0;
         this.fadet = -1;
+        this.entities = [];
     }
 
     update() {
@@ -37,93 +41,72 @@ export class IntroScene {
 
         if (this.fadet >= 0) this.fadet++;
 
-        if (this.fadet > 10) {
+        if (this.fadet === 1) {
+            Audio.initTracks();
+        }
+
+        if (this.fadet > 20) {
             game.scenes.pop();
-            game.scenes.push(new LoadingScene());
-            console.log('popping');
+
+            const gameScene = new GameScene();
+            game.scenes.push(gameScene);
+            gameScene.entities = this.entities;
         }
 
         if (Input.pressed['Space']) {
-            console.log('space');
             this.fadet = 0;
         }
 
-/*
-        if (this.t > 10) {
-            game.scenes.pop();
-            game.scenes.push(new LoadingScene());
-        }*/
+        if (this.entities.length < 33) {
+            this.entities.push(new AshParticle());
+        }
+
+        for (let entity of this.entities) {
+            entity.update();
+        }
+
+        this.entities = this.entities.filter(entity => !entity.cull);
     }
 
     draw() {
-        Viewport.ctx.fillStyle = PALETTE[3];
+        Viewport.ctx.fillStyle = PALETTE[0];
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
-        let shakeX = 0, shakeY = 0;
-        for (let i = 0; i < 3; i++) {
-            if (this.screenshakes[i]) {
-                shakeX += this.screenshakes[i].x;
-                shakeY += this.screenshakes[i].y;
-            }
-        }
-        Viewport.ctx.translate(shakeX, shakeY);
+        Viewport.ctx.globalAlpha = Math.min(this.t / 20, 1);
+        Viewport.ctx.fillStyle = PALETTE[3];
+        Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+        Viewport.ctx.globalAlpha = 1;
 
-        for (let i = this.text.length - 1; i >= 0; i--) {
-            let width = Text.measure(this.text[i], 2).w;
-
-            //Viewport.ctx.globalAlpha = 0.3;
-            //Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, 50 + i * 15 - 4, 2, Text.pig);
-
-            Viewport.ctx.globalAlpha = 1;
-            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, this.pos[i].y - 1, 2, Text.shadow);
-            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, this.pos[i].y + 1, 2, Text.shadow);
-            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2 - 1, this.pos[i].y, 2, Text.shadow);
-            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2 + 1, this.pos[i].y, 2, Text.shadow);
-            Text.drawText(Viewport.ctx, this.text[i], (Viewport.width - width) / 2, this.pos[i].y, 2, Text.pig);
+        for (let entity of this.entities) {
+            entity.draw();
         }
 
-        if (this.pos[2].y > 50) {
-        //    this.drawInstructions();
-        }
+        if (this.t > 30) {
+            let adjustment = Math.max(1 - this.t / 54, 0);
 
-            Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
-
-        let text = 'PRESS SPACE TO PLAY';
-        let width = Text.measure(text, 1).w;
-        Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, Viewport.height - 10, 1, Text.white);
-
-//        let text = 'PRESS SPACE OR ENTER TO START';
-  //      let width = Text.measure(text, 1).w;
-
-/*        if (this.t % 30 < 24) {
-            Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, Viewport.height - 10, 1, Text.white, Text.shadow);
-        }*/
-
-
-        // Fade to load screen
-        if (this.fadet >= 0) {
-            let fade = 0;
-            if (this.fadet > 8) {
-                fade = (this.fadet - 8) * (Viewport.width / 2 - 40) / 20;
+            if (!this.x || this.t % 3 === 0) {
+                this.x = [0,1,2,3,4,5,6,7,8].map(x => adjustment * (Math.random() * 12 - 6));
+                this.alpha = [0,1,2,3,4,5,6,7,8].map(x => 1 - adjustment * Math.random());
             }
 
-            Viewport.ctx.fillStyle = '#2c1b2e';
-            Viewport.ctx.beginPath();
-            Viewport.ctx.moveTo(Viewport.width / 2 - 0 - fade, 0);
-            Viewport.ctx.lineTo(Viewport.width / 2 + 40 + fade, 0);
-            Viewport.ctx.lineTo(Viewport.width / 2 + 0 + fade, Viewport.height);
-            Viewport.ctx.lineTo(Viewport.width / 2 - 40 - fade, Viewport.height);
-            Viewport.ctx.closePath();
-            Viewport.ctx.fill();
+            for (let i = 0; i < 9; i++) {
+                let y = i * 4;
+                Viewport.ctx.globalAlpha = this.alpha[i];
+                Viewport.ctx.drawImage(Sprite.blackcat[0].img, 0, y, 24, 4, 160 + this.x[i], 73 - 30 + y, 24, 4);
+                Viewport.ctx.globalAlpha = 1;
+            }
         }
-    }
 
-    drawInstructions() {
-        let text = 'PRESS SPACE OR ENTER TO START';
-        let width = Text.measure(text, 1).w;
+        if (this.t > 40) {
+            let title = 'THE ASHES OF ULTHAR';
+            let titleWidth = Text.measure(title, 2).w;
+            Text.drawText(Viewport.ctx, title, 168 - titleWidth / 2, 13 - this.fadet * 3, 2, Text.palette[4], Text.palette[1]);
+        }
 
-        if (this.t % 30 < 24) {
-            Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, Viewport.height - 10, 1, Text.white, Text.shadow);
+        if (this.t > 48 && this.fadet < 0) {
+            let text = 'PRESS SPACE TO PLAY';
+            let width = Text.measure(text, 1).w;
+            Text.drawText(Viewport.ctx, text, 168 - width / 2, 150, 1, Text.palette[4], Text.palette[1]);
         }
     }
 }

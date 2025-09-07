@@ -1,17 +1,14 @@
 // WinkParticle
 
 import { Viewport } from './Viewport';
-import { Text } from './Text';
 import { Sprite } from './Sprite';
-import { game } from './Game';
-import { createCanvas } from './Util';
-import { VillagerChunkParticle } from './VillagerChunkParticle';
 
 export class WinkParticle {
     constructor() {
         this.t = -1;
         this.d = 15;
         this.winkframe = 3;
+        this.layer = 1;
     }
 
     update() {
