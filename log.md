@@ -399,3 +399,17 @@ remove a switch.
 [19:40:51] Finished 'buildZip' after 480 ms
 [19:40:51] Starting 'ready'...
 [19:40:51] Finished 'ready' after 192 μs
+
+### After bringing in the NEW song, wiring it up, fixing the intro, deleting the loading scene.
+
+[21:54:51] Starting 'buildHtml'...
+[21:54:51] Finished 'buildHtml' after 4.55 ms
+[21:54:51] Starting 'buildZip'...
+[21:54:51] all files 17.7 kB
+       13501       13330  98% js13k-2025-ulthar-rising.zip
+       13501       13330  98%
+[21:54:51] zip all files 13.3 kB
+[21:54:51] 18 bytes over
+[21:54:51] Finished 'buildZip' after 559 ms
+[21:54:51] Starting 'ready'...
+[21:54:51] Finished 'ready' after 129 μs
