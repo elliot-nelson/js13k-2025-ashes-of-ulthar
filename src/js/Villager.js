@@ -22,7 +22,7 @@ export class IdleTask extends TweenChain {
             { t1: 0, t2: 30, v1: 0, v2: 0 }
         ]);
         this.frame = 0;
-        this.layer = 3;
+        this.layer = 1;
     }
 
     completeTask() { }
@@ -35,7 +35,7 @@ export class ButcherTask extends TweenChain {
             { t1: 120, t2: 180, v1: undefined, v2: -76, stagger: 20 },
             { t1: 180, t2: 300, v1: undefined, v2: 0 }
         ]);
-        this.layer = 3;
+        this.layer = 1;
         this.frame = 0;
     }
 
@@ -60,7 +60,7 @@ export class WoodcutterTask extends TweenChain {
             { t1: 120, t2: 180, v1: undefined, v2: 140, stagger: 15 },
             { t1: 180, t2: 300, v1: undefined, v2: 0 }
         ]);
-        this.layer = 3;
+        this.layer = 1;
         this.frame = 0;
     }
 
@@ -110,7 +110,7 @@ export class StonecutterTask extends TweenChain {
             { t1: 120, t2: 180, v1: -141, v2: -141 },
             { t1: 180, t2: 300, v1: -141, v2: 0 }
         ]);
-        this.layer = 3;
+        this.layer = 1;
         this.frame = 0;
     }
 
@@ -165,6 +165,7 @@ export class Villager {
     }
 
     draw() {
+        console.log(this.frame, this.pos);
         Sprite.drawViewportSprite(Sprite.villager[this.frame], this.pos);
 
         if (this.equipmentframe > -1) {

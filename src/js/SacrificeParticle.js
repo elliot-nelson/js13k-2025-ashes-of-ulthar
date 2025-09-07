@@ -6,6 +6,7 @@ import { Sprite } from './Sprite';
 import { game } from './Game';
 import { createCanvas } from './Util';
 import { VillagerChunkParticle } from './VillagerChunkParticle';
+import { Audio } from './Audio';
 
 export class SacrificeParticle {
     constructor(villager) {
@@ -26,6 +27,9 @@ export class SacrificeParticle {
             game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
             game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
             game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
+        }
+        if (this.t === 24) {
+            Audio.play(Audio.sacrifice);
         }
 
         this.villager.pos.v -= 0.2;

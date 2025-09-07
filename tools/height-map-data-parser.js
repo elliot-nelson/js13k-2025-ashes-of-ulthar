@@ -61,11 +61,12 @@ const HeightMapDataParser = {
             }
         }
 
-        // HACK: We don't use the background (0) layer for villagers
+        // HACK: Rearrange so 1 = closest most layer, 0 is background
+        // and always empty, 3 (farthest) is currently unused
         heightmap[0] = [];
-
-        // HACK: We don't use the furthest-back (1) layer for villagers
-        heightmap[1] = [];
+        heightmap[1] = heightmap[3];
+        //heightmap[2] = heightmap[2];
+        heightmap[3] = [];
 
         return heightmap;
     },

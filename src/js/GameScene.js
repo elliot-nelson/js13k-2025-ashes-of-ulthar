@@ -209,6 +209,10 @@ export class GameScene {
         if (this.entities.length < 33) {
             this.entities.push(new AshParticle());
         }
+
+        if (this.t % 60 === 0) {
+            Audio.play(Audio.tick);
+        }
     }
 
     draw() {
@@ -220,6 +224,8 @@ export class GameScene {
         Viewport.ctx.fillRect(0, 0, Viewport.width + 5, Viewport.height);
 
         // Layer 3 (farthest)
+
+        console.log(this.villagers.map(v => v.layer));
 
         Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, Math.floor(0 + terrainY * 0.8 * 0.8));
 
@@ -247,17 +253,17 @@ export class GameScene {
 
         Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, Math.floor(0 + terrainY));
 
+        // Black cat perch
+
+        Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
+
         for (let entity of this.entities) {
-            if (entity.layer === 1) entity.draw();
+            if (entity.layer === 1 || !entity.layer) entity.draw();
         }
 
         for (let villager of this.villagers) {
             if (villager.layer === 1) villager.draw();
         }
-
-        // Black cat perch
-
-        Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
 
         /*Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);*/
@@ -409,6 +415,7 @@ export class GameScene {
             this.villagersRecruited++;
 
             this.entities.push(new WinkParticle());
+            Audio.play(Audio.wink);
             return true;
         }
 
@@ -446,6 +453,7 @@ export class GameScene {
 
             this.entities.push(new SacrificeParticle(villager));
             this.entities.push(new WinkParticle());
+            Audio.play(Audio.wink);
 
             //villager.job = SACRIFICE;
             //this.villagersWithJob[SACRIFICE].push(villager);

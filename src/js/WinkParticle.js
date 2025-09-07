@@ -28,6 +28,7 @@ export class WinkParticle {
     }
 
     draw() {
+        console.log('draw wink');
         Viewport.ctx.drawImage(Sprite.wink[this.winkframe].img, 160 + 11 - 1, 73 - 30 + 9 - 2);
     }
 }
