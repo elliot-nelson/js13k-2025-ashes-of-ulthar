@@ -217,6 +217,7 @@ export const ZZFX =
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sound object that can precache and play ZZFX sounds
+/*
 export class ZZFXSound
 {
     constructor(zzfxSound=[])
@@ -241,3 +242,4 @@ export class ZZFXSound
         return this.source;
     }
 }
+*/

@@ -18,12 +18,12 @@ export const Audio = {
 
         Audio.wink = [1.8,,453,.07,.01,.01,4,.3,,,-21,.14,.04,,,,.27,.58,.18,.47,-900]; // Random 276
         Audio.sacrifice = [.5,,10,,.19,0,2,.6,-86,8,,,,.4,31,,,.7,.29,,-739]; // Random 301
-        Audio.tick = [1.2,,338,,.02,.004,2,.7,-59,,,,,.2,,.3,,.86,,,-702]; // Random 359
+        //Audio.tick = [1.2,,338,,.02,.004,2,.7,-59,,,,,.2,,.3,,.86,,,-702]; // Random 359
         Audio.start = [,,691,.02,.12,.34,,.8,-5,,251,.08,,,22,,,.59,.14]; // Powerup 472
     },
 
     initContext() {
-        console.log('initContext()');
+        //console.log('initContext()');
         if (Audio.contextCreated) return;
 
         // In Safari, ensure our target AudioContext is created inside a
@@ -35,7 +35,7 @@ export const Audio = {
         Audio.gain_ = Audio.ctx.createGain();
         Audio.gain_.connect(Audio.ctx.destination);
         ZZFX.destination = Audio.gain_;
-        console.log(Audio.ctx);
+        //console.log(Audio.ctx);
 
         Audio.contextCreated = true;
     },
@@ -45,14 +45,14 @@ export const Audio = {
         // user has interacted at least once (and that interaction called initContext above),
         // so we know it's safe to interact with the audio context.
         if (!Audio.musicPlaying) {
-            console.log('starting music');
+            //console.log('starting music');
             this.player = new CPlayer();
             this.player.init(song);
-            console.log('music started');
+            //console.log('music started');
 
             for (;;) {
                 if (this.player.generate() === 1) break;
-                console.log('generating');
+                //console.log('generating');
             }
 
             this.musicGainNode = Audio.ctx.createGain();

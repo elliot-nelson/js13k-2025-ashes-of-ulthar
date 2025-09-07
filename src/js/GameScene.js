@@ -154,8 +154,8 @@ export class GameScene {
             this.nextSanityTick = this.t + 12;
         }
 
-        if (this.t === 4) {
-        //    Audio.play(Audio.levelStart);
+        if (this.t === 40) {
+            Audio.play(Audio.start);
         }
 
         // Button UI Elements
@@ -211,7 +211,7 @@ export class GameScene {
         }
 
         if (this.t % 60 === 0) {
-            Audio.play(Audio.tick);
+            //Audio.play(Audio.tick);
         }
     }
 
@@ -224,8 +224,6 @@ export class GameScene {
         Viewport.ctx.fillRect(0, 0, Viewport.width + 5, Viewport.height);
 
         // Layer 3 (farthest)
-
-        console.log(this.villagers.map(v => v.layer));
 
         Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, Math.floor(0 + terrainY * 0.8 * 0.8));
 

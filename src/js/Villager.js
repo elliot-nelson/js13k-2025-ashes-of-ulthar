@@ -165,7 +165,6 @@ export class Villager {
     }
 
     draw() {
-        console.log(this.frame, this.pos);
         Sprite.drawViewportSprite(Sprite.villager[this.frame], this.pos);
 
         if (this.equipmentframe > -1) {
