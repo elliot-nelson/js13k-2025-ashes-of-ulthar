@@ -5,6 +5,8 @@ import { CPlayer } from './lib/player-small';
 import { VillageHusk } from './songs/VillageHusk';
 import { Explosion } from './sfx/Explosion';
 import { Wink } from './sfx/Wink';
+import { Wind } from './sfx/Wind';
+import { Fail } from './sfx/Fail';
 
 export const Audio = {
     init() {
@@ -46,6 +48,8 @@ export const Audio = {
 
             Audio.wink = this.loadSoundBox(Wink);
             Audio.explosion = this.loadSoundBox(Explosion);
+            Audio.wind = this.loadSoundBox(Wind);
+            Audio.fail = this.loadSoundBox(Fail);
             Audio.music = this.loadSoundBox(VillageHusk);
             Audio.readyToPlay = true;
 

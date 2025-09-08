@@ -13,6 +13,7 @@ import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER,
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
+import { ScreenShake } from './ScreenShake';
 
 import { HelpScene } from './HelpScene';
 import { DefeatScene } from './DefeatScene';
@@ -154,8 +155,12 @@ export class GameScene {
             this.nextSanityTick = this.t + 12;
         }
 
-        if (this.t === 40) {
-            Audio.play(Audio.start);
+        if (this.t === 1) {
+            Audio.play(Audio.wind);
+        }
+
+        if (this.t === 36) {
+            this.addScreenShake(new ScreenShake(6, 6, 6));
         }
 
         // Button UI Elements
@@ -213,9 +218,23 @@ export class GameScene {
         if (this.t % 60 === 0) {
             //Audio.play(Audio.tick);
         }
+
+        for (let i = 0; i < this.screenshakes.length; i++) {
+            if (!this.screenshakes[i].update()) {
+                this.screenshakes.splice(i, 1);
+                i--;
+            }
+        }
     }
 
     draw() {
+        let shakeX = 0, shakeY = 0;
+        this.screenshakes.forEach(shake => {
+            shakeX += shake.x;
+            shakeY += shake.y;
+        });
+        Viewport.ctx.translate(shakeX, shakeY);
+
         let terrainY = this.t > 36 ? 0 : (285 - 285 * this.t / 36);
 
         // Background
@@ -415,9 +434,11 @@ export class GameScene {
             this.entities.push(new WinkParticle());
             Audio.play(Audio.wink);
             return true;
+        } else {
+            Audio.play(Audio.fail);
+            this.addScreenShake(new ScreenShake(4, 6, 6));
+            return false;
         }
-
-        return false;
     }
 
     hireVillager() {
