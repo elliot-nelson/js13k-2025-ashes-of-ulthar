@@ -2,12 +2,9 @@
 
 //import { ZZFX } from './lib/zzfx';
 import { CPlayer } from './lib/player-small';
-import { song } from './songs/VillageHusk';
+import { VillageHusk } from './songs/VillageHusk';
 import { Explosion } from './sfx/Explosion';
 import { Wink } from './sfx/Wink';
-
-export const TRACK_COMBAT = 5;
-export const TRACK_WAVE = 6;
 
 export const Audio = {
     init() {
@@ -17,11 +14,6 @@ export const Audio = {
         Audio.sfxEnabled = true;
         Audio.musicVolume = 0;
         Audio.sfxVolume = 0;
-
-        //Audio.wink = [1.8,,453,.07,.01,.01,4,.3,,,-21,.14,.04,,,,.27,.58,.18,.47,-900]; // Random 276
-        //Audio.sacrifice = [.5,,10,,.19,0,2,.6,-86,8,,,,.4,31,,,.7,.29,,-739]; // Random 301
-        //Audio.tick = [1.2,,338,,.02,.004,2,.7,-59,,,,,.2,,.3,,.86,,,-702]; // Random 359
-        //Audio.start = [,,691,.02,.12,.34,,.8,-5,,251,.08,,,22,,,.59,.14]; // Powerup 472
 
         Audio.sounds = {};
     },
@@ -54,7 +46,7 @@ export const Audio = {
 
             Audio.wink = this.loadSoundBox(Wink);
             Audio.explosion = this.loadSoundBox(Explosion);
-            Audio.music = this.loadSoundBox(song);
+            Audio.music = this.loadSoundBox(VillageHusk);
             Audio.readyToPlay = true;
 
             // Start music
@@ -124,6 +116,8 @@ export const Audio = {
 
         let buffer = player.createAudioBuffer(Audio.ctx);
 
+        // Return an object containing the original player, the audio node,
+        // and the source buffer for playback later.
         return { player, gainNode, buffer };
     }
 };
