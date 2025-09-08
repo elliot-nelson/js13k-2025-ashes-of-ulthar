@@ -417,3 +417,10 @@ remove a switch.
 +71 -> +95
 +95 -> +106
 +71 -> +30 over
+
+About 50% of the way with tech tree, at +106 bytes over.
+
+Adding more tech tree entries, shoring up payment code, but removed 2 bespoke functions.
+  Now +229 bytes over. (OH NO!)
+  Now +241 bytes over. (OH NO!)
+ Phew -107 bytes left (cleaned up TechScene).

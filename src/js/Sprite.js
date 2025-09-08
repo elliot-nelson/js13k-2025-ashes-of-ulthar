@@ -40,6 +40,7 @@ export const Sprite = {
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
+        Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);
 
         // Custom anchors
         Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, { anchor: { x: 9, y: 28 } });
@@ -70,6 +71,7 @@ export const Sprite = {
         for (let i = 0; i < villagerFrames; i++) {
             Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
         }
+
     },
 
     /**

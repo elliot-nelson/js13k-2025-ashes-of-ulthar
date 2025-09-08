@@ -16,8 +16,11 @@ import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
 
 import { HelpScene } from './HelpScene';
+import { TechScene } from './TechScene';
 import { DefeatScene } from './DefeatScene';
 import { AshParticle } from './AshParticle';
+
+import { TechTree } from './TechTree';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
@@ -68,77 +71,78 @@ export class GameScene {
         this.villagers = [];
         this.villagersWithJob = [[], [], [], [], [], [], [], []];
 
-        this.techBridge = false;
-        this.techTorches = false;
-        this.techStone = false;
         this.techAltar = false;
+
+        this.tech = TechTree.create();
+        this.unlockTech(this.tech.woodcutter);
     }
 
-    update() {
+    update(handleInput = true) {
         // Set up displayed jobs
         this.jobsDisplayed = [WOODCUTTER];
-        if (this.techBridge) {
+        if (this.tech.butcher.unlocked) {
             this.jobsDisplayed.push(BUTCHER);
         }
-        if (this.techTorches) {
+        if (this.tech.tallower.unlocked) {
             this.jobsDisplayed.push(TALLOWER);
         }
-        if (this.techStone) {
+        if (this.tech.stonecutter.unlocked) {
             this.jobsDisplayed.push(STONECUTTER);
         }
 
-        if (this.torches > 0 && !this.techStone) {
-            this.techStone = true;
-        }
-
         // Player input
+
+        if (handleInput) {
 
                 // move
         ///this.pos.x += this.vel.x;
         ///this.pos.y += this.vel.y;
 
-        if (Input.pressed['KeyV']) {
-            this.recruitVillager();
-        }
+            if (Input.pressed['KeyV']) {
+                this.recruitVillager();
+            }
 
-        if (Input.pressed['KeyB']) {
+        /*if (Input.pressed['KeyB']) {
             this.buildBridge();
-        }
+        }*/
 
-        if (Input.pressed['KeyT']) {
+        /*if (Input.pressed['KeyT']) {
             this.buildHall();
-        }
+        }*/
 
-        if (Input.pressed['KeyA']) {
-            this.buildAltar();
-        }
+            if (Input.pressed['KeyA']) {
+                this.buildAltar();
+            }
 
-        if (Input.pressed['ArrowDown']) {
-            this.moveJobSelector(1);
-        }
+            if (Input.pressed['ArrowDown']) {
+                this.moveJobSelector(1);
+            }
 
-        if (Input.pressed['ArrowUp']) {
-            this.moveJobSelector(-1);
-        }
+            if (Input.pressed['ArrowUp']) {
+                this.moveJobSelector(-1);
+            }
 
-        if (Input.pressed['ArrowRight']) {
-            this.hireVillager(this.selectedJob);
-        }
+            if (Input.pressed['ArrowRight']) {
+                this.hireVillager(this.selectedJob);
+            }
 
-        if (Input.pressed['ArrowLeft']) {
-            this.fireVillager(this.selectedJob);
-        }
+            if (Input.pressed['ArrowLeft']) {
+                this.fireVillager(this.selectedJob);
+            }
 
-        if (Input.pressed['KeyS']) {
-            this.sacrificeVillager();
-        }
+            if (Input.pressed['KeyS']) {
+                this.sacrificeVillager();
+            }
 
-        if (Input.pressed['Space']) {
-            this.sanity -= 10;
-        }
+            if (Input.pressed['Space']) {
+                this.sanity -= 10;
+            }
 
-        if (Input.pressed['KeyH']) {
-            game.scenes.push(new HelpScene());
+            if (Input.pressed['KeyH']) {
+                //game.scenes.push(new HelpScene());
+                game.scenes.push(new TechScene(this.tech));
+            }
+
         }
 
         // Game ticks
@@ -171,14 +175,14 @@ export class GameScene {
         this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
         this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_SACRIFICE_VILLAGER].active);
 
-        this.buttons[BUTTON_REPAIR_BRIDGE].active = (this.wood >= 10);
-        this.buttons[BUTTON_REPAIR_BRIDGE].visible = !this.techBridge && this.wood >= 10;
+        //this.buttons[BUTTON_REPAIR_BRIDGE].active = (this.wood >= 10);
+        //this.buttons[BUTTON_REPAIR_BRIDGE].visible = !this.techBridge && this.wood >= 10;
 
-        this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
-        this.buttons[BUTTON_REPAIR_HALL].visible = this.techBridge && !this.techTorches && this.wood >= 10;
+        //this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
+        //this.buttons[BUTTON_REPAIR_HALL].visible = this.tech.butcher.unlocked && !this.techTorches && this.wood >= 10;
 
         this.buttons[BUTTON_REPAIR_ALTAR].active = (this.stone >= 10);
-        this.buttons[BUTTON_REPAIR_ALTAR].visible = this.techTorches && !this.techAltar && this.stone >= 10;
+        this.buttons[BUTTON_REPAIR_ALTAR].visible = this.tech.tallower.unlocked && !this.techAltar && this.stone >= 10;
 
         let visibleButtonY = 3;
         for (let i = 0; i < 5; i++) {
@@ -288,7 +292,7 @@ export class GameScene {
         // Bridge
 
         if (this.t > 40) {
-        if (this.techBridge) {
+        if (this.tech.butcher.unlocked) {
             Viewport.ctx.drawImage(Sprite.bridge[1].img, 112, 133 - 32);
         } else {
             Viewport.ctx.drawImage(Sprite.bridge[0].img, 112, 133 - 32);
@@ -296,7 +300,7 @@ export class GameScene {
 
         // Tallower Hall
 
-        if (this.techTorches) {
+        if (this.tech.tallower.unlocked) {
             Viewport.ctx.drawImage(Sprite.factory[1].img, 198, 133 - 32);
         } else {
             Viewport.ctx.drawImage(Sprite.factory[0].img, 198, 133 - 32);
@@ -390,24 +394,23 @@ export class GameScene {
         Text.drawText(Viewport.ctx, 'WOOD', INVENTORY_WOOD_POS.u - 50, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
         Text.drawText(Viewport.ctx, String(this.wood), INVENTORY_WOOD_POS.u - woodWidth, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
 
-        if (this.techBridge) {
+        if (this.tech.butcher.unlocked) {
             Viewport.ctx.drawImage(Sprite.icons[2].img, INVENTORY_MEAT_POS.u - 60, INVENTORY_MEAT_POS.v - 1);
             Text.drawText(Viewport.ctx, 'MEAT', INVENTORY_MEAT_POS.u - 50, INVENTORY_MEAT_POS.v, 1, Text.palette[4]);
             Text.drawText(Viewport.ctx, String(this.meat), INVENTORY_MEAT_POS.u - meatWidth, INVENTORY_MEAT_POS.v, 1, Text.palette[4]);
         }
 
-        if (this.techTorches) {
+        if (this.tech.tallower.unlocked) {
             Viewport.ctx.drawImage(Sprite.icons[3].img, INVENTORY_TORCH_POS.u - 60, INVENTORY_TORCH_POS.v - 1);
             Text.drawText(Viewport.ctx, 'TORCHES', INVENTORY_TORCH_POS.u - 50, INVENTORY_TORCH_POS.v, 1, Text.palette[4]);
             Text.drawText(Viewport.ctx, String(this.torches), INVENTORY_TORCH_POS.u - torchWidth, INVENTORY_TORCH_POS.v, 1, Text.palette[4]);
         }
 
-        if (this.techStone) {
+        if (this.tech.stonecutter.unlocked) {
             Viewport.ctx.drawImage(Sprite.icons[1].img, INVENTORY_STONE_POS.u - 60, INVENTORY_STONE_POS.v - 1);
             Text.drawText(Viewport.ctx, 'STONE', INVENTORY_STONE_POS.u - 50, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
             Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
         }
-
     }
 
     addScreenShake(screenshake) {
@@ -533,7 +536,7 @@ export class GameScene {
         this.entities.push(new TextFloatParticle({ u: INVENTORY_STONE_POS.u + 6, v: INVENTORY_STONE_POS.v }, '+5', [4, 2]));
     }
 
-    buildBridge() {
+    /*buildBridge() {
         const button = this.buttons[BUTTON_REPAIR_BRIDGE];
 
         if (button.active && button.visible && this.wood >= 10 && !this.techBridge) {
@@ -543,12 +546,13 @@ export class GameScene {
 
             // TODO build bridge animation
         }
-    }
+    }*/
 
+        /*
     buildHall() {
         const button = this.buttons[BUTTON_REPAIR_HALL];
 
-        if (button.active && button.visible && this.wood >= 10 && !this.techTorches) {
+        if (button.active && button.visible && this.wood >= 10 && !this.tech.tallower.unlocked) {
             this.wood -= 10;
             this.techTorches = true;
             this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
@@ -556,6 +560,7 @@ export class GameScene {
             // TODO build hall animation
         }
     }
+        */
 
     buildAltar() {
         const button = this.buttons[BUTTON_REPAIR_ALTAR];
@@ -583,5 +588,40 @@ export class GameScene {
         };
         game.scenes.pop();
         game.scenes.push(new DefeatScene(stats));
+    }
+
+    getTechNode(x, y) {
+        return Object.values(this.tech).find(node => node.x === x && node.y === y);
+    }
+
+    /**
+     * Unlock tech node immediately without paying costs or validating.
+     */
+    unlockTech(node) {
+        node.visible = true;
+        node.unlocked = true;
+        if (node.right) this.getTechNode(node.x + 1, node.y).visible = true;
+        if (node.left) this.getTechNode(node.x - 1, node.y).visible = true;
+        if (node.up) this.getTechNode(node.x , node.y - 1).visible = true;
+        if (node.down) this.getTechNode(node.x, node.y + 1).visible = true;
+        this.lastUnlock = node;
+    }
+
+    /**
+     * Pay costs for and unlock a tech node, if possible.
+     */
+    buyTech(node) {
+        if (node.unlocked) return false;
+        if (!this.canAffordCosts(node)) return false;
+        this.unlockTech(node);
+        if (node.wood) this.wood -= node.wood;
+        if (node.meat) this.meat -= node.meat;
+        return true;
+    }
+
+    canAffordCosts(obj) {
+        if (obj.wood && this.wood < obj.wood) return false;
+        if (obj.meat && this.meat < obj.meat) return false;
+        return true;
     }
 }

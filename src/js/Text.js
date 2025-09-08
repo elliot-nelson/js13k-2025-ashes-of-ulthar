@@ -116,7 +116,7 @@ export const Text = {
                 lines.push(line);
                 line = '';
             }
-            line = line + ' ' + words.shift();
+            line = (line.length > 0 ? line + ' ' : '') + words.shift();
         }
         if (line.length > 0) {
             lines.push(line);
