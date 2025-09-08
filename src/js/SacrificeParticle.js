@@ -29,7 +29,7 @@ export class SacrificeParticle {
             game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
         }
         if (this.t === 24) {
-            Audio.play(Audio.sacrifice);
+            Audio.play(Audio.explosion);
         }
 
         this.villager.pos.v -= 0.2;

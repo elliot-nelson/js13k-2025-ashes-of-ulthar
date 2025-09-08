@@ -1,8 +1,10 @@
 // Audio
 
-import { ZZFX } from './lib/zzfx';
+//import { ZZFX } from './lib/zzfx';
 import { CPlayer } from './lib/player-small';
 import { song } from './songs/VillageHusk';
+import { Explosion } from './sfx/Explosion';
+import { Wink } from './sfx/Wink';
 
 export const TRACK_COMBAT = 5;
 export const TRACK_WAVE = 6;
@@ -16,10 +18,12 @@ export const Audio = {
         Audio.musicVolume = 0;
         Audio.sfxVolume = 0;
 
-        Audio.wink = [1.8,,453,.07,.01,.01,4,.3,,,-21,.14,.04,,,,.27,.58,.18,.47,-900]; // Random 276
-        Audio.sacrifice = [.5,,10,,.19,0,2,.6,-86,8,,,,.4,31,,,.7,.29,,-739]; // Random 301
+        //Audio.wink = [1.8,,453,.07,.01,.01,4,.3,,,-21,.14,.04,,,,.27,.58,.18,.47,-900]; // Random 276
+        //Audio.sacrifice = [.5,,10,,.19,0,2,.6,-86,8,,,,.4,31,,,.7,.29,,-739]; // Random 301
         //Audio.tick = [1.2,,338,,.02,.004,2,.7,-59,,,,,.2,,.3,,.86,,,-702]; // Random 359
-        Audio.start = [,,691,.02,.12,.34,,.8,-5,,251,.08,,,22,,,.59,.14]; // Powerup 472
+        //Audio.start = [,,691,.02,.12,.34,,.8,-5,,251,.08,,,22,,,.59,.14]; // Powerup 472
+
+        Audio.sounds = {};
     },
 
     initContext() {
@@ -31,10 +35,11 @@ export const Audio = {
         // after user input).
         //
         // Chrome and Firefox are more relaxed, but this approach works for all 3.
-        ZZFX.x = Audio.ctx = new AudioContext();
+        //ZZFX.x = Audio.ctx = new AudioContext();
+        Audio.ctx = new AudioContext();
         Audio.gain_ = Audio.ctx.createGain();
         Audio.gain_.connect(Audio.ctx.destination);
-        ZZFX.destination = Audio.gain_;
+        //ZZFX.destination = Audio.gain_;
         //console.log(Audio.ctx);
 
         Audio.contextCreated = true;
@@ -45,30 +50,19 @@ export const Audio = {
         // user has interacted at least once (and that interaction called initContext above),
         // so we know it's safe to interact with the audio context.
         if (!Audio.musicPlaying) {
-            //console.log('starting music');
-            this.player = new CPlayer();
-            this.player.init(song);
-            //console.log('music started');
+            // Sfx
 
-            for (;;) {
-                if (this.player.generate() === 1) break;
-                //console.log('generating');
-            }
+            Audio.wink = this.loadSoundBox(Wink);
+            Audio.explosion = this.loadSoundBox(Explosion);
+            Audio.music = this.loadSoundBox(song);
+            Audio.readyToPlay = true;
 
-            this.musicGainNode = Audio.ctx.createGain();
-            this.musicGainNode.connect(Audio.gain_);
-            this.songSource = Audio.ctx.createBufferSource();
-            this.songSource.buffer = this.player.createAudioBuffer(Audio.ctx);
-            this.songSource.loop = true;
-            this.songSource.connect(this.musicGainNode);
+            // Start music
 
-            this.musicStartTime = Audio.ctx.currentTime + 0.1;
-            this.songSource.start(this.musicStartTime);
+            Audio.play(Audio.music, Audio.ctx.currentTime + 0.1, true);
 
             Audio.musicPlaying = true;
         }
-
-        Audio.readyToPlay = true;
     },
 
     update() {
@@ -77,18 +71,27 @@ export const Audio = {
         this.sfxVolume = this.sfxEnabled ? 0.3 : 0;
         this.musicVolume = this.musicEnabled ? 1 : 0;
 
-        ZZFX.volume = this.sfxVolume;
+        //ZZFX.volume = this.sfxVolume;
 
         if (this.sfxEnabled) {
-            ZZFX.volume = 0.3;
+            //ZZFX.volume = 0.3;
         } else {
-            ZZFX.volume = 0;
+            //ZZFX.volume = 0;
         }
     },
 
-    play(sound) {
+    play(sound, startTime, loop) {
         if (!Audio.readyToPlay) return;
-        ZZFX.play(...sound);
+        if (!sound) return;
+
+        //ZZFX.play(...sound);
+        //this.sources.explosion.start(Audio.ctx.currentTime);
+
+        let source = Audio.ctx.createBufferSource();
+        source.buffer = sound.buffer;
+        source.loop = loop || false;
+        source.connect(sound.gainNode);
+        source.start(startTime || Audio.ctx.currentTime);
     },
 
     // It's important we do pausing and unpausing as specific events and not in general update(),
@@ -106,5 +109,21 @@ export const Audio = {
         if (Audio.readyToPlay) {
             Audio.gain_.gain.linearRampToValueAtTime(1, Audio.ctx.currentTime + 1);
         }
+    },
+
+    loadSoundBox(exportedSound) {
+        let player = new CPlayer();
+        player.init(exportedSound);
+
+        for (;;) {
+            if (player.generate() === 1) break;
+        }
+
+        let gainNode = Audio.ctx.createGain();
+        gainNode.connect(Audio.gain_);
+
+        let buffer = player.createAudioBuffer(Audio.ctx);
+
+        return { player, gainNode, buffer };
     }
 };
