@@ -29,6 +29,9 @@ export class TweenChain {
                 if (this.tweenArray[i].v1 === undefined) {
                     this.tweenArray[i].v1 = this.tweenArray[i - 1].v2;
                 }
+                if (this.tweenArray[i].v2 === undefined) {
+                    this.tweenArray[i].v2 = this.tweenArray[i].v1;
+                }
 
                 // Apply stagger on the fly; this allows for randomization of the DESTINATION
                 // (we assume the start point does not move).

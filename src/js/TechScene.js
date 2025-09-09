@@ -65,10 +65,12 @@ export class TechScene {
 
         for (let node of Object.values(this.tech)) {
             if (node && node.visible) {
-                if (node.unlocked) {
-                    Viewport.ctx.drawImage(Sprite.techtree[1].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
-                } else {
-                    Viewport.ctx.drawImage(Sprite.techtree[0].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
+                let bgColor = node.unlocked ? 1 : 0;
+
+                Viewport.ctx.drawImage(Sprite.techtree[bgColor].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
+
+                if (node.sprite) {
+                    Viewport.ctx.drawImage(Sprite.techtree[node.sprite].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
                 }
 
                 if (node.x == this.pos.x && node.y == this.pos.y) {
@@ -81,11 +83,11 @@ export class TechScene {
 
                     if (!node.unlocked) {
                         let costColor = game.gameScene.canAffordCosts(node) ? 4 : 2;
-                        Text.drawText(Viewport.ctx, 'UNLOCK:', cardx, cardy+30, 1, Text.palette[3]);
-                        Text.drawText(Viewport.ctx, node.unlockCost.toUpperCase(), cardx + 56, cardy+30, 1, Text.palette[costColor]);
+                        Text.drawText(Viewport.ctx, 'UNLOCK:', cardx, cardy+40, 1, Text.palette[3]);
+                        Text.drawParagraph(Viewport.ctx, node.unlockCost.toUpperCase(), cardx + 56, cardy+30, 132 - 56, 1, Text.palette[costColor]);
                     }
 
-                    Text.drawText(Viewport.ctx, 'PER TURN:', cardx, cardy+40, 1, Text.palette[3]);
+                    Text.drawText(Viewport.ctx, 'PER TURN:', cardx, cardy+50, 1, Text.palette[3]);
                     Text.drawParagraph(Viewport.ctx, node.perTurn.toUpperCase(), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[4]);
                 }
             }

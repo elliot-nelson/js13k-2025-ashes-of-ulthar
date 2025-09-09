@@ -4,13 +4,6 @@ const Aseparser = require('ase-parser');
 const fs = require('fs');
 const util = require('util');
 
-const SPACE    = 0;
-const ROOM     = 1;
-const SAFEROOM = 2;
-const SPAWN    = 3;
-const TUNNEL   = 4;
-const ENDING   = 5;
-
 /**
  * Similar to the image data parser, the map data parser updates a generated source
  * containing the map data. Like all things, this is a compromise -- it's a trade-off
@@ -64,9 +57,10 @@ const HeightMapDataParser = {
         // HACK: Rearrange so 1 = closest most layer, 0 is background
         // and always empty, 3 (farthest) is currently unused
         heightmap[0] = [];
+        let hm1 = heightmap[1];
         heightmap[1] = heightmap[3];
         //heightmap[2] = heightmap[2];
-        heightmap[3] = [];
+        heightmap[3] = hm1;
 
         return heightmap;
     },

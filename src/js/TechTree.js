@@ -10,6 +10,7 @@ export const TechTree = {
                 unlockCost: '5 Meat',
                 meat: 5,
                 x: 2, y: 2,
+                sprite: 3,
                 right: true,
                 down: true
             },
@@ -20,6 +21,7 @@ export const TechTree = {
                 unlockCost: '10 Wood',
                 wood: 10,
                 x: 2, y: 3,
+                sprite: 4,
                 down: true
             },
             tallower: {
@@ -29,6 +31,7 @@ export const TechTree = {
                 unlockCost: '10 Wood',
                 wood: 10,
                 x: 2, y: 4,
+                sprite: 5,
                 down: true
             },
             stonecutter: {
@@ -37,7 +40,8 @@ export const TechTree = {
                 perTurn: '-1 Meat\n-1 Torch\n+5 Stone',
                 unlockCost: '10 Wood',
                 wood: 10,
-                x: 2, y: 5
+                x: 2, y: 5,
+                sprite: 6
             },
             woodplus: {
                 title: 'Wood+',

@@ -9,7 +9,7 @@ import { SacrificeParticle } from './SacrificeParticle';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, FIREKEEPER, TOTEMCARVER } from './Villager';
+import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR, TOTEMCARVER } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
@@ -89,6 +89,7 @@ export class GameScene {
         if (this.tech.stonecutter.unlocked) {
             this.jobsDisplayed.push(STONECUTTER);
         }
+        this.jobsDisplayed = [WOODCUTTER, BUTCHER, TALLOWER, STONECUTTER, CANTOR];
 
         // Player input
 
@@ -255,7 +256,7 @@ export class GameScene {
         }
 
         for (let villager of this.villagers) {
-            if (villager.layer === 2) villager.draw();
+            if (villager.layer === 3) villager.draw();
         }
 
         // Layer 2 (middle)
@@ -534,6 +535,11 @@ export class GameScene {
         this.consumeMeat();
         this.entities.push(new TextFloatParticle({ u: 100, v: 100 }, '+5', [4, 2]));
         this.entities.push(new TextFloatParticle({ u: INVENTORY_STONE_POS.u + 6, v: INVENTORY_STONE_POS.v }, '+5', [4, 2]));
+    }
+
+    sing() {
+        this.consumeMeat();
+        // gain sanity
     }
 
     /*buildBridge() {
