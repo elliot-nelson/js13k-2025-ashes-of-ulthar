@@ -56,7 +56,13 @@ const ImageDataParser = {
 
     data = {
       ...data,
-      base64: `data:image/png;base64,${base64}`
+      // Uncomment the base64 line if using the base64 image loader.
+      //
+      // In general, it is worth it to base64 and inline your spritesheet if it
+      // is small enough. If the overall crushed version is more than 2k after
+      // encoding, however, it is likely that overall ZIP size will be smaller
+      // by loading dynamically at runtime.
+      // base64: `data:image/png;base64,${base64}`
     };
 
     let generated = util.inspect(data, { compact: true, maxArrayLength: Infinity, depth: Infinity, maxStringLength: Infinity });

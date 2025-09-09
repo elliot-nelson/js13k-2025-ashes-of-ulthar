@@ -192,18 +192,6 @@ async function generateSpriteSheetData() {
     await ImageDataParser.parse(data, image, output);
 }
 
-async function exportTileSheet() {
-    let src = 'src/assets/tiles.aseprite';
-    let png = 'src/assets/generated/tiles-gen.png';
-
-    try {
-        await AsepriteCli.exec(`--batch ${src} --sheet-type rows --sheet-width 32 --sheet ${png}`);
-    } catch (e) {
-        log.error(e);
-        log.warn(chalk.red('Failed to update tile sheet, but building anyway...'));
-    }
-}
-
 function copyAssets() {
     let pipeline = gulp.src('src/assets/generated/spritesheet-gen.png', { encoding: false })
         .pipe(size({ title: 'spritesheet  pre' }));
@@ -237,13 +225,12 @@ async function generateHeightMapData() {
 
 function copyFinalSprites() {
     return gulp.src('dist/temp/sprites.png', { encoding: false })
-        .pipe(gulp.dest('dist/final'));
+        .pipe(gulp.dest('dist/build'));
 }
 
 const buildAssets = gulp.series(
     exportTerrain,
     exportSpriteSheet,
-    exportTileSheet,
     copyAssets,
     pngoutAssets,
     generateSpriteSheetData,

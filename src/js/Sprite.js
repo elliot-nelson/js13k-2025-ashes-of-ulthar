@@ -18,10 +18,19 @@ export const Sprite = {
     // This is an exception to the rule, loading the spritesheet is a special action that
     // happens BEFORE everything is initialized.
     loadSpritesheet(cb) {
+        // Preloaded option
+        // image.onload = cb;
+        // image.src = SpriteSheet.base64;
+        // Sprite.sheet = image;
+
+        // Dynamic load option
         let image = new Image();
-        image.onload = cb;
-        image.src = SpriteSheet.base64;
-        Sprite.sheet = image;
+        image.onload = () => {
+            Sprite.sheet = image;
+            cb();
+        };
+        image.onerror = () => { cb(); }
+        image.src = 'sprites.png';
     },
 
     init() {
