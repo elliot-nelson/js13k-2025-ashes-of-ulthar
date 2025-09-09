@@ -34,7 +34,6 @@ export const Sprite = {
         Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
         Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
         Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
-        Sprite.bridge = initBasicSpriteArray(SpriteSheet.bridge, defaultOpts);
         Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);

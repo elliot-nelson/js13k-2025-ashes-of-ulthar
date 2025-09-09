@@ -25,7 +25,6 @@ import { TechTree } from './TechTree';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
-const BUTTON_REPAIR_BRIDGE = 2;
 const BUTTON_REPAIR_HALL = 3;
 const BUTTON_REPAIR_ALTAR = 4;
 const BUTTON_HELP = 5;
@@ -59,7 +58,6 @@ export class GameScene {
         //this.buttons[BUTTON_SACRIFICE_VILLAGER] = new Button((320-80)/2, 15, 'S', 'Sacrifice Villager');
         this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(5, 3, 'V', 'Recruit Villager');
         this.buttons[BUTTON_SACRIFICE_VILLAGER] = new Button(5, 13, 'S', 'Sacrifice Villager');
-        this.buttons[BUTTON_REPAIR_BRIDGE] = new Button(5, 23, 'B', 'REPAIR BRIDGE');
         this.buttons[BUTTON_REPAIR_HALL] = new Button(5, 33, 'T', 'REPAIR TALLOW HALL');
         this.buttons[BUTTON_REPAIR_ALTAR] = new Button(5, 43, 'A', 'BUILD ALTAR');
         this.buttons[BUTTON_HELP] = new Button(285, 168, 'H', 'HELP');
@@ -114,10 +112,6 @@ export class GameScene {
             if (Input.pressed['KeyV']) {
                 this.recruitVillager();
             }
-
-        /*if (Input.pressed['KeyB']) {
-            this.buildBridge();
-        }*/
 
         /*if (Input.pressed['KeyT']) {
             this.buildHall();
@@ -188,8 +182,6 @@ export class GameScene {
         this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
         this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_SACRIFICE_VILLAGER].active);
 
-        //this.buttons[BUTTON_REPAIR_BRIDGE].active = (this.wood >= 10);
-        //this.buttons[BUTTON_REPAIR_BRIDGE].visible = !this.techBridge && this.wood >= 10;
 
         //this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
         //this.buttons[BUTTON_REPAIR_HALL].visible = this.tech.butcher.unlocked && !this.techTorches && this.wood >= 10;
@@ -308,14 +300,7 @@ export class GameScene {
         /*Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);*/
 
-        // Bridge
-
         if (this.t > 40) {
-        if (this.tech.butcher.unlocked) {
-            Viewport.ctx.drawImage(Sprite.bridge[1].img, 112, 133 - 32);
-        } else {
-            Viewport.ctx.drawImage(Sprite.bridge[0].img, 112, 133 - 32);
-        }
 
         // Tallower Hall
 
@@ -514,18 +499,6 @@ export class GameScene {
         let strValue = signedString(value);
         this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, strValue, [0, 2]));
     }
-
-    /*buildBridge() {
-        const button = this.buttons[BUTTON_REPAIR_BRIDGE];
-
-        if (button.active && button.visible && this.wood >= 10 && !this.techBridge) {
-            this.wood -= 10;
-            this.techBridge = true;
-            this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
-
-            // TODO build bridge animation
-        }
-    }*/
 
         /*
     buildHall() {

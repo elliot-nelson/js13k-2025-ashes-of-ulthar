@@ -432,3 +432,7 @@ Before resource revamp: 260 bytes over
   now down to 169 bytes over... but does it work
   ready to start polishing... but now up to 309 byte sover
   -heightmap slightly: down to 298
+  many tiny iterations: down to 252
+
+More revamping
+  DELETE: Bridge. All gone.
