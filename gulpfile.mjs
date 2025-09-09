@@ -84,14 +84,19 @@ function minifyBuild() {
                         'KeyA',
                         'KeyS',
                         'KeyD',
+                        'KeyM',
+                        'KeyB',
+                        'KeyH',
+                        'KeyT',
+                        'KeyS',
+                        'KeyV',
                         'ArrowUp',
                         'ArrowLeft',
                         'ArrowDown',
                         'ArrowRight',
                         'Escape',
                         'Space',
-                        'Enter',
-                        'OS13kMusic,Wizard with a Shotgun - Oblique Mystique'
+                        'Enter'
                     ]
                 }
             }
@@ -103,7 +108,7 @@ function minifyBuild() {
             mangle: {
                 properties: {
                     builtins: true,
-                    regex: /^(behavior|direction|frame|reset|update|anchor|DEAD|canvas|entities|history|pressed|page|paused|resize|reload|pages|pattern|pause|unpause|sheet|state|init|play|text)$/
+                    regex: /^(buttons|palette|description|title|measure|behavior|direction|frame|reset|update|anchor|DEAD|canvas|entities|history|pressed|page|paused|resize|reload|pages|pattern|pause|unpause|sheet|state|init|play|text)$/
                 }
             }
         }))

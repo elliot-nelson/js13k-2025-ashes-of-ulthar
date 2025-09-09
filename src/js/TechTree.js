@@ -11,9 +11,7 @@ export const TechTree = {
                 unlockCostText: '5 Meat',
                 x: 2, y: 2,
                 sprite: 3,
-                right: true,
-                down: true,
-                left: true
+                r: true, d: true, l: true
             },
             butcher: {
                 title: 'Butchers',
@@ -23,7 +21,7 @@ export const TechTree = {
                 unlockCostText: '10 Wood',
                 x: 2, y: 3,
                 sprite: 4,
-                down: true
+                d: true
             },
             tallower: {
                 title: 'Tallowers',
@@ -33,7 +31,7 @@ export const TechTree = {
                 unlockCostText: '10 Wood',
                 x: 2, y: 4,
                 sprite: 5,
-                down: true
+                d: true
             },
             stonecutter: {
                 title: 'Stonemasons',
@@ -52,7 +50,7 @@ export const TechTree = {
                 perUse: '-1 Villager\n+10 Sanity',
                 x: 1, y: 2,
                 sprite: 6,
-                left: true
+                l: true
             },
             cantor: {
                 title: 'Cantors',
@@ -70,7 +68,7 @@ export const TechTree = {
                 unlockCost: [0, 0, 10, 0, 0, 10],
                 unlockCostText: '10 Wood 10 Stone',
                 x: 3, y: 2,
-                right: true
+                r: true
             },
             woodplusplus: {
                 title: 'Wood++',

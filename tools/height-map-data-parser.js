@@ -62,6 +62,13 @@ const HeightMapDataParser = {
         //heightmap[2] = heightmap[2];
         heightmap[3] = hm1;
 
+        for (let x = 0; x < 190; x++) {
+            heightmap[3][x] = 0;
+        }
+        for (let x = 265; x > 320; x++) {
+            heightmap[1][x] = 0;
+        }
+
         return heightmap;
     },
     _writeOutputFile(data, outputFile) {

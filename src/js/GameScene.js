@@ -579,10 +579,10 @@ export class GameScene {
     unlockTech(node) {
         node.visible = true;
         node.unlocked = true;
-        if (node.right) this.getTechNode(node.x + 1, node.y).visible = true;
-        if (node.left) this.getTechNode(node.x - 1, node.y).visible = true;
-        if (node.up) this.getTechNode(node.x , node.y - 1).visible = true;
-        if (node.down) this.getTechNode(node.x, node.y + 1).visible = true;
+        if (node.r) this.getTechNode(node.x + 1, node.y).visible = true;
+        if (node.l) this.getTechNode(node.x - 1, node.y).visible = true;
+        if (node.u) this.getTechNode(node.x , node.y - 1).visible = true;
+        if (node.d) this.getTechNode(node.x, node.y + 1).visible = true;
         this.lastUnlock = node;
     }
 

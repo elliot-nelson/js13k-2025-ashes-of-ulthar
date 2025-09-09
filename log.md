@@ -430,3 +430,5 @@ Before resource revamp: 260 bytes over
   started refactoring TweenChain, now 358 bytes over (OOF)
   after factoring otu custom buy functions, now 261 byte sover (STILL OOF)
   now down to 169 bytes over... but does it work
+  ready to start polishing... but now up to 309 byte sover
+  -heightmap slightly: down to 298
