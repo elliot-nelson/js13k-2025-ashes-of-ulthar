@@ -32,6 +32,11 @@ export function clamp(value, min, max) {
     return value < min ? min : value > max ? max : value;
 }
 
+export function signedString(value) {
+    if (value > 0) return '+' + value;
+    return String(value);
+}
+
 export function array2d(width, height, fn) {
     return Array.from({ length: height }, () =>
         Array.from({ length: width }, fn)

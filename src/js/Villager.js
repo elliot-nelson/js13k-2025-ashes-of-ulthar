@@ -23,33 +23,8 @@ export class IdleTask extends TweenChain {
         ]);
         this.frame = 0;
         this.layer = 1;
-    }
-
-    completeTask() { }
-}
-
-export class ButcherTask extends TweenChain {
-    constructor() {
-        super([
-            { t1: 0, t2: 120, v1: 0, v2: -76, stagger: 20 },
-            { t1: 120, t2: 180, v1: undefined, v2: -76, stagger: 20 },
-            { t1: 180, t2: 300, v1: undefined, v2: 0 }
-        ]);
-        this.layer = 1;
-        this.frame = 0;
-    }
-
-    update() {
-        super.update();
-
-        const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
-
-        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
-        this.equipmentframe = (this.t > 60 && this.t < 210) ? 3 + facing * VILLAGER_FRAMES : undefined;
-    }
-
-    completeTask() {
-        game.gameScene.gatherMeat();
+        this.cost = [];
+        this.grant = [];
     }
 }
 
@@ -62,6 +37,8 @@ export class WoodcutterTask extends TweenChain {
         ]);
         this.layer = 1;
         this.frame = 0;
+        this.cost = [0, 0, 0, 1];
+        this.grant = [0, 0, 5];
     }
 
     update() {
@@ -72,9 +49,28 @@ export class WoodcutterTask extends TweenChain {
         this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
         this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
     }
+}
 
-    completeTask() {
-        game.gameScene.gatherWood();
+export class ButcherTask extends TweenChain {
+    constructor() {
+        super([
+            { t1: 0, t2: 120, v1: 0, v2: -76, stagger: 20 },
+            { t1: 120, t2: 180, v1: undefined, v2: -76, stagger: 20 },
+            { t1: 180, t2: 300, v1: undefined, v2: 0 }
+        ]);
+        this.layer = 1;
+        this.frame = 0;
+        this.cost = [];
+        this.grant = [0, 0, 0, 4];
+    }
+
+    update() {
+        super.update();
+
+        const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 3 + facing * VILLAGER_FRAMES : undefined;
     }
 }
 
@@ -87,6 +83,8 @@ export class TallowerTask extends TweenChain {
         ]);
         this.layer = 2;
         this.frame = 0;
+        this.cost = [0, 0, 2, 3];
+        this.grant = [0, 0, 0, 0, 1];
     }
 
     update() {
@@ -96,10 +94,6 @@ export class TallowerTask extends TweenChain {
 
         this.frame = Math.floor((this.t + 1) / 8) % 2 + 7 + facing * VILLAGER_FRAMES;
         //this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
-    }
-
-    completeTask() {
-        game.gameScene.craftTorch();
     }
 }
 
@@ -112,6 +106,8 @@ export class StonecutterTask extends TweenChain {
         ]);
         this.layer = 1;
         this.frame = 0;
+        this.cost = [0, 0, 0, 1, 1];
+        this.grant = [0, 0, 0, 0, 0, 5];
     }
 
     update() {
@@ -121,10 +117,6 @@ export class StonecutterTask extends TweenChain {
 
         this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
         this.equipmentframe = (this.t > 60 && this.t < 210) ? 5 + facing * VILLAGER_FRAMES : undefined;
-    }
-
-    completeTask() {
-        game.gameScene.gatherStone();
     }
 }
 
@@ -137,6 +129,8 @@ export class CantorTask extends TweenChain {
         ]);
         this.layer = 3;
         this.frame = 0;
+        this.cost = [0, 0, 3, 3, 3, 3];
+        this.grant = [1];
     }
 
     update() {
@@ -147,10 +141,6 @@ export class CantorTask extends TweenChain {
 
         this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES + 10;
         //this.equipmentframe = (this.t > 60 && this.t < 210) ? 5 + facing * VILLAGER_FRAMES : undefined;
-    }
-
-    completeTask() {
-        game.gameScene.sing();
     }
 }
 
@@ -187,13 +177,12 @@ export class Villager {
         this.equipmentframe = this.task.equipmentframe;
 
         if (this.task.finished) {
-            this.task.completeTask(this);
+            this.task.completeTask();
             this.task = undefined;
         }
     }
 
     draw() {
-        console.log('draw',this.frame,this.pos);
         Sprite.drawViewportSprite(Sprite.villager[this.frame], this.pos);
 
         if (this.equipmentframe > -1) {

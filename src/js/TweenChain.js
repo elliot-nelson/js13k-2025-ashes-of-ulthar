@@ -1,9 +1,25 @@
 // TweenChain
 
+import { Audio } from './Audio';
+import { game } from './Game';
+
 export class TweenChain {
     constructor(tweenArray) {
         this.t = -1;
         this.tweenArray = tweenArray;
+    }
+
+    payCosts() {
+        if (game.gameScene.payCosts(this.cost)) {
+            this.paid = true;
+        } else {
+            game.gameScene.grant([-1]);
+            Audio.play(Audio.fail);
+        }
+    }
+
+    completeTask() {
+        if (this.paid) game.gameScene.grant(this.grant);
     }
 
     update() {
@@ -24,6 +40,11 @@ export class TweenChain {
 
         for (let i = 0; i < this.tweenArray.length; i++) {
             if (this.t >= this.tweenArray[i].t1 && this.t < this.tweenArray[i].t2) {
+                if (i === 1 && !this.attemptedPayment) {
+                    this.attemptedPayment = true;
+                    this.payCosts();
+                }
+
                 // A tween chain can have an "undefined" start value, which means
                 // just inherit the last value of the previous tween.
                 if (this.tweenArray[i].v1 === undefined) {

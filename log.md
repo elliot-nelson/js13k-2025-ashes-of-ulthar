@@ -424,3 +424,9 @@ Adding more tech tree entries, shoring up payment code, but removed 2 bespoke fu
   Now +229 bytes over. (OH NO!)
   Now +241 bytes over. (OH NO!)
  Phew -107 bytes left (cleaned up TechScene).
+
+Before resource revamp: 260 bytes over
+  start point: 232 bytes over (promising)
+  started refactoring TweenChain, now 358 bytes over (OOF)
+  after factoring otu custom buy functions, now 261 byte sover (STILL OOF)
+  now down to 169 bytes over... but does it work

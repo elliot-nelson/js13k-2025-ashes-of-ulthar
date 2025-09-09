@@ -1,7 +1,7 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, INVENTORY_WOOD_POS, INVENTORY_MEAT_POS, INVENTORY_STONE_POS, INVENTORY_TORCH_POS, SANITY_POS } from './Constants';
+import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, INVENTORY_POS, SANITY_POS } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -14,7 +14,7 @@ import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
-import { clamp } from './Util';
+import { clamp, signedString } from './Util';
 
 import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
@@ -30,29 +30,29 @@ const BUTTON_REPAIR_HALL = 3;
 const BUTTON_REPAIR_ALTAR = 4;
 const BUTTON_HELP = 5;
 
+const SANITY = 0;
+const INFLUENCE = 1;
+const WOOD = 2;
+const MEAT = 3;
+const TORCHES = 4;
+const STONE = 5;
+
 export class GameScene {
     constructor() {
         game.gameScene = this;
         this.entities = [];
         this.screenshakes = [];
 
+        // Inventory
+        this.resources = [100, 5, 15, 15, 15, 15];
+        this.gathered = [0, 0, 0, 0, 0, 0];
+
         // Clock
         this.t = 0;
         this.influence = 5;
         this.sanity = 100;
 
-        // Inventory
-        this.meat = 0;
-        this.wood = 0;
-        this.stone = 0;
-        this.torches = 0;
-
-        // Playthrough Stats
-        this.meatGathered = 0;
-        this.woodGathered = 0;
-        this.stoneGathered = 0;
         this.villagersRecruited = 0;
-        this.torchesCrafted = 0;
 
         this.buttons = [];
         //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
@@ -68,6 +68,7 @@ export class GameScene {
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
+        this.inventoryDisplayed = [WOOD];
 
         this.villagers = [];
         this.villagersWithJob = [[], [], [], [], [], [], [], []];
@@ -76,21 +77,31 @@ export class GameScene {
 
         this.tech = TechTree.create();
         this.unlockTech(this.tech.woodcutter);
+        // Set up displayed jobs
+        //this.tech.butcher.unlocked = true;
+        //this.tech.tallower.unlocked = true;
+        //this.tech.stonecutter.unlocked = true;
+        //this.tech.cantor.unlocked = true;
     }
 
     update(handleInput = true) {
-        // Set up displayed jobs
         this.jobsDisplayed = [WOODCUTTER];
+        this.inventoryDisplayed = [WOOD];
         if (this.tech.butcher.unlocked) {
             this.jobsDisplayed.push(BUTCHER);
+            this.inventoryDisplayed.push(MEAT);
         }
         if (this.tech.tallower.unlocked) {
             this.jobsDisplayed.push(TALLOWER);
+            this.inventoryDisplayed.push(TORCHES);
         }
         if (this.tech.stonecutter.unlocked) {
             this.jobsDisplayed.push(STONECUTTER);
+            this.inventoryDisplayed.push(STONE);
         }
-        this.jobsDisplayed = [WOODCUTTER, BUTCHER, TALLOWER, STONECUTTER, CANTOR];
+        if (this.tech.cantor.unlocked) {
+            this.jobsDisplayed.push(CANTOR);
+        }
 
         // Player input
 
@@ -183,8 +194,8 @@ export class GameScene {
         //this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
         //this.buttons[BUTTON_REPAIR_HALL].visible = this.tech.butcher.unlocked && !this.techTorches && this.wood >= 10;
 
-        this.buttons[BUTTON_REPAIR_ALTAR].active = (this.stone >= 10);
-        this.buttons[BUTTON_REPAIR_ALTAR].visible = this.tech.tallower.unlocked && !this.techAltar && this.stone >= 10;
+        //this.buttons[BUTTON_REPAIR_ALTAR].active = (this.stone >= 10);
+        //this.buttons[BUTTON_REPAIR_ALTAR].visible = this.tech.tallower.unlocked && !this.techAltar && this.stone >= 10;
 
         let visibleButtonY = 3;
         for (let i = 0; i < 5; i++) {
@@ -209,13 +220,13 @@ export class GameScene {
             this.entities = this.entities.filter(entity => !entity.cull);
         }
 
-        // Check
+        // Check for player defeat
 
         if (this.sanity < 0) {
             this.playerLost();
         }
 
-        // Ash Particles
+        // Ash rain
 
         if (this.entities.length < 33) {
             this.entities.push(new AshParticle());
@@ -224,6 +235,8 @@ export class GameScene {
         if (this.t % 60 === 0) {
             //Audio.play(Audio.tick);
         }
+
+        // Increment screenshakes
 
         for (let i = 0; i < this.screenshakes.length; i++) {
             if (!this.screenshakes[i].update()) {
@@ -234,12 +247,16 @@ export class GameScene {
     }
 
     draw() {
+        // Draw screenshakes
+
         let shakeX = 0, shakeY = 0;
         this.screenshakes.forEach(shake => {
             shakeX += shake.x;
             shakeY += shake.y;
         });
         Viewport.ctx.translate(shakeX, shakeY);
+
+        // Fake "slam" (parallax drop at beginning of game)
 
         let terrainY = this.t > 36 ? 0 : (285 - 285 * this.t / 36);
 
@@ -387,31 +404,35 @@ export class GameScene {
     }
 
     drawInventory() {
-        let woodWidth = Text.measure(String(this.wood), 1).w;
-        let meatWidth = Text.measure(String(this.meat), 1).w;
-        let stoneWidth = Text.measure(String(this.stone), 1).w;
-        let torchWidth = Text.measure(String(this.torches), 1).w;
+        const inventoryText = ['', '', 'WOOD', 'MEAT', 'TORCHES', 'STONE'];
+        const inventoryIcon = [0, 0, 0, 2, 3, 1];
 
-        Viewport.ctx.drawImage(Sprite.icons[0].img, INVENTORY_WOOD_POS.u - 60, INVENTORY_WOOD_POS.v - 1);
-        Text.drawText(Viewport.ctx, 'WOOD', INVENTORY_WOOD_POS.u - 50, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
-        Text.drawText(Viewport.ctx, String(this.wood), INVENTORY_WOOD_POS.u - woodWidth, INVENTORY_WOOD_POS.v, 1, Text.palette[4]);
+        for (let i = 0; i < this.inventoryDisplayed.length; i++) {
+            let type = this.inventoryDisplayed[i];
+            let strValue = String(this.resources[type]);
+            let width = Text.measure(strValue, 1).w;
 
-        if (this.tech.butcher.unlocked) {
-            Viewport.ctx.drawImage(Sprite.icons[2].img, INVENTORY_MEAT_POS.u - 60, INVENTORY_MEAT_POS.v - 1);
-            Text.drawText(Viewport.ctx, 'MEAT', INVENTORY_MEAT_POS.u - 50, INVENTORY_MEAT_POS.v, 1, Text.palette[4]);
-            Text.drawText(Viewport.ctx, String(this.meat), INVENTORY_MEAT_POS.u - meatWidth, INVENTORY_MEAT_POS.v, 1, Text.palette[4]);
-        }
-
-        if (this.tech.tallower.unlocked) {
-            Viewport.ctx.drawImage(Sprite.icons[3].img, INVENTORY_TORCH_POS.u - 60, INVENTORY_TORCH_POS.v - 1);
-            Text.drawText(Viewport.ctx, 'TORCHES', INVENTORY_TORCH_POS.u - 50, INVENTORY_TORCH_POS.v, 1, Text.palette[4]);
-            Text.drawText(Viewport.ctx, String(this.torches), INVENTORY_TORCH_POS.u - torchWidth, INVENTORY_TORCH_POS.v, 1, Text.palette[4]);
-        }
-
-        if (this.tech.stonecutter.unlocked) {
-            Viewport.ctx.drawImage(Sprite.icons[1].img, INVENTORY_STONE_POS.u - 60, INVENTORY_STONE_POS.v - 1);
-            Text.drawText(Viewport.ctx, 'STONE', INVENTORY_STONE_POS.u - 50, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
-            Text.drawText(Viewport.ctx, String(this.stone), INVENTORY_STONE_POS.u - stoneWidth, INVENTORY_STONE_POS.v, 1, Text.palette[4]);
+            Viewport.ctx.drawImage(
+                Sprite.icons[inventoryIcon[type]].img,
+                INVENTORY_POS.u - 60,
+                INVENTORY_POS.v + i*12 - 1
+            );
+            Text.drawText(
+                Viewport.ctx,
+                inventoryText[type],
+                INVENTORY_POS.u - 50,
+                INVENTORY_POS.v + i*12,
+                1,
+                Text.palette[4]
+            );
+            Text.drawText(
+                Viewport.ctx,
+                strValue,
+                INVENTORY_POS.u - width,
+                INVENTORY_POS.v + i*12,
+                1,
+                Text.palette[4]
+            );
         }
     }
 
@@ -488,61 +509,10 @@ export class GameScene {
         return false;
     }
 
-    consumeMeat() {
-        if (this.meat > 0) {
-            this.meat--;
-            this.entities.push(new TextFloatParticle({ u: INVENTORY_MEAT_POS.u + 6, v: INVENTORY_MEAT_POS.v }, '-1', [4, 2]));
-        } else {
-            this.sanity--;
-            this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '-1', [0, 2]));
-        }
-    }
-
     grantSanity(value) {
         this.sanity = clamp(value, 1, 100);
-        let strValue = value > 0 ? '+' + value : value;
+        let strValue = signedString(value);
         this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, strValue, [0, 2]));
-    }
-
-    gatherMeat() {
-        this.meat += 5;
-        this.meatGathered += 5;
-        this.consumeMeat();
-        this.entities.push(new TextFloatParticle({ u: INVENTORY_MEAT_POS.u + 6, v: INVENTORY_MEAT_POS.v }, '+5', [4, 2]));
-    }
-
-    gatherWood() {
-        this.wood += 5;
-        this.woodGathered += 5;
-        this.consumeMeat();
-        this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '+5', [4, 2]));
-    }
-
-    craftTorch() {
-        this.torches += 1;
-        this.torchesCrafted += 1;
-        this.wood -= 2;
-        this.meat -= 2;
-        this.consumeMeat();
-        this.entities.push(new TextFloatParticle({ u: INVENTORY_TORCH_POS.u + 6, v: INVENTORY_TORCH_POS.v }, '+1', [4, 2]));
-        this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-2', [4, 2]));
-        this.entities.push(new TextFloatParticle({ u: INVENTORY_MEAT_POS.u + 6, v: INVENTORY_MEAT_POS.v }, '-2', [4, 2]));
-    }
-
-    gatherStone() {
-        this.stone += 5;
-        this.stoneGathered += 5;
-        this.consumeMeat();
-        this.entities.push(new TextFloatParticle({ u: 100, v: 100 }, '+5', [4, 2]));
-        this.entities.push(new TextFloatParticle({ u: INVENTORY_STONE_POS.u + 6, v: INVENTORY_STONE_POS.v }, '+5', [4, 2]));
-    }
-
-    sing() {
-        if (this.payCosts({ meat: 3, stone: 3, wood: 3, torches: 3 })) {
-            this.grantSanity(1);
-        } else {
-            Audio.play(Audio.fail);
-        }
     }
 
     /*buildBridge() {
@@ -571,7 +541,7 @@ export class GameScene {
     }
         */
 
-    buildAltar() {
+    /*buildAltar() {
         const button = this.buttons[BUTTON_REPAIR_ALTAR];
 
         if (button.active && button.visible && this.stone >= 10 && !this.techAltar) {
@@ -581,7 +551,7 @@ export class GameScene {
 
             // TODO build altar animation
         }
-    }
+    }*/
 
     nextWorkerCost() {
         return Math.floor(1 * Math.pow(1.3, this.villagers.length));
@@ -590,10 +560,10 @@ export class GameScene {
     playerLost() {
         const stats = {
             seconds: Math.floor(this.t / 60),
-            woodGathered: this.woodGathered,
-            meatGathered: this.meatGathered,
-            torchesCrafted: this.torchesCrafted,
-            stoneGathered: this.stoneGathered,
+            woodGathered: this.gathered[WOOD],
+            meatGathered: this.gathered[MEAT],
+            torchesCrafted: this.gathered[TORCHES],
+            stoneGathered: this.gathered[STONE]
         };
         game.scenes.pop();
         game.scenes.push(new DefeatScene(stats));
@@ -620,27 +590,37 @@ export class GameScene {
      * Pay costs for and unlock a tech node, if possible.
      */
     buyTech(node) {
-        if (!node.unlocked && this.payCosts(node)) {
+        if (!node.unlocked && this.payCosts(node.unlockCost)) {
             this.unlockTech(node);
             return true;
         }
         return false;
     }
 
-    payCosts(obj) {
-        if (!this.canAffordCosts(obj)) return false;
-        if (obj.wood) this.wood -= obj.wood;
-        if (obj.meat) this.meat -= obj.meat;
-        if (obj.torches) this.torches -= obj.torches;
-        if (obj.stone) this.stone -= obj.stone;
+    payCosts(arr) {
+        if (!this.canAffordCosts(arr)) return false;
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i]) this.resources[i] -= arr[i];
+        }
         return true;
     }
 
-    canAffordCosts(obj) {
-        if (obj.wood && this.wood < obj.wood) return false;
-        if (obj.meat && this.meat < obj.meat) return false;
-        if (obj.torches && this.torches < obj.torches) return false;
-        if (obj.stone && this.stone < obj.stone) return false;
+    canAffordCosts(arr) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] && this.resources[i] < arr[i]) return false;
+        }
         return true;
+    }
+
+    grant(arr) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i]) {
+                this.resources[i] = clamp(this.resources[i] + arr[i], 0, 100);
+                this.gathered[i] += arr[i];
+            }
+            this.entities.push(
+                new TextFloatParticle({ u: INVENTORY_POS.u + 6, v: INVENTORY_POS.v }, signedString(arr[i]), [4, 2])
+            );
+        }
     }
 }

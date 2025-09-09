@@ -82,13 +82,14 @@ export class TechScene {
                     Text.drawParagraph(Viewport.ctx, node.description.toUpperCase(), cardx, cardy + 10, 132, 1, Text.palette[3]);
 
                     if (!node.unlocked) {
-                        let costColor = game.gameScene.canAffordCosts(node) ? 4 : 2;
+                        let costColor = game.gameScene.canAffordCosts(node.unlockCost) ? 4 : 2;
                         Text.drawText(Viewport.ctx, 'UNLOCK:', cardx, cardy+40, 1, Text.palette[3]);
-                        Text.drawParagraph(Viewport.ctx, node.unlockCost.toUpperCase(), cardx + 56, cardy+30, 132 - 56, 1, Text.palette[costColor]);
+                        Text.drawParagraph(Viewport.ctx, node.unlockCostText.toUpperCase(), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[costColor]);
                     }
 
-                    Text.drawText(Viewport.ctx, 'PER TURN:', cardx, cardy+50, 1, Text.palette[3]);
-                    Text.drawParagraph(Viewport.ctx, node.perTurn.toUpperCase(), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[4]);
+                    let perText = node.perTurn ? 'PER TURN:' : 'PER USE:';
+                    Text.drawText(Viewport.ctx, perText, cardx, cardy+70, 1, Text.palette[3]);
+                    Text.drawParagraph(Viewport.ctx, (node.perTurn || node.perUse).toUpperCase(), cardx + 56, cardy+70, 132 - 56, 1, Text.palette[4]);
                 }
             }
         }
