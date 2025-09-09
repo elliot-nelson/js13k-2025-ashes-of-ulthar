@@ -14,6 +14,7 @@ import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
+import { clamp } from './Util';
 
 import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
@@ -498,10 +499,9 @@ export class GameScene {
     }
 
     grantSanity(value) {
-        if (this.sanity < 100) {
-            this.sanity = Math.min(100, this.sanity + value);
-            this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, '+' + value, [0, 2]));
-        }
+        this.sanity = clamp(value, 1, 100);
+        let strValue = value > 0 ? '+' + value : value;
+        this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, strValue, [0, 2]));
     }
 
     gatherMeat() {
@@ -538,8 +538,11 @@ export class GameScene {
     }
 
     sing() {
-        this.consumeMeat();
-        // gain sanity
+        if (this.payCosts({ meat: 3, stone: 3, wood: 3, torches: 3 })) {
+            this.grantSanity(1);
+        } else {
+            Audio.play(Audio.fail);
+        }
     }
 
     /*buildBridge() {
@@ -617,17 +620,27 @@ export class GameScene {
      * Pay costs for and unlock a tech node, if possible.
      */
     buyTech(node) {
-        if (node.unlocked) return false;
-        if (!this.canAffordCosts(node)) return false;
-        this.unlockTech(node);
-        if (node.wood) this.wood -= node.wood;
-        if (node.meat) this.meat -= node.meat;
+        if (!node.unlocked && this.payCosts(node)) {
+            this.unlockTech(node);
+            return true;
+        }
+        return false;
+    }
+
+    payCosts(obj) {
+        if (!this.canAffordCosts(obj)) return false;
+        if (obj.wood) this.wood -= obj.wood;
+        if (obj.meat) this.meat -= obj.meat;
+        if (obj.torches) this.torches -= obj.torches;
+        if (obj.stone) this.stone -= obj.stone;
         return true;
     }
 
     canAffordCosts(obj) {
         if (obj.wood && this.wood < obj.wood) return false;
         if (obj.meat && this.meat < obj.meat) return false;
+        if (obj.torches && this.torches < obj.torches) return false;
+        if (obj.stone && this.stone < obj.stone) return false;
         return true;
     }
 }
