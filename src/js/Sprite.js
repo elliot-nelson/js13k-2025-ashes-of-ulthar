@@ -49,6 +49,8 @@ export const Sprite = {
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
         Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);
+        Sprite.asdf3 = initBasicSpriteArray(SpriteSheet.asdf3, defaultOpts);
+        Sprite.asdf2 = initBasicSpriteArray(SpriteSheet.asdf2, { anchor: { x: 4, y: 10 } });
 
         // Custom anchors
         Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, { anchor: { x: 9, y: 28 } });

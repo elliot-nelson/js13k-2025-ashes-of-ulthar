@@ -62,6 +62,11 @@ export class IntroScene {
             entity.draw();
         }
 
+        let circle = { u: 143, v: 32 };
+        Viewport.ctx.drawImage(Sprite.asdf3[0].img, circle.u, circle.v);
+        Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u, circle.v + 8);
+        Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u + 37, circle.v + 8);
+
         if (this.t > 30) {
             let adjustment = Math.max(1 - this.t / 54, 0);
 

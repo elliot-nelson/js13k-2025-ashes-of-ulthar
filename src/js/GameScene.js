@@ -18,16 +18,15 @@ import { clamp, signedString } from './Util';
 
 import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
-import { DefeatScene } from './DefeatScene';
+import { GameOverScene } from './GameOverScene';
 import { AshParticle } from './AshParticle';
 
 import { TechTree } from './TechTree';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
-const BUTTON_REPAIR_HALL = 3;
-const BUTTON_REPAIR_ALTAR = 4;
-const BUTTON_HELP = 5;
+const BUTTON_SUMMON_FREEDOM = 2;
+const BUTTON_HELP = 3;
 
 const SANITY = 0;
 const INFLUENCE = 1;
@@ -52,15 +51,14 @@ export class GameScene {
         this.sanity = 100;
 
         this.villagersRecruited = 0;
+        this.freedom = 0;
 
-        this.buttons = [];
-        //this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button((320-80)/2, 15, 'V', 'Recruit Villager');
-        //this.buttons[BUTTON_SACRIFICE_VILLAGER] = new Button((320-80)/2, 15, 'S', 'Sacrifice Villager');
-        this.buttons[BUTTON_RECRUIT_VILLAGER] = new Button(5, 3, 'V', 'Recruit Villager');
-        this.buttons[BUTTON_SACRIFICE_VILLAGER] = new Button(5, 13, 'S', 'Sacrifice Villager');
-        this.buttons[BUTTON_REPAIR_HALL] = new Button(5, 33, 'T', 'REPAIR TALLOW HALL');
-        this.buttons[BUTTON_REPAIR_ALTAR] = new Button(5, 43, 'A', 'BUILD ALTAR');
-        this.buttons[BUTTON_HELP] = new Button(285, 168, 'H', 'HELP');
+        this.buttons = [
+            new Button(5, 3, 'V', 'RECRUIT VILLAGER'),
+            new Button(5, 13, 'S', 'SACRIFICE VILLAGER'),
+            new Button(5, 23, 'F', 'LIGHT FREEDOM'),
+            new Button(285, 168, 'H', 'HELP')
+        ];
         this.buttons[BUTTON_HELP].visible = true;
         this.buttons[BUTTON_HELP].active = true;
 
@@ -75,6 +73,7 @@ export class GameScene {
 
         this.tech = TechTree.create();
         this.unlockTech(this.tech.woodcutter);
+
         // Set up displayed jobs
         //this.tech.butcher.unlocked = true;
         //this.tech.tallower.unlocked = true;
@@ -121,6 +120,10 @@ export class GameScene {
                 this.buildAltar();
             }
 
+            if (Input.pressed['KeyF']) {
+                this.lightFreedom();
+            }
+
             if (Input.pressed['ArrowDown']) {
                 this.moveJobSelector(1);
             }
@@ -161,7 +164,7 @@ export class GameScene {
         }
 
         if (this.t >= this.nextSanityTick) {
-            this.sanity -= 0.2;
+            this.sanity -= 0.2 + (this.freedom * 0.1);
             this.influence += 0.2;
             this.nextSanityTick = this.t + 12;
         }
@@ -179,8 +182,12 @@ export class GameScene {
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
         this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
 
+        //this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
         this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
         this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_SACRIFICE_VILLAGER].active);
+
+        this.buttons[BUTTON_SUMMON_FREEDOM].active = this.canAffordCosts([0, 0, 5, 5, 20, 5]);
+        this.buttons[BUTTON_SUMMON_FREEDOM].visible = true;
 
 
         //this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
@@ -191,7 +198,7 @@ export class GameScene {
 
         let visibleButtonY = 3;
         for (let i = 0; i < 5; i++) {
-            if (this.buttons[i].visible) {
+            if (this.buttons[i] && this.buttons[i].visible) {
                 this.buttons[i].y = visibleButtonY;
                 visibleButtonY += 10;
             }
@@ -212,10 +219,16 @@ export class GameScene {
             this.entities = this.entities.filter(entity => !entity.cull);
         }
 
+        // Check for player victory
+
+        if (this.freedom === 7) {
+            this.gameOver(true);
+        }
+
         // Check for player defeat
 
         if (this.sanity < 0) {
-            this.playerLost();
+            this.gameOver(false);
         }
 
         // Ash rain
@@ -295,6 +308,15 @@ export class GameScene {
 
         for (let villager of this.villagers) {
             if (villager.layer === 1) villager.draw();
+        }
+
+        // TEMPORARY
+        let circle = { u: 143, v: 32 };
+        Viewport.ctx.drawImage(Sprite.asdf3[0].img, circle.u, circle.v);
+        for (let i = 0; i < this.freedom; i++) {
+            Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u + i * 10, circle.v + 8);
+            //Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u, circle.v + 8);
+            //Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u + 37, circle.v + 8);
         }
 
         /*Viewport.ctx.fillStyle = '#0a1a2f';
@@ -495,7 +517,7 @@ export class GameScene {
     }
 
     grantSanity(value) {
-        this.sanity = clamp(value, 1, 100);
+        this.sanity = clamp(this.sanity + value, 1, 100);
         let strValue = signedString(value);
         this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, strValue, [0, 2]));
     }
@@ -526,11 +548,20 @@ export class GameScene {
         }
     }*/
 
+    lightFreedom() {
+        if (this.payCosts([0, 0, 5, 5, 20, 5])) {
+            Audio.play(Audio.wink);
+            this.freedom++;
+        } else {
+            Audio.play(Audio.fail);
+        }
+    }
+
     nextWorkerCost() {
         return Math.floor(1 * Math.pow(1.3, this.villagers.length));
     }
 
-    playerLost() {
+    gameOver(victory) {
         const stats = {
             seconds: Math.floor(this.t / 60),
             woodGathered: this.gathered[WOOD],
@@ -539,7 +570,7 @@ export class GameScene {
             stoneGathered: this.gathered[STONE]
         };
         game.scenes.pop();
-        game.scenes.push(new DefeatScene(stats));
+        game.scenes.push(new GameOverScene(victory, stats));
     }
 
     getTechNode(x, y) {

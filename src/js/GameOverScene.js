@@ -1,4 +1,4 @@
-// DefeatScene
+// GameOverScene
 
 import { game } from './Game';
 import { Text } from './Text';
@@ -6,8 +6,9 @@ import { Viewport } from './Viewport';
 import { Sprite } from './Sprite';
 import { Input } from './input/Input';
 
-export class DefeatScene {
-    constructor(stats) {
+export class GameOverScene {
+    constructor(victory, stats) {
+        this.victory = victory;
         this.stats = stats;
 
         this.text = [
@@ -20,6 +21,9 @@ export class DefeatScene {
             'STONE MINED: ' + this.stats.stoneGathered,
             'SECONDS SURVIVED: ' + this.stats.seconds
         ];
+        if (this.victory) {
+            this.text[0] = 'GOOD STUFF';
+        }
         this.frames = 0;
     }
 
