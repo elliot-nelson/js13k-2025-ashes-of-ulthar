@@ -8,6 +8,6 @@ don't forget:
  - bytes: 9-box influence bar
  - game over: halign values
  - game over: slide in text
+ - villager job left/right: tiny tick audio
 
-savings:
- - maybe move png OUT of base64?
+

@@ -5,7 +5,6 @@ import { Text } from './Text';
 import { Sprite } from './Sprite';
 import { game } from './Game';
 import { createCanvas } from './Util';
-import { VillagerChunkParticle } from './VillagerChunkParticle';
 import { Audio } from './Audio';
 
 export class SacrificeParticle {
@@ -22,11 +21,7 @@ export class SacrificeParticle {
         }
 
         if (this.t >= 24 && this.t <= 27) {
-            game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
-            game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
-            game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
-            game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
-            game.gameScene.entities.push(new VillagerChunkParticle(this.villager.pos));
+            this.villager.spawnChunks();
         }
         if (this.t === 24) {
             Audio.play(Audio.explosion);

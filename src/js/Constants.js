@@ -12,6 +12,16 @@ export const SANITY_POS = { u: 284, v: 9 };
 // Number of "facing left" villager frames (doubled for facing right)
 export const VILLAGER_FRAMES = 12;
 
+export const SEPTAGRAM_FLAMES = [
+    { u: 3, v: 28 },
+    { u: 57, v: 3 },
+    { u: 69, v: 58 },
+    { u: 22, v: 3 },
+    { u: 10, v: 58 },
+    { u: 76, v: 28 },
+    { u: 39, v: 70 }
+];
+
 // Frames per second (locked)
 //
 // Other constants below, like gravity, foot speed, etc., are represented as movement PER FRAME.

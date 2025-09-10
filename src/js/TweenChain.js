@@ -43,6 +43,10 @@ export class TweenChain {
                 if (i === 1 && !this.attemptedPayment) {
                     this.attemptedPayment = true;
                     this.payCosts();
+                    if (!this.paid) {
+                        this.t = this.tweenArray[2].t1;
+                        continue;
+                    }
                 }
 
                 // A tween chain can have an "undefined" start value, which means

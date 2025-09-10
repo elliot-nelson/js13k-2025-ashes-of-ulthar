@@ -49,17 +49,17 @@ export const TechTree = {
                 unlockCostText: '10 All Resources',
                 perUse: '-1 Villager\n+10 Sanity',
                 x: 1, y: 2,
-                sprite: 6,
+                sprite: 8,
                 l: true
             },
             cantor: {
                 title: 'Cantors',
                 description: 'Soothe the old ones.',
                 unlockCost: [0, 0, 0, 0, 5, 5],
-                unlockCostText: '5 Torches 5 Stone',
-                perTurn: '-3 All Resources\n+1 Sanity',
+                unlockCostText: '5 Torches\n5 Stone',
+                perTurn: '-3 Wood\n-4 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
                 x: 0, y: 2,
-                sprite: 6,
+                sprite: 7,
                 l: true
             },
             ritual: {

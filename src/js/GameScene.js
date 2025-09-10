@@ -1,7 +1,7 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { INVENTORY_POS, SANITY_POS } from './Constants';
+import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -9,7 +9,7 @@ import { SacrificeParticle } from './SacrificeParticle';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR } from './Villager';
+import { Villager, SillyTask, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
@@ -20,13 +20,15 @@ import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
 import { GameOverScene } from './GameOverScene';
 import { AshParticle } from './AshParticle';
+import { DustParticle } from './DustParticle';
 
 import { TechTree } from './TechTree';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
 const BUTTON_SUMMON_FREEDOM = 2;
-const BUTTON_HELP = 3;
+const BUTTON_CODEX = 3;
+const BUTTON_HELP = 4;
 
 const SANITY = 0;
 const INFLUENCE = 1;
@@ -42,13 +44,12 @@ export class GameScene {
         this.screenshakes = [];
 
         // Inventory
-        this.resources = [100, 5, 15, 15, 15, 15];
+        this.resources = [100, 0, 0, 0, 0, 0];
+        this.resourcesDisplayed = [0, 0, 0, 0, 0, 0];
         this.gathered = [0, 0, 0, 0, 0, 0];
 
         // Clock
         this.t = 0;
-        this.influence = 5;
-        this.sanity = 100;
 
         this.villagersRecruited = 0;
         this.freedom = 0;
@@ -57,8 +58,11 @@ export class GameScene {
             new Button(5, 3, 'V', 'RECRUIT VILLAGER'),
             new Button(5, 13, 'S', 'SACRIFICE VILLAGER'),
             new Button(5, 23, 'F', 'LIGHT FREEDOM'),
-            new Button(285, 168, 'H', 'HELP')
+            new Button(275, 158, 'C', 'CODEX'),
+            new Button(275, 168, 'H', 'HELP')
         ];
+        this.buttons[BUTTON_CODEX].visible = true;
+        this.buttons[BUTTON_CODEX].active = true;
         this.buttons[BUTTON_HELP].visible = true;
         this.buttons[BUTTON_HELP].active = true;
 
@@ -68,6 +72,14 @@ export class GameScene {
 
         this.villagers = [];
         this.villagersWithJob = [[], [], [], [], [], [], [], []];
+
+        // These two fake villagers are for laughs
+        let villager = new Villager(IDLE);
+        villager.task = new SillyTask(-50);
+        this.villagers.push(villager);
+        villager = new Villager(IDLE);
+        villager.task = new SillyTask(80);
+        this.villagers.push(villager);
 
         this.techAltar = false;
 
@@ -83,10 +95,10 @@ export class GameScene {
 
     update(handleInput = true) {
         this.jobsDisplayed = [WOODCUTTER];
-        this.inventoryDisplayed = [WOOD];
+        this.inventoryDisplayed = [WOOD, MEAT];
+
         if (this.tech.butcher.unlocked) {
             this.jobsDisplayed.push(BUTCHER);
-            this.inventoryDisplayed.push(MEAT);
         }
         if (this.tech.tallower.unlocked) {
             this.jobsDisplayed.push(TALLOWER);
@@ -145,12 +157,15 @@ export class GameScene {
             }
 
             if (Input.pressed['Space']) {
-                this.sanity -= 10;
+                this.resources[SANITY] -= 10;
+            }
+
+            if (Input.pressed['KeyC']) {
+                game.scenes.push(new TechScene(this.tech));
             }
 
             if (Input.pressed['KeyH']) {
-                //game.scenes.push(new HelpScene());
-                game.scenes.push(new TechScene(this.tech));
+                game.scenes.push(new HelpScene());
             }
 
         }
@@ -164,9 +179,22 @@ export class GameScene {
         }
 
         if (this.t >= this.nextSanityTick) {
-            this.sanity -= 0.2 + (this.freedom * 0.1);
-            this.influence += 0.2;
+            this.resources[SANITY] -= 0.2 + (this.freedom * 0.1);
+            this.resources[INFLUENCE] += 0.2;
             this.nextSanityTick = this.t + 12;
+        }
+
+        // Resource ticks
+        // Note: very simple check is designed for small-scale
+        // changes that never have fractions. Sanity and influence
+        // ignore this system.
+
+        for (let i = 2; i < this.resourcesDisplayed.length; i++) {
+            if (this.resourcesDisplayed[i] > this.resources[i]) {
+                this.resourcesDisplayed[i]--;
+            } else if (this.resourcesDisplayed[i] < this.resources[i]) {
+                this.resourcesDisplayed[i]++;
+            }
         }
 
         if (this.t === 1) {
@@ -175,11 +203,20 @@ export class GameScene {
 
         if (this.t === 36) {
             this.addScreenShake(new ScreenShake(6, 6, 6));
+            Audio.play(Audio.explosion);
+        }
+        if (this.t >= 36 && this.t <= 38) {
+            this.villagers[0].spawnChunks();
+            this.villagers[1].spawnChunks();
+        }
+        if (this.t === 38) {
+            this.villagers = [];
+            this.resources[MEAT] += 10;
         }
 
         // Button UI Elements
 
-        this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.influence >= this.nextWorkerCost());
+        this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.resources[INFLUENCE] >= this.nextWorkerCost());
         this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
 
         //this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
@@ -227,7 +264,7 @@ export class GameScene {
 
         // Check for player defeat
 
-        if (this.sanity < 0) {
+        if (this.resources[SANITY] <= 0) {
             this.gameOver(false);
         }
 
@@ -237,8 +274,19 @@ export class GameScene {
             this.entities.push(new AshParticle());
         }
 
-        if (this.t % 60 === 0) {
-            //Audio.play(Audio.tick);
+        // Ritual
+
+        let ritualOffset = Math.floor(Math.sin(this.t / 12) * 2);
+        if (!this.ritualDust && ritualOffset > 0) {
+            this.ritualDust = this.t + 1;
+        }
+
+        this.ritualPosition = { u: 160 - 39 + 8, v: 17 + Math.floor(Math.sin(this.t / 12) * 2) };
+
+        if (this.ritualDust && this.t > this.ritualDust) {
+            let flame = Math.floor(Math.random() * 7);
+            this.entities.push(new DustParticle({ u: this.ritualPosition.u + SEPTAGRAM_FLAMES[flame].u, v: this.ritualPosition.v + SEPTAGRAM_FLAMES[flame].v }));
+            this.ritualDust += Math.PI * 2;
         }
 
         // Increment screenshakes
@@ -294,7 +342,9 @@ export class GameScene {
             if (villager.layer === 2) villager.draw();
         }
 
-        this.drawRitual();
+        if (this.tech.ritual.unlocked) {
+            this.drawRitual();
+        }
 
         // Layer 1 (closest)
 
@@ -309,7 +359,7 @@ export class GameScene {
         }
 
         for (let villager of this.villagers) {
-            if (villager.layer === 1) villager.draw();
+            if (villager.layer === 1) villager.draw(Math.floor(terrainY));
         }
 
 
@@ -334,12 +384,6 @@ export class GameScene {
             Viewport.ctx.drawImage(Sprite.altar[1].img, 238, 115 - 30 + altarY);
         }
 
-        /*
-            // (Debug) raw numbers
-            let crunk = String(Math.floor(this.sanity)) + ',' + String(Math.floor(this.influence)) + ',' + String(this.villagers.length);
-            Text.drawText(Viewport.ctx, crunk, 3, 3, 1, Text.palette[1]);
-        */
-
         if (game.scene === this) {
             // Hide button prompts if Help Screen is displayed, to avoid confusion
             for (const button of this.buttons) {
@@ -355,7 +399,7 @@ export class GameScene {
     }
 
     drawSanityBar() {
-        let k = Math.floor((this.sanity / 100) * 78);
+        let k = Math.floor((this.resources[SANITY] / 100) * 78);
         Viewport.ctx.drawImage(Sprite.sanitybar[0].img, 320-18-5, -3);
         Viewport.ctx.drawImage(Sprite.sanitybar[1].img, 320-18-5, -3);
         Viewport.ctx.drawImage(Sprite.sanitybar[2].img,
@@ -367,7 +411,7 @@ export class GameScene {
     }
 
     drawInfluenceBar() {
-        let k = Math.floor(Math.min(this.influence / this.nextWorkerCost(), 1) * 80);
+        let k = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * 80);
         Viewport.ctx.drawImage(Sprite.influencebar[0].img, (320-80)/2, 3);
         Viewport.ctx.drawImage(Sprite.influencebar[1].img,
             2, 3,
@@ -410,7 +454,7 @@ export class GameScene {
 
         for (let i = 0; i < this.inventoryDisplayed.length; i++) {
             let type = this.inventoryDisplayed[i];
-            let strValue = String(this.resources[type]);
+            let strValue = String(this.resourcesDisplayed[type]);
             let width = Text.measure(strValue, 1).w;
 
             Viewport.ctx.drawImage(
@@ -438,20 +482,11 @@ export class GameScene {
     }
 
     drawRitual() {
-        let flamePositions = [
-            { u: 3, v: 28 },
-            { u: 57, v: 3 },
-            { u: 69, v: 58 },
-            { u: 22, v: 3 },
-            { u: 10, v: 58 },
-            { u: 76, v: 28 },
-            { u: 39, v: 70 }
-        ];
         let pos = { u: 160 - 39 + 8, v: 17 + Math.floor(Math.sin(this.t / 12) * 2) };
 
         Viewport.ctx.drawImage(Sprite.ritual[0].img, pos.u, pos.v);
         for (let i = 0; i < this.freedom; i++) {
-            Sprite.drawSprite(Viewport.ctx, Sprite.ritualflame[Math.floor((this.t / 6) + i) % 3], pos.u + flamePositions[i].u, pos.v + flamePositions[i].v);
+            Sprite.drawSprite(Viewport.ctx, Sprite.ritualflame[Math.floor((this.t / 6) + i) % 3], pos.u + SEPTAGRAM_FLAMES[i].u, pos.v + SEPTAGRAM_FLAMES[i].v);
         }
     }
 
@@ -468,8 +503,8 @@ export class GameScene {
 
     recruitVillager() {
         const cost = this.nextWorkerCost();
-        if (this.influence >= cost) {
-            this.influence -= cost;
+        if (this.resources[INFLUENCE] >= cost) {
+            this.resources[INFLUENCE] -= cost;
 
             const villager = new Villager(this.selectedJob || WOODCUTTER);
             this.villagers.push(villager);
@@ -529,7 +564,7 @@ export class GameScene {
     }
 
     grantSanity(value) {
-        this.sanity = clamp(this.sanity + value, 1, 100);
+        this.resources[SANITY] = clamp(this.resources[SANITY] + value, 1, 100);
         let strValue = signedString(value);
         this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, strValue, [0, 2]));
     }
@@ -570,7 +605,7 @@ export class GameScene {
     }
 
     nextWorkerCost() {
-        return Math.floor(1 * Math.pow(1.3, this.villagers.length));
+        return Math.floor(3 * Math.pow(1.3, this.villagers.length));
     }
 
     gameOver(victory) {

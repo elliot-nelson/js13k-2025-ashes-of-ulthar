@@ -7,6 +7,7 @@ import { Sprite } from './Sprite';
 import { Viewport } from './Viewport';
 import { TweenChain } from './TweenChain';
 import { HeightMapData } from './generated/HeightMapData-gen';
+import { VillagerChunkParticle } from './VillagerChunkParticle';
 
 export const IDLE = 0;
 export const WOODCUTTER = 1;
@@ -20,6 +21,18 @@ export class IdleTask extends TweenChain {
     constructor() {
         super([
             { t1: 0, t2: 30, v1: 0, v2: 0 }
+        ]);
+        this.frame = 0;
+        this.layer = 1;
+        this.cost = [];
+        this.grant = [];
+    }
+}
+
+export class SillyTask extends TweenChain {
+    constructor(uValue) {
+        super([
+            { t1: 0, t2: 120, v1: uValue, v2: 0 }
         ]);
         this.frame = 0;
         this.layer = 1;
@@ -182,15 +195,23 @@ export class Villager {
         }
     }
 
-    draw() {
-        Sprite.drawViewportSprite(Sprite.villager[this.frame], this.pos);
+    draw(terrainY) {
+        Sprite.drawViewportSprite(Sprite.villager[this.frame], { u: this.pos.u, v: this.pos.v + terrainY });
 
         if (this.equipmentframe > -1) {
-            Sprite.drawViewportSprite(Sprite.villager[this.equipmentframe], this.pos);
+            Sprite.drawViewportSprite(Sprite.villager[this.equipmentframe], { u: this.pos.u, v: this.pos.v + terrainY });
         }
     }
 
     newTask() {
         return new TaskClass[this.job]();
+    }
+
+    spawnChunks() {
+        game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+        game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+        game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+        game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+        game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
     }
 }

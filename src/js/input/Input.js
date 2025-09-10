@@ -21,7 +21,8 @@ export const Input = {
         'KeyB',
         'KeyT',
         'KeyM',
-        'KeyF'
+        'KeyF',
+        'KeyC'
     ],
 
     init() {
