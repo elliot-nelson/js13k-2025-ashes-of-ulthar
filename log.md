@@ -451,3 +451,13 @@ Remove all altar handling. 663 bytes over.
 [16:38:12] Starting 'ready'...
 [16:38:12] Finished 'ready' after 190 μs
 [16:38:12] Finished 'build' after 8.05 s
+
+Move some other stuff around
+
+      14456       13961  96%
+[16:44:39] zip all files 14 kB
+[16:44:39] 649 bytes over
+[16:44:39] Finished 'buildZip' after 895 ms
+[16:44:39] Starting 'ready'...
+[16:44:39] Finished 'ready' after 188 μs
+[16:44:39] Finished 'build' after 7.97 s

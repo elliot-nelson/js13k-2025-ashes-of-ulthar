@@ -12,6 +12,7 @@ export const SANITY_POS = { u: 284, v: 9 };
 // Number of "facing left" villager frames (doubled for facing right)
 export const VILLAGER_FRAMES = 12;
 
+// Flame locations in ritual
 export const SEPTAGRAM_FLAMES = [
     { u: 3, v: 28 },
     { u: 57, v: 3 },

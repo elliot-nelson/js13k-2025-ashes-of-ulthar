@@ -172,6 +172,10 @@ export class GameScene {
             this.nextSanityTick = this.t + 12;
         }
 
+        if (!this.nextSacrificeTick) {
+            this.nextSacrificeTick = this.t + 3;
+        }
+
         // Resource ticks
         // Note: very simple check is designed for small-scale
         // changes that never have fractions. Sanity and influence
@@ -184,6 +188,9 @@ export class GameScene {
                 this.resourcesDisplayed[i]++;
             }
         }
+
+        // Game "start up" logic - some tick-based init
+        // animations that happen once at start of game.
 
         if (this.t === 1) {
             Audio.play(Audio.wind);
@@ -206,24 +213,10 @@ export class GameScene {
 
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.resources[INFLUENCE] >= this.nextWorkerCost());
         this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
-
-        //this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
-        this.buttons[BUTTON_SACRIFICE_VILLAGER].active = (true);
-        this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_SACRIFICE_VILLAGER].active);
-
+        this.buttons[BUTTON_SACRIFICE_VILLAGER].active = this.t >= this.nextSacrificeTick;
+        this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = this.tech.sacrifice.unlocked;
         this.buttons[BUTTON_SUMMON_FREEDOM].active = this.canAffordCosts([0, 0, 5, 5, 20, 5]);
-        this.buttons[BUTTON_SUMMON_FREEDOM].visible = true;
-
-        //this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
-        //this.buttons[BUTTON_REPAIR_HALL].visible = this.tech.butcher.unlocked && !this.techTorches && this.wood >= 10;
-
-        let visibleButtonY = 3;
-        for (let i = 0; i < 5; i++) {
-            if (this.buttons[i] && this.buttons[i].visible) {
-                this.buttons[i].y = visibleButtonY;
-                visibleButtonY += 10;
-            }
-        }
+        this.buttons[BUTTON_SUMMON_FREEDOM].visible = this.tech.ritual.unlocked;
 
         // Villagers
 
@@ -238,18 +231,6 @@ export class GameScene {
                 entity.update();
             }
             this.entities = this.entities.filter(entity => !entity.cull);
-        }
-
-        // Check for player victory
-
-        if (this.freedom === 7) {
-            this.gameOver(true);
-        }
-
-        // Check for player defeat
-
-        if (this.resources[SANITY] <= 0) {
-            this.gameOver(false);
         }
 
         // Ash rain
@@ -271,6 +252,18 @@ export class GameScene {
             let flame = Math.floor(Math.random() * 7);
             this.entities.push(new DustParticle({ u: this.ritualPosition.u + SEPTAGRAM_FLAMES[flame].u, v: this.ritualPosition.v + SEPTAGRAM_FLAMES[flame].v }));
             this.ritualDust += Math.PI * 2;
+        }
+
+        // Check for player victory
+
+        if (this.freedom === 7) {
+            this.gameOver(true);
+        }
+
+        // Check for player defeat
+
+        if (this.resources[SANITY] <= 0) {
+            this.gameOver(false);
         }
 
         // Increment screenshakes
