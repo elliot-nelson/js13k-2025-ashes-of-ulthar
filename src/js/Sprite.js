@@ -55,11 +55,6 @@ export const Sprite = {
         Sprite.ritualglyph = initBasicSpriteArray(SpriteSheet.ritualglyph, defaultOpts);
         Sprite.ritualflame = initBasicSpriteArray(SpriteSheet.ritualflame, { anchor: { x: 4, y: 10 } });
 
-        // Custom anchors
-        Sprite.altar = initBasicSpriteArray(SpriteSheet.altar, { anchor: { x: 9, y: 28 } });
-        Sprite.villagerdeath = initBasicSpriteArray(SpriteSheet.villagerdeath, { anchor: { x: 6, y: 21 } });
-        Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
-
         // Sanity bar handling
         Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
         Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, '#0a1a2f'), defaultOpts);
@@ -75,6 +70,8 @@ export const Sprite = {
         }
 
         // Villager
+        Sprite.villagerdeath = initBasicSpriteArray(SpriteSheet.villagerdeath, { anchor: { x: 6, y: 21 } });
+        Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
         Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
         const villagerFrames = Sprite.villager.length;
         Sprite.villager[1].img = copySpriteFrame(Sprite.villager[0].img, Sprite.villager[1].img, 22, 28);

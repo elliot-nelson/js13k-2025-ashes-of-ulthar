@@ -435,4 +435,19 @@ Before resource revamp: 260 bytes over
   many tiny iterations: down to 252
 
 More revamping
-  DELETE: Bridge. All gone.
+  DELETE: Bridge. All gone. Now 40 bytes over.
+
+Remove all altar handling. 663 bytes over.
+
+[16:38:11] Starting 'buildHtml'...
+[16:38:11] Finished 'buildHtml' after 5.69 ms
+[16:38:11] Starting 'buildZip'...
+[16:38:11] all files 22.1 kB
+       14466       13975  96% js13k-2025-ulthar-rising.zip
+       14466       13975  96%
+[16:38:12] zip all files 14 kB
+[16:38:12] 663 bytes over
+[16:38:12] Finished 'buildZip' after 836 ms
+[16:38:12] Starting 'ready'...
+[16:38:12] Finished 'ready' after 190 μs
+[16:38:12] Finished 'build' after 8.05 s

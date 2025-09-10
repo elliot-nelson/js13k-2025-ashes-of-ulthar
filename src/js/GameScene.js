@@ -81,16 +81,8 @@ export class GameScene {
         villager.task = new SillyTask(80);
         this.villagers.push(villager);
 
-        this.techAltar = false;
-
         this.tech = TechTree.create();
         this.unlockTech(this.tech.woodcutter);
-
-        // Set up displayed jobs
-        //this.tech.butcher.unlocked = true;
-        //this.tech.tallower.unlocked = true;
-        //this.tech.stonecutter.unlocked = true;
-        //this.tech.cantor.unlocked = true;
     }
 
     update(handleInput = true) {
@@ -127,10 +119,6 @@ export class GameScene {
         /*if (Input.pressed['KeyT']) {
             this.buildHall();
         }*/
-
-            if (Input.pressed['KeyA']) {
-                this.buildAltar();
-            }
 
             if (Input.pressed['KeyF']) {
                 this.lightFreedom();
@@ -226,12 +214,8 @@ export class GameScene {
         this.buttons[BUTTON_SUMMON_FREEDOM].active = this.canAffordCosts([0, 0, 5, 5, 20, 5]);
         this.buttons[BUTTON_SUMMON_FREEDOM].visible = true;
 
-
         //this.buttons[BUTTON_REPAIR_HALL].active = (this.wood >= 10);
         //this.buttons[BUTTON_REPAIR_HALL].visible = this.tech.butcher.unlocked && !this.techTorches && this.wood >= 10;
-
-        //this.buttons[BUTTON_REPAIR_ALTAR].active = (this.stone >= 10);
-        //this.buttons[BUTTON_REPAIR_ALTAR].visible = this.tech.tallower.unlocked && !this.techAltar && this.stone >= 10;
 
         let visibleButtonY = 3;
         for (let i = 0; i < 5; i++) {
@@ -374,14 +358,6 @@ export class GameScene {
             Viewport.ctx.drawImage(Sprite.factory[1].img, 198, 133 - 32);
         } else {
             Viewport.ctx.drawImage(Sprite.factory[0].img, 198, 133 - 32);
-        }
-
-        // Altar
-
-        if (this.techAltar) {
-            let altarY = Math.floor(Math.sin(this.t / 25) * 2);
-            Viewport.ctx.drawImage(Sprite.altar[0].img, 238, 116 - 30);
-            Viewport.ctx.drawImage(Sprite.altar[1].img, 238, 115 - 30 + altarY);
         }
 
         if (game.scene === this) {
@@ -582,18 +558,6 @@ export class GameScene {
         }
     }
         */
-
-    /*buildAltar() {
-        const button = this.buttons[BUTTON_REPAIR_ALTAR];
-
-        if (button.active && button.visible && this.stone >= 10 && !this.techAltar) {
-            this.stone -= 10;
-            this.techAltar = true;
-            this.entities.push(new TextFloatParticle({ u: INVENTORY_STONE_POS.u + 6, v: INVENTORY_STONE_POS.v }, '-10', [4, 2]));
-
-            // TODO build altar animation
-        }
-    }*/
 
     lightFreedom() {
         if (this.payCosts([0, 0, 5, 5, 20, 5])) {
