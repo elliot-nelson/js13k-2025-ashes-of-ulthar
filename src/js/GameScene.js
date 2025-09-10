@@ -1,7 +1,7 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { TARGET_GAME_HEIGHT, TARGET_GAME_WIDTH, INVENTORY_POS, SANITY_POS } from './Constants';
+import { INVENTORY_POS, SANITY_POS } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -9,7 +9,7 @@ import { SacrificeParticle } from './SacrificeParticle';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
-import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR, TOTEMCARVER } from './Villager';
+import { Villager, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR } from './Villager';
 import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
@@ -294,6 +294,8 @@ export class GameScene {
             if (villager.layer === 2) villager.draw();
         }
 
+        this.drawRitual();
+
         // Layer 1 (closest)
 
         Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, Math.floor(0 + terrainY));
@@ -310,14 +312,6 @@ export class GameScene {
             if (villager.layer === 1) villager.draw();
         }
 
-        // TEMPORARY
-        let circle = { u: 143, v: 32 };
-        Viewport.ctx.drawImage(Sprite.asdf3[0].img, circle.u, circle.v);
-        for (let i = 0; i < this.freedom; i++) {
-            Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u + i * 10, circle.v + 8);
-            //Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u, circle.v + 8);
-            //Viewport.ctx.drawImage(Sprite.asdf2[Math.floor((this.t / 6) + 1) % 3].img, circle.u + 37, circle.v + 8);
-        }
 
         /*Viewport.ctx.fillStyle = '#0a1a2f';
         Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);*/
@@ -440,6 +434,24 @@ export class GameScene {
                 1,
                 Text.palette[4]
             );
+        }
+    }
+
+    drawRitual() {
+        let flamePositions = [
+            { u: 3, v: 28 },
+            { u: 57, v: 3 },
+            { u: 69, v: 58 },
+            { u: 22, v: 3 },
+            { u: 10, v: 58 },
+            { u: 76, v: 28 },
+            { u: 39, v: 70 }
+        ];
+        let pos = { u: 160 - 39 + 8, v: 17 + Math.floor(Math.sin(this.t / 12) * 2) };
+
+        Viewport.ctx.drawImage(Sprite.ritual[0].img, pos.u, pos.v);
+        for (let i = 0; i < this.freedom; i++) {
+            Sprite.drawSprite(Viewport.ctx, Sprite.ritualflame[Math.floor((this.t / 6) + i) % 3], pos.u + flamePositions[i].u, pos.v + flamePositions[i].v);
         }
     }
 
