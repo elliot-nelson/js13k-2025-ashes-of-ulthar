@@ -564,10 +564,11 @@ export class GameScene {
     gameOver(victory) {
         const stats = {
             seconds: Math.floor(this.t / 60),
+            freedom: this.freedom,
             woodGathered: this.gathered[WOOD],
             meatGathered: this.gathered[MEAT],
             torchesCrafted: this.gathered[TORCHES],
-            stoneGathered: this.gathered[STONE]
+            stoneGathered: this.gathered[STONE],
         };
         game.scenes.pop();
         game.scenes.push(new GameOverScene(victory, stats));
@@ -604,6 +605,8 @@ export class GameScene {
     payCosts(arr) {
         if (!this.canAffordCosts(arr)) return false;
         for (let i = 0; i < arr.length; i++) {
+            // HACK FOR COSTS
+            if (arr[i]) arr[i] = 1;
             if (arr[i]) this.resources[i] -= arr[i];
         }
         return true;
@@ -611,6 +614,8 @@ export class GameScene {
 
     canAffordCosts(arr) {
         for (let i = 0; i < arr.length; i++) {
+            // HACK FOR COSTS
+            if (arr[i]) arr[i] = 1;
             if (arr[i] && this.resources[i] < arr[i]) return false;
         }
         return true;

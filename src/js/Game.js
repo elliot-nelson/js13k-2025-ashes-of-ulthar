@@ -6,7 +6,6 @@ import { IntroScene } from './IntroScene';
 import { GameScene } from './GameScene';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
-import { VictoryScene } from './VictoryScene';
 import { Viewport } from './Viewport';
 import { Input } from './input/Input';
 

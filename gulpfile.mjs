@@ -90,6 +90,7 @@ function minifyBuild() {
                         'KeyT',
                         'KeyS',
                         'KeyV',
+                        'KeyF',
                         'ArrowUp',
                         'ArrowLeft',
                         'ArrowDown',

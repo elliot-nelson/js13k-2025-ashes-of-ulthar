@@ -44,7 +44,7 @@ export const TechTree = {
             },
             sacrifice: {
                 title: 'Sacrificial Lamb',
-                description: 'Sacrifice a villager to temporarily increase sanity.',
+                description: 'Sacrifice villagers to temporarily increase sanity.',
                 unlockCost: [0, 0, 10, 10, 10, 10],
                 unlockCostText: '10 All Resources',
                 perUse: '-1 Villager\n+10 Sanity',
@@ -59,6 +59,16 @@ export const TechTree = {
                 unlockCostText: '5 Torches 5 Stone',
                 perTurn: '-3 All Resources\n+1 Sanity',
                 x: 0, y: 2,
+                sprite: 6,
+                l: true
+            },
+            ritual: {
+                title: 'Ritual',
+                description: 'Start the ritual and light the seven seals. WARNING: Seals will gradually drain village sanity.',
+                unlockCost: [0, 0, 5, 5, 20, 5],
+                unlockCostText: '5 Wood 5 Meat\n20 Torches 5 Stone',
+                perUse: '-5 Wood\n-5 Meat\n-20 Torches\n-5 Stone',
+                x: -1, y: 2,
                 sprite: 6
             },
             woodplus: {
