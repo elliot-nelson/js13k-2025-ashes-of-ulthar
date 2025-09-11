@@ -461,3 +461,55 @@ Move some other stuff around
 [16:44:39] Starting 'ready'...
 [16:44:39] Finished 'ready' after 188 μs
 [16:44:39] Finished 'build' after 7.97 s
+
+     14462       13971  96%
+[08:04:54] zip all files 14 kB
+[08:04:54] 659 bytes over
+[08:04:54] Finished 'buildZip' after 936 ms
+
+'buildHtml' after 4.76 ms
+[09:47:35] Starting 'buildZip'...
+[09:47:35] all files 22.5 kB
+       14516       14016  96% js13k-2025-ulthar-rising.zip
+       14516       14016  96%
+[09:47:36] zip all files 14 kB
+[09:47:36] 704 bytes over
+[09:47:36] Finished 'buildZip' after 989 ms
+[09:47:36] Starting 'ready'...
+[09:47:36] Finished 'ready' after 179 μs
+[09:47:36] Finished 'build' after 7.48 s
+
+added junk
+
+] zip all files 14 kB
+[09:57:59] 656 bytes over
+[09:57:59] Finished 'buildZip' after 864 ms
+[09:57:59] Starting 'ready'...
+
+
+      14411       13897  96% js13k-2025-ulthar-rising.zip
+       14411       13897  96%
+[11:06:00] zip all files 13.9 kB
+[11:06:00] 585 bytes over
+[11:06:00] Finished 'buildZip' after 923 ms
+[11:06:00] Starting 'ready'...
+[11:06:00] Finished 'ready' after 183 μs
+
+DEBT: scrap influencebar down to 506 (-79)
+DEBT: scrap ritual down to 252 (-254)
+DEBT: scrap ritualglyph down to 180 (-72)
+DEBT: remove 50% of help text: 92 (-88)
+DEBT: remove bigarrows and add line: 74 (-18)
+DEBT: remove custom names for gathered: -47 (-3)
+DEBT: squash jobselect -59 (-12)
+DEBT: lol deleted Util functions, lost bytes!
+DEBT: delete 1 villager frame - 68 (-9)
+DEBT: delete keys aseprite - 83 (-15)
+DEBT: remove ritual bigtime - 205 (-122)
+DEBT: rotate sanitybar CCW - 228 (-23)
+
+TODO:
+DEBT: delete villagerdeath - 326 (-98)
+DEBT: remove TextFloartParticle completely: -44 (-118)
+
+REAL: remove TextFloat completely, +528 bytes over

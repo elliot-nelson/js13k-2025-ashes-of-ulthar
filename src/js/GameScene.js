@@ -10,7 +10,6 @@ import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, SillyTask, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR } from './Villager';
-import { TextFloatParticle } from './TextFloatParticle';
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
@@ -510,26 +509,6 @@ export class GameScene {
         return false;
     }
 
-    grantSanity(value) {
-        this.resources[SANITY] = clamp(this.resources[SANITY] + value, 1, 100);
-        let strValue = signedString(value);
-        this.entities.push(new TextFloatParticle({ u: SANITY_POS.u, v: SANITY_POS.v }, strValue, [0, 2]));
-    }
-
-        /*
-    buildHall() {
-        const button = this.buttons[BUTTON_REPAIR_HALL];
-
-        if (button.active && button.visible && this.wood >= 10 && !this.tech.tallower.unlocked) {
-            this.wood -= 10;
-            this.techTorches = true;
-            this.entities.push(new TextFloatParticle({ u: INVENTORY_WOOD_POS.u + 6, v: INVENTORY_WOOD_POS.v }, '-10', [4, 2]));
-
-            // TODO build hall animation
-        }
-    }
-        */
-
     lightFreedom() {
         if (this.payCosts([0, 0, 5, 5, 20, 5])) {
             Audio.play(Audio.wink);
@@ -606,12 +585,9 @@ export class GameScene {
     grant(arr) {
         for (let i = 0; i < arr.length; i++) {
             if (arr[i]) {
-                this.resources[i] = clamp(this.resources[i] + arr[i], 0, 100);
+                this.resources[i] = clamp(this.resources[i] + arr[i], 0, i === 0 ? 100 : 10000);
                 this.gathered[i] += arr[i];
             }
-            this.entities.push(
-                new TextFloatParticle({ u: INVENTORY_POS.u + 6, v: INVENTORY_POS.v }, signedString(arr[i]), [4, 2])
-            );
         }
     }
 }

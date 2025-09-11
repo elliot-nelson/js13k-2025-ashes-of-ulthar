@@ -16,7 +16,7 @@ export class SacrificeParticle {
 
     update() {
         if (++this.t === this.d) {
-            game.gameScene.grantSanity(10);
+            game.gameScene.grant([10]);
             this.cull = true;
         }
 
