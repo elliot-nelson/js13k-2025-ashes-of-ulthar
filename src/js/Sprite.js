@@ -45,7 +45,6 @@ export const Sprite = {
         Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
         Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
-        Sprite.factory = initBasicSpriteArray(SpriteSheet.factory, defaultOpts);
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
         Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
         Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);

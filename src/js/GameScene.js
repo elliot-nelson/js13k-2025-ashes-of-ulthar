@@ -107,18 +107,13 @@ export class GameScene {
         // Player input
 
         if (handleInput) {
-
-                // move
-        ///this.pos.x += this.vel.x;
-        ///this.pos.y += this.vel.y;
-
             if (Input.pressed['KeyV']) {
                 this.recruitVillager();
             }
 
-        /*if (Input.pressed['KeyT']) {
-            this.buildHall();
-        }*/
+            if (Input.pressed['KeyS']) {
+                this.sacrificeVillager();
+            }
 
             if (Input.pressed['KeyF']) {
                 this.lightFreedom();
@@ -138,10 +133,6 @@ export class GameScene {
 
             if (Input.pressed['ArrowLeft']) {
                 this.fireVillager(this.selectedJob);
-            }
-
-            if (Input.pressed['KeyS']) {
-                this.sacrificeVillager();
             }
 
             if (Input.pressed['Space']) {
@@ -339,31 +330,18 @@ export class GameScene {
             if (villager.layer === 1) villager.draw(Math.floor(terrainY));
         }
 
-
-        /*Viewport.ctx.fillStyle = '#0a1a2f';
-        Viewport.ctx.fillRect(-5, Viewport.height - 31, Viewport.width + 5, 31);*/
-
         if (this.t > 40) {
-
-        // Tallower Hall
-
-        if (this.tech.tallower.unlocked) {
-            Viewport.ctx.drawImage(Sprite.factory[1].img, 198, 133 - 32);
-        } else {
-            Viewport.ctx.drawImage(Sprite.factory[0].img, 198, 133 - 32);
-        }
-
-        if (game.scene === this) {
-            // Hide button prompts if Help Screen is displayed, to avoid confusion
-            for (const button of this.buttons) {
-                button.draw();
+            if (game.scene === this) {
+                // Hide button prompts if Help Screen is displayed, to avoid confusion
+                for (const button of this.buttons) {
+                    button.draw();
+                }
             }
-        }
 
-        this.drawSanityBar();
-        this.drawInfluenceBar();
-        this.drawJobSelectUI();
-        this.drawInventory();
+            this.drawSanityBar();
+            this.drawInfluenceBar();
+            this.drawJobSelectUI();
+            this.drawInventory();
         }
     }
 

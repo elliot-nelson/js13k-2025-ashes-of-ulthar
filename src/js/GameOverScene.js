@@ -13,6 +13,18 @@ export class GameOverScene {
         this.victory = victory;
         this.stats = stats;
 
+        let s = [0, 0, 0, 0, 0, 0, 0];
+
+        this.scorelines = [
+            ['FREEDOM REIGNS', 'NO', s[0]],
+            ['SEALS LIT', String(stats.freedom), stats.freedom * 1000],
+            ['WOOD GATHERED', String(stats.woodGathered), clamp(stats.woodGathered, 0, 1000)],
+            ['MEAT BUTCHERED', String(stats.meatGathered), clamp(stats.meatGathered, 0, 1000)],
+            ['TORCHES CRAFTED', String(stats.torchesCrafted), clamp(stats.torchesCrafted, 0, 1000)],
+            ['STONE MINED', String(stats.stoneGathered), clamp(stats.stoneGathered, 0, 1000)],
+            ['TIME', String(stats.seconds), clamp(stats.seconds, 0, 1000)]
+        ]
+
         if (victory) {
             this.title = 'VICTORY';
             this.text = [
@@ -20,15 +32,11 @@ export class GameOverScene {
                 'BUT THE ENTIRE PLANET.',
                 ''
             ]
-            this.scorelines = [
-                ['FREEDOM REIGNS', 'YES', 7000],
-                ['SEALS LIT', String(stats.freedom), stats.freedom * 1000],
-                ['WOOD GATHERED', String(stats.woodGathered), clamp(1000 - stats.woodGathered, 0, 1000)],
-                ['MEAT BUTCHERED', String(stats.meatGathered), clamp(1000 - stats.meatGathered, 0, 1000)],
-                ['TORCHES CRAFTED', String(stats.torchesCrafted), clamp(1000 - stats.torchesCrafted, 0, 1000)],
-                ['STONE MINED', String(stats.stoneGathered), clamp(1000 - stats.stoneGathered, 0, 1000)],
-                ['TIME', String(stats.seconds), clamp(1000 - stats.seconds, 0, 1000)]
-            ]
+            this.scorelines[0][1] = 'YES';
+            this.scorelines[0][2] = 7000;
+            for (let i = 2; i < 7; i++) {
+                this.scorelines[i][2] = 1000 - this.scorelines[i][2];
+            }
         } else {
             this.title = 'GAME OVER';
             this.text = [
@@ -36,16 +44,8 @@ export class GameOverScene {
                 'ANY HOPE OF FREEDOM FOR YOU AND YOUR KIN.',
                 '',
             ];
-            this.scorelines = [
-                ['FREEDOM REIGNS', 'NO', 0],
-                ['SEALS LIT', String(stats.freedom), stats.freedom * 1000],
-                ['WOOD GATHERED', String(stats.woodGathered), clamp(stats.woodGathered, 0, 1000)],
-                ['MEAT BUTCHERED', String(stats.meatGathered), clamp(stats.meatGathered, 0, 1000)],
-                ['TORCHES CRAFTED', String(stats.torchesCrafted), clamp(stats.torchesCrafted, 0, 1000)],
-                ['STONE MINED', String(stats.stoneGathered), clamp(stats.stoneGathered, 0, 1000)],
-                ['TIME', String(stats.seconds), clamp(stats.seconds, 0, 1000)]
-            ]
         }
+
         this.t = 0;
         this.finalScore = 0;
         this.displayedScore = 0;

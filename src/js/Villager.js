@@ -15,7 +15,6 @@ export const BUTCHER = 2;
 export const TALLOWER = 3;
 export const STONECUTTER = 4;
 export const CANTOR = 5;
-export const FIREKEEPER = 6;
 
 export class IdleTask extends TweenChain {
     constructor() {
@@ -167,7 +166,7 @@ export const TaskClass = {
 };
 
 export class Villager {
-    static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'CANTOR', 'FIRE'];
+    static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'CANTOR'];
 
     constructor(job) {
         this.job = job;
