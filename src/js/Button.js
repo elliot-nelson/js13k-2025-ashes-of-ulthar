@@ -14,18 +14,16 @@ export class Button {
         this.active = false;
     }
 
-    update() {
-        if (!this.visible) return;
-    }
+    update() { }
 
     draw() {
-        if (!this.visible) return;
-
-        const frame = this.active ? 0 : 2;
-        const colorIndex = this.active ? 4 : 2;
-        const bgColorIndex = this.active ? 0 : 2;
-        Viewport.ctx.drawImage(Sprite.button[frame].img, this.u, this.v);
-        Text.drawText(Viewport.ctx, this.hotkey, this.u + 2, this.v + 2, 1, Text.palette[bgColorIndex]);
-        Text.drawText(Viewport.ctx, this.text.toUpperCase(), this.u + 11, this.v + 2, 1, Text.palette[colorIndex]);
+        if (this.visible) {
+            const frame = this.active ? 0 : 2;
+            const colorIndex = this.active ? 4 : 2;
+            const bgColorIndex = this.active ? 0 : 2;
+            Viewport.ctx.drawImage(Sprite.button[frame].img, this.u, this.v);
+            Text.drawText(Viewport.ctx, this.hotkey, this.u + 2, this.v + 2, 1, Text.palette[bgColorIndex]);
+            Text.drawText(Viewport.ctx, this.text.toUpperCase(), this.u + 11, this.v + 2, 1, Text.palette[colorIndex]);
+        }
     }
 }

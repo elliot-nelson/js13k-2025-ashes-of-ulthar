@@ -3,7 +3,6 @@
 import { game } from './Game';
 import { Text } from './Text';
 import { Viewport } from './Viewport';
-import { Sprite } from './Sprite';
 import { Input } from './input/Input';
 import { clamp } from './Util';
 import { PALETTE } from './Constants';
@@ -16,7 +15,7 @@ export class GameOverScene {
         let s = [0, 0, 0, 0, 0, 0, 0];
 
         this.scorelines = [
-            ['FREEDOM REIGNS', 'NO', s[0]],
+            ['FREEDOM', 'NO', s[0]],
             ['SEALS LIT', String(stats.freedom), stats.freedom * 1000],
             ['WOOD GATHERED', String(stats.woodGathered), clamp(stats.woodGathered, 0, 1000)],
             ['MEAT BUTCHERED', String(stats.meatGathered), clamp(stats.meatGathered, 0, 1000)],
@@ -75,9 +74,6 @@ export class GameOverScene {
 
         const gameOverWidth = Text.measure(this.title, 2).w;
         Text.drawText(Viewport.ctx, this.title, (Viewport.width - gameOverWidth) / 2, 10, 2, Text.palette[4]);
-
-        //Viewport.ctx.drawImage(Sprite.blackcat[1].img, 160, 73 - 30);
-        //Viewport.ctx.drawImage(Sprite.blackcat[1].img, 160, 61 - 30);
 
         let y = 0;
 

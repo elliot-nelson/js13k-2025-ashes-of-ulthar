@@ -517,14 +517,4 @@ REAL: remove Ritual sprite completely, +205 bytes over
 REAL: remove villagerdeath sprite, +86 bytes over
 REAL: streamline help text, +48 bytes over
 REAL: remove bigarrows and replace with lines, +17 bytes over
-
-
-:57:13] Starting 'buildZip'...
-[22:57:13] all files 20.8 kB
-       13793       13360  96% js13k-2025-ulthar-rising.zip
-       13793       13360  96%
-[22:57:14] zip all files 13.4 kB
-[22:57:14] 48 bytes over
-[22:57:14] Finished 'buildZip' after 664 ms
-[22:57:14] Starting 'ready'...
-[22:57:14] Finished 'ready' after 255 μs
+REAL: remove glyph dust, -165 bytes left

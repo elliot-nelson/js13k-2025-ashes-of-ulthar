@@ -79,7 +79,7 @@ export class IntroScene {
         }
 
         if (this.t > 40) {
-            let title = 'THE ASHES OF ULTHAR';
+            let title = 'ASHES OF ULTHAR';
             let titleWidth = Text.measure(title, 2).w;
             Text.drawText(Viewport.ctx, title, 168 - titleWidth / 2, 13 - this.fadet * 3, 2, Text.palette[4], Text.palette[1]);
         }

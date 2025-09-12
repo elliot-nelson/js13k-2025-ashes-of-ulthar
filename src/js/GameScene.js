@@ -60,7 +60,6 @@ export class GameScene {
             new Button(275, 158, 'C', 'CODEX'),
             new Button(275, 168, 'H', 'HELP')
         ];
-        this.buttons[BUTTON_CODEX].visible = true;
         this.buttons[BUTTON_CODEX].active = true;
         this.buttons[BUTTON_HELP].visible = true;
         this.buttons[BUTTON_HELP].active = true;
@@ -201,12 +200,19 @@ export class GameScene {
 
         // Button UI Elements
 
+        if (this.resources[INFLUENCE] >= this.nextWorkerCost()) {
+            this.buttons[BUTTON_RECRUIT_VILLAGER].visible = true;
+            this.buttons[BUTTON_CODEX].visible = true;
+        }
+        if (this.tech.sacrifice.unlocked) {
+            this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = true;
+        }
+        if (this.tech.ritual.unlocked) {
+            this.buttons[BUTTON_SUMMON_FREEDOM].visible = true;
+        }
         this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.resources[INFLUENCE] >= this.nextWorkerCost());
-        this.buttons[BUTTON_RECRUIT_VILLAGER].visible = (this.villagersRecruited > 0 || this.buttons[BUTTON_RECRUIT_VILLAGER].active);
         this.buttons[BUTTON_SACRIFICE_VILLAGER].active = this.t >= this.nextSacrificeTick;
-        this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = this.tech.sacrifice.unlocked;
         this.buttons[BUTTON_SUMMON_FREEDOM].active = this.canAffordCosts([0, 0, 5, 5, 20, 5]);
-        this.buttons[BUTTON_SUMMON_FREEDOM].visible = this.tech.ritual.unlocked;
 
         // Villagers
 
@@ -227,21 +233,6 @@ export class GameScene {
 
         if (this.entities.length < 33) {
             this.entities.push(new AshParticle());
-        }
-
-        // Ritual
-
-        let ritualOffset = Math.floor(Math.sin(this.t / 12) * 2);
-        if (!this.ritualDust && ritualOffset > 0) {
-            this.ritualDust = this.t + 1;
-        }
-
-        this.ritualPosition = { u: 160 - 39 + 8, v: 17 + Math.floor(Math.sin(this.t / 12) * 2) };
-
-        if (this.ritualDust && this.t > this.ritualDust) {
-            let flame = Math.floor(Math.random() * 7);
-            this.entities.push(new DustParticle({ u: this.ritualPosition.u + SEPTAGRAM_FLAMES[flame].u, v: this.ritualPosition.v + SEPTAGRAM_FLAMES[flame].v }));
-            this.ritualDust += Math.PI * 2;
         }
 
         // Check for player victory
@@ -309,7 +300,6 @@ export class GameScene {
             if (villager.layer === 2) villager.draw();
         }
 
-        this.tech.ritual.unlocked = true;
         if (this.tech.ritual.unlocked) {
             this.drawRitual();
         }
@@ -513,13 +503,12 @@ export class GameScene {
             this.entities.push(new WinkParticle());
             Audio.play(Audio.wink);
 
-            //villager.job = SACRIFICE;
-            //this.villagersWithJob[SACRIFICE].push(villager);
-            //this.activeSacrifice = new SacrificeParticle();
-            //console.log('VILLAGER DEAD');
+            this.nextSacrificeTick = this.t + 15 * 60;
             return true;
+        } else {
+            Audio.play(Audio.fail);
+            return false;
         }
-        return false;
     }
 
     lightFreedom() {
