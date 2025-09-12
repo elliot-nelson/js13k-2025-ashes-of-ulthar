@@ -96,7 +96,7 @@ export class TallowerTask extends TweenChain {
         this.layer = 2;
         this.frame = 0;
         this.cost = [0, 0, 2, 3];
-        this.grant = [0, 0, 0, 0, game.gameScene.tech.tallowplus.unlocked ? 2 : 1];
+        this.grant = [0, 0, 0, 0, game.gameScene.tech.torchplus.unlocked ? 2 : 1];
     }
 
     update() {
@@ -180,7 +180,6 @@ export class Villager {
         }
 
         this.task.update();
-        //console.log('Villager',this.job,this.task);
 
         this.layer = this.task.layer;
         this.pos.u = 160 + this.task.value;
@@ -194,7 +193,7 @@ export class Villager {
         }
     }
 
-    draw(terrainY) {
+    draw(terrainY = 0) {
         Sprite.drawViewportSprite(Sprite.villager[this.frame], { u: this.pos.u, v: this.pos.v + terrainY });
 
         if (this.equipmentframe > -1) {

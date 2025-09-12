@@ -496,16 +496,10 @@ added junk
 [11:06:00] Finished 'ready' after 183 μs
 
 DEBT: scrap influencebar down to 506 (-79)
-DEBT: scrap ritual down to 252 (-254)
-DEBT: scrap ritualglyph down to 180 (-72)
-DEBT: remove 50% of help text: 92 (-88)
-DEBT: remove bigarrows and add line: 74 (-18)
 DEBT: remove custom names for gathered: -47 (-3)
 DEBT: squash jobselect -59 (-12)
 DEBT: lol deleted Util functions, lost bytes!
 DEBT: delete 1 villager frame - 68 (-9)
-DEBT: delete keys aseprite - 83 (-15)
-DEBT: remove ritual bigtime - 205 (-122)
 DEBT: rotate sanitybar CCW - 228 (-23)
 
 TODO:

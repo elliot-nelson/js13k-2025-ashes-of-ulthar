@@ -81,6 +81,15 @@ export class GameScene {
 
         this.tech = TechTree.create();
         this.unlockTech(this.tech.woodcutter);
+
+        // DEBUG
+        this.unlockTech(this.tech.butcher);
+        this.unlockTech(this.tech.tallower);
+        this.unlockTech(this.tech.stonecutter);
+        this.resources[WOOD] = 50;
+        this.resources[MEAT] = 50;
+        this.resources[TORCHES] = 50;
+        this.resources[STONE] = 50;
     }
 
     update(handleInput = true) {
