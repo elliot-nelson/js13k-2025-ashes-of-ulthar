@@ -50,9 +50,6 @@ export class GameOverScene {
         this.finalScore = 0;
         this.displayedScore = 0;
         this.linesDisplayed = 0;
-
-        this.scorelines[3][2] = 123;
-        this.scorelines[4][2] = 500;
     }
 
     update() {

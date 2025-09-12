@@ -1,7 +1,7 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES } from './Constants';
+import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES, PALETTE } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -13,7 +13,7 @@ import { Villager, SillyTask, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, 
 import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
-import { clamp, signedString } from './Util';
+import { clamp, signedString, createCanvas } from './Util';
 
 import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
@@ -309,6 +309,7 @@ export class GameScene {
             if (villager.layer === 2) villager.draw();
         }
 
+        this.tech.ritual.unlocked = true;
         if (this.tech.ritual.unlocked) {
             this.drawRitual();
         }
@@ -430,9 +431,21 @@ export class GameScene {
     drawRitual() {
         let pos = { u: 160 - 39 + 8, v: 17 + Math.floor(Math.sin(this.t / 12) * 2) };
 
-        Viewport.ctx.drawImage(Sprite.ritual[0].img, pos.u, pos.v);
-        for (let i = 0; i < this.freedom; i++) {
-            Sprite.drawSprite(Viewport.ctx, Sprite.ritualflame[Math.floor((this.t / 6) + i) % 3], pos.u + SEPTAGRAM_FLAMES[i].u, pos.v + SEPTAGRAM_FLAMES[i].v);
+        Viewport.ctx.strokeStyle = PALETTE[1];
+        Viewport.ctx.beginPath();
+        for (let i = 0; i < 7; i++) {
+            for (let j = 0; j < 7; j++) {
+                if (j - i === 1 || i - j === 1 || j - i === 6 || i - j === 6) continue;
+                Viewport.ctx.moveTo(pos.u + SEPTAGRAM_FLAMES[i].u + 0.5, pos.v + SEPTAGRAM_FLAMES[i].v + 0.5);
+                Viewport.ctx.lineTo(pos.u + SEPTAGRAM_FLAMES[j].u + 0.5, pos.v + SEPTAGRAM_FLAMES[j].v + 0.5);
+            }
+        }
+        Viewport.ctx.stroke();
+
+        for (let i = 0; i < 7; i++) {
+            let i2 = (i * 3 + 3) % 7;
+            let frame = i < this.freedom ? Math.floor((this.t / 6) + i) % 3 : 3;
+            Sprite.drawSprite(Viewport.ctx, Sprite.ritualflame[frame], pos.u + SEPTAGRAM_FLAMES[i2].u, pos.v + SEPTAGRAM_FLAMES[i2].v);
         }
     }
 
@@ -510,7 +523,8 @@ export class GameScene {
     }
 
     lightFreedom() {
-        if (this.payCosts([0, 0, 5, 5, 20, 5])) {
+        //if (this.payCosts([0, 0, 5, 5, 20, 5])) {
+        if (true) {
             Audio.play(Audio.wink);
             this.freedom++;
         } else {

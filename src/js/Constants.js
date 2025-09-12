@@ -14,6 +14,14 @@ export const VILLAGER_FRAMES = 12;
 
 // Flame locations in ritual
 export const SEPTAGRAM_FLAMES = [
+    { u: 39, v: 70 },
+    { u: 10, v: 58 },
+    { u: 3, v: 28 },
+    { u: 22, v: 3 },
+    { u: 57, v: 3 },
+    { u: 76, v: 28 },
+    { u: 69, v: 58 }
+    /*
     { u: 3, v: 28 },
     { u: 57, v: 3 },
     { u: 69, v: 58 },
@@ -21,6 +29,7 @@ export const SEPTAGRAM_FLAMES = [
     { u: 10, v: 58 },
     { u: 76, v: 28 },
     { u: 39, v: 70 }
+     */
 ];
 
 // Frames per second (locked)

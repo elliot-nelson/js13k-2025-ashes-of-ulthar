@@ -50,7 +50,6 @@ export const Sprite = {
         Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);
 
         // Ritual
-        Sprite.ritual = initBasicSpriteArray(SpriteSheet.ritual, defaultOpts);
         Sprite.ritualglyph = initBasicSpriteArray(SpriteSheet.ritualglyph, defaultOpts);
         Sprite.ritualflame = initBasicSpriteArray(SpriteSheet.ritualflame, { anchor: { x: 4, y: 10 } });
 
