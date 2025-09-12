@@ -43,10 +43,9 @@ export const Sprite = {
         Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
         Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
         Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
-        Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
+        //Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
-        Sprite.keys = initBasicSpriteArray(SpriteSheet.keys, defaultOpts);
         Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);
 
         // Ritual
@@ -68,7 +67,6 @@ export const Sprite = {
         }
 
         // Villager
-        Sprite.villagerdeath = initBasicSpriteArray(SpriteSheet.villagerdeath, { anchor: { x: 6, y: 21 } });
         Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
         Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
         const villagerFrames = Sprite.villager.length;

@@ -1,5 +1,6 @@
 // HelpScene
 
+import { PALETTE } from './Constants';
 import { Text } from './Text';
 import { Viewport } from './Viewport';
 import { rgba } from './Util';
@@ -10,27 +11,31 @@ import { Input } from './input/Input';
 import { Sprite } from './Sprite';
 
 export class HelpScene {
-    static pagesUnlocked = 4;
+    static pagesUnlocked = 5;
     static help = [
         {
             title: 'SANITY',
-            text: 'The sanity of the village is already eroding. If it runs out before you accomplish your mission, you lose.',
-            arrow: [278, 38]
+            text: 'Bring freedom to the village before sanity erodes completely.',
+            arrow: [180, 38, 290, 30]
         },
         {
             title: 'INFLUENCE',
-            text: 'Use your influence to control villagers. The more villagers you have, the longer it takes to gain another.',
-            arrow: [100, 3]
+            text: 'Exert influence to control villagers. Each additional villager requires more influence than before.',
+            arrow: [132, 38, 115, 8]
         },
         {
             title: 'JOBS',
-            text: 'Use the arrow keys to switch jobs and change the number of villagers assigned to a job. As you unlock additional jobs, adjust the number of villagers assigned to accomplish your goals.',
-            arrow: [65, 122]
+            text: 'Use arrow keys to select unlocked jobs and assign villagers.',
+            arrow: [160, 70, 65, 116]
         },
         {
             title: 'RESOURCES',
-            text: 'Resources are produced constantly by villagers each turn. Some resources consume other resources to produce, so watch resource levels carefully.',
-            arrow: [170, 128]
+            text: 'Resources are produced and consumed each turn by each job.',
+            arrow: [160, 70, 190, 122]
+        },
+        {
+            title: 'CODEX',
+            text: 'Consult the Codex to unlock jobs, upgrades, and abilities required to free the village.'
         }
     ];
 
@@ -67,11 +72,15 @@ export class HelpScene {
         Text.drawText(Viewport.ctx, titleText, (Viewport.width - titleWidth) / 2, 35, 1, Text.palette[4]);
         Text.drawParagraph(Viewport.ctx, page.text.toUpperCase(), 80, 50, 180, 1, Text.palette[4]);
 
+        Viewport.ctx.strokeStyle = PALETTE[4];
+        Viewport.ctx.beginPath();
         if (page.arrow) {
-            Viewport.ctx.drawImage(Sprite.bigarrows[0].img, page.arrow[0] + this.bounceX, page.arrow[1]);
+            Viewport.ctx.moveTo(page.arrow[0], page.arrow[1]);
+            Viewport.ctx.lineTo(page.arrow[2], page.arrow[3]);
         }
+        Viewport.ctx.stroke();
 
-        const helpText = `HELP PAGE ${this.page + 1}/${HelpScene.pagesUnlocked}    \\l\\r MORE HELP    \\e BACK`;
+        const helpText = `HELP PAGE ${this.page + 1}/${HelpScene.pagesUnlocked}    \\l\\r MORE HELP    \\E\\S\\C BACK`;
         const helpWidth = Text.measure(helpText, 1).w;
         Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }

@@ -36,7 +36,9 @@ const C_SHIFT = {
     111: 6, // o (down),
     1108: 10, // left arrow key
     1114: 10, // right arrow key
-    1101: 19 // escape key
+    1069: 6, // E
+    1083: 6, // S
+    1067: 10  // C
 };
 
 const C_ICONS = {
@@ -45,8 +47,8 @@ const C_ICONS = {
 export const Text = {
     init() {
         Text.white = Sprite.font.img;
-        Text.black = recolor(Text.white, rgba(0, 0, 0, 1));
-        Text.shadow = recolor(Text.white, rgba(44, 27, 46, 1));
+        //Text.black = recolor(Text.white, rgba(0, 0, 0, 1));
+        //Text.shadow = recolor(Text.white, rgba(44, 27, 46, 1));
 
         //Text.tan = recolor(Text.white, rgba(209, 180, 140, 1));
         //Text.pig = recolor(Text.white, rgba(227, 66, 98, 1));
@@ -55,46 +57,38 @@ export const Text = {
 
         Text.palette = PALETTE.map(color => recolor(Text.white, color));
 
-        C_ICONS[1108] = Sprite.keys[0];
-        C_ICONS[1114] = Sprite.keys[1];
-        C_ICONS[1101] = Sprite.keys[2];
+        C_ICONS[1108] = Sprite.button[0];
+        C_ICONS[1114] = Sprite.button[0];
+        C_ICONS[1069] = Sprite.button[0];
+        C_ICONS[1083] = Sprite.button[0];
+        C_ICONS[1067] = Sprite.button[0];
     },
 
-    drawText(ctx, text, u, v, scale = 1, font = Text.white, shadow) {
+    drawText(ctx, text, u, v, scale = 1, font = Text.white) {
         for (let c of this.charactersToDraw(text, scale)) {
+            let nextfont = font;
             if (C_ICONS[c.c]) {
                 ctx.drawImage(
                     C_ICONS[c.c].img,
                     u + c.u,
                     v + c.v - Math.floor((C_ICONS[c.c].img.height) / 2) + 2
                 );
-            } else {
-                let k = (c.c - 32) * FONT_SHEET_C_WIDTH;
-                if (shadow) {
-                    ctx.drawImage(
-                        shadow,
-                        k % FONT_SHEET_WIDTH,
-                        (k / FONT_SHEET_WIDTH | 0) * FONT_SHEET_C_WIDTH,
-                        C_WIDTH,
-                        C_HEIGHT,
-                        u + c.u,
-                        v + c.v + 1,
-                        C_WIDTH * scale,
-                        C_HEIGHT * scale
-                    );
-                }
-                ctx.drawImage(
-                    font,
-                    k % FONT_SHEET_WIDTH,
-                    (k / FONT_SHEET_WIDTH | 0) * FONT_SHEET_C_WIDTH,
-                    C_WIDTH,
-                    C_HEIGHT,
-                    u + c.u,
-                    v + c.v,
-                    C_WIDTH * scale,
-                    C_HEIGHT * scale
-                );
+                nextfont = Text.palette[0];
+                c.c -= 1000;
+                c.u += 2;
             }
+            let k = (c.c - 32) * FONT_SHEET_C_WIDTH;
+            ctx.drawImage(
+                nextfont,
+                k % FONT_SHEET_WIDTH,
+                (k / FONT_SHEET_WIDTH | 0) * FONT_SHEET_C_WIDTH,
+                C_WIDTH,
+                C_HEIGHT,
+                u + c.u,
+                v + c.v,
+                C_WIDTH * scale,
+                C_HEIGHT * scale
+            );
         }
     },
 
