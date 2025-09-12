@@ -509,8 +509,6 @@ DEBT: remove ritual bigtime - 205 (-122)
 DEBT: rotate sanitybar CCW - 228 (-23)
 
 TODO:
-DEBT: delete villagerdeath - 326 (-98)
-DEBT: remove TextFloartParticle completely: -44 (-118)
 
 REAL: remove TextFloat completely, +528 bytes over
 REAL: remove Ritual sprite completely, +205 bytes over
@@ -518,3 +516,7 @@ REAL: remove villagerdeath sprite, +86 bytes over
 REAL: streamline help text, +48 bytes over
 REAL: remove bigarrows and replace with lines, +17 bytes over
 REAL: remove glyph dust, -165 bytes left
+
+(Bug fixes and audio improvements)
+
+REAL: remove ritualglyph (saved to etc), -231 bytes left

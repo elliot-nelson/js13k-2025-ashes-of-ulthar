@@ -47,14 +47,14 @@ export const Sprite = {
         Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
         Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
         Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);
+        Sprite.techtree[1] = initDynamicSprite(recolor(Sprite.techtree[0].img, PALETTE[3]), defaultOpts);
 
         // Ritual
-        Sprite.ritualglyph = initBasicSpriteArray(SpriteSheet.ritualglyph, defaultOpts);
         Sprite.ritualflame = initBasicSpriteArray(SpriteSheet.ritualflame, { anchor: { x: 4, y: 10 } });
 
         // Sanity bar handling
         Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
-        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, '#0a1a2f'), defaultOpts);
+        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, PALETTE[0]), defaultOpts);
 
         // Terrain handling
         Sprite.terrain = [
