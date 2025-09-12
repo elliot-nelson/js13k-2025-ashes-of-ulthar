@@ -165,7 +165,13 @@ export class GameScene {
 
         if (this.t >= this.nextSanityTick) {
             if (this.villagersRecruited > 0) {
-                this.resources[SANITY] -= 0.2 + (this.freedom * 0.1);
+                let drain = 0.2 + (this.freedom * 0.1);
+                if (this.tech.sanityplusplus) {
+                    drain *= 0.5;
+                } else if (this.tech.sanityplus) {
+                    drain *= 0.75;
+                }
+                this.resources[SANITY] -= drain;
             }
             this.resources[INFLUENCE] += 0.2;
             this.nextSanityTick = this.t + 12;
@@ -540,7 +546,7 @@ export class GameScene {
             Audio.play(Audio.wink);
 
             // Next sacrifice timer
-            this.nextSacrificeTick = this.t + 15 * 60;
+            this.nextSacrificeTick = this.t + (this.tech.sacrificeplus.unlocked ? 7.5 : 15) * 60;
             this.buttons[BUTTON_SACRIFICE_VILLAGER].active = false;
         } else {
             this.addScreenShake(new ScreenShake(4, 4));
@@ -559,7 +565,7 @@ export class GameScene {
     }
 
     nextWorkerCost() {
-        return Math.floor(3 * Math.pow(1.27, this.villagers.length));
+        return Math.floor(3 * Math.pow(1.24, this.villagers.length));
     }
 
     gameOver(victory) {

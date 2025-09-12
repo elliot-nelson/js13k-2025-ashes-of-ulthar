@@ -50,7 +50,7 @@ export class WoodcutterTask extends TweenChain {
         this.layer = 1;
         this.frame = 0;
         this.cost = [0, 0, 0, 1];
-        this.grant = [0, 0, game.gameScene.tech.woodplus.unlocked ? 6 : 5];
+        this.grant = [0, 0, game.gameScene.tech.woodplus.unlocked ? 7 : 5];
     }
 
     update() {
@@ -73,7 +73,7 @@ export class ButcherTask extends TweenChain {
         this.layer = 1;
         this.frame = 0;
         this.cost = [];
-        this.grant = [0, 0, 0, 4];
+        this.grant = [0, 0, 0, game.gameScene.tech.meatplus.unlocked ? 7 : 5];
     }
 
     update() {
@@ -119,7 +119,7 @@ export class StonecutterTask extends TweenChain {
         this.layer = 1;
         this.frame = 0;
         this.cost = [0, 0, 0, 1, 1];
-        this.grant = [0, 0, 0, 0, 0, game.gameScene.tech.stoneplus.unlocked ? 6 : 5];
+        this.grant = [0, 0, 0, 0, 0, game.gameScene.tech.stoneplus.unlocked ? 7 : 5];
     }
 
     update() {

@@ -58,16 +58,25 @@ export const TechTree = {
             sacrifice: {
                 title: 'Sacrificial Lamb',
                 description: 'Sacrifice villagers to temporarily increase sanity. Long cooldown.',
-                unlockCost: [0, 0, 20, 20, 5, 20],
+                unlockCost: [0, 0, 20, 20, 5, 10],
                 perUse: '-1 Villager\n+10 Sanity',
                 x: 3, y: 4,
                 sprite: 8,
-                l: true
+                l: true,
+                u: true
+            },
+            sacrificeplus: {
+                title: 'Repeat Offender',
+                description: 'Shorten sacrifice cooldown.',
+                unlockCost: [0, 0, 30, 5, 5, 30],
+                perUse: '-50% Cooldown',
+                x: 3, y: 3,
+                sprite: 8,
             },
             sanityplus: {
                 title: 'Resolute',
                 description: 'The village is more resilient.',
-                unlockCost: [0, 0, 0, 0, 35],
+                unlockCost: [0, 0, 0, 0, 20],
                 perTurn: 'Reduce all sanity drain by 25%',
                 x: 2, y: 4,
                 sprite: 7,
@@ -76,7 +85,7 @@ export const TechTree = {
             sanityplusplus: {
                 title: 'Resolute+',
                 description: 'The village is even more resilient.',
-                unlockCost: [0, 0, 0, 0, 60],
+                unlockCost: [0, 0, 0, 0, 40],
                 perTurn: 'Reduce all sanity drain by 50%',
                 x: 2, y: 5,
                 sprite: 7
@@ -95,18 +104,28 @@ export const TechTree = {
             // Wood upgrades
             woodplus: {
                 title: 'Screaming Trees',
-                description: 'Woodcutters bring back 20% more wood.',
-                perTurn: '+1 Wood',
+                description: 'Woodcutters bring back 40% more wood.',
+                perTurn: '+2 Wood',
                 unlockCost: [0, 0, 20, 0, 0, 20],
                 x: 5, y: 4,
+                r: true
+            },
+
+            // Meat upgrades
+            meatplus: {
+                title: 'Organ Harvest',
+                description: 'Butchers bring back 40% more meat.',
+                perTurn: '+2 Meat',
+                unlockCost: [0, 0, 20, 0, 0, 20],
+                x: 5, y: 5,
                 r: true
             },
 
             // Stone upgrades
             stoneplus: {
                 title: 'Stone Cold',
-                description: 'Stonemasons bring back 20% more stone.',
-                perTurn: '+1 Stone',
+                description: 'Stonemasons bring back 40% more stone.',
+                perTurn: '+2 Stone',
                 unlockCost: [0, 0, 20, 0, 0, 20],
                 x: 5, y: 7
             },
@@ -116,7 +135,7 @@ export const TechTree = {
                 title: 'Hallowed',
                 description: 'Tallower torch production is doubled.',
                 perTurn: '+1 Torch',
-                unlockCost: [0, 0, 40, 40],
+                unlockCost: [0, 0, 30, 30],
                 x: 5, y: 6,
                 sprite: 7
             },
@@ -126,7 +145,7 @@ export const TechTree = {
                 title: 'Chorus',
                 description: 'Cantor sanity gain is doubled.',
                 perTurn: '+1 Sanity',
-                unlockCost: [0, 0, 40, 40, 40, 40],
+                unlockCost: [0, 0, 30, 30, 30, 30],
                 x: 5, y: 8,
                 sprite: 7
             }
