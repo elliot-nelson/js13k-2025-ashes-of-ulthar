@@ -24,18 +24,16 @@ export class TechScene {
         this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
 
         if (Input.pressed['ArrowRight']) {
-            this.pos.x++;
+            this.move(1, 0);
         }
-
         if (Input.pressed['ArrowLeft']) {
-            this.pos.x--;
+            this.move(-1, 0);
         }
-
         if (Input.pressed['ArrowUp']) {
-            this.pos.y--;
+            this.move(0, -1);
         }
         if (Input.pressed['ArrowDown']) {
-            this.pos.y++;
+            this.move(0, 1);
         }
 
         if (Input.pressed['Space']) {
@@ -81,7 +79,9 @@ export class TechScene {
                     Text.drawText(Viewport.ctx, node.title.toUpperCase(), cardx, cardy, 1, Text.palette[4]);
                     Text.drawParagraph(Viewport.ctx, node.description.toUpperCase(), cardx, cardy + 10, 132, 1, Text.palette[3]);
 
-                    if (!node.unlocked) {
+                    if (node.unlocked) {
+                        Text.drawText(Viewport.ctx, 'UNLOCKED', cardx, cardy+40, 1, Text.palette[4]);
+                    } else {
                         let costColor = game.gameScene.canAffordCosts(node.unlockCost) ? 4 : 2;
                         Text.drawText(Viewport.ctx, 'UNLOCK:', cardx, cardy+40, 1, Text.palette[3]);
                         Text.drawParagraph(Viewport.ctx, node.unlockCostText.toUpperCase(), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[costColor]);
@@ -92,6 +92,14 @@ export class TechScene {
                     Text.drawParagraph(Viewport.ctx, (node.perTurn || node.perUse).toUpperCase(), cardx + 56, cardy+70, 132 - 56, 1, Text.palette[4]);
                 }
             }
+        }
+    }
+
+    move(dx, dy) {
+        Audio.play(Audio.click);
+        if (game.gameScene.getTechNode(this.pos.x + dx, this.pos.y + dy)?.visible) {
+            this.pos.x += dx;
+            this.pos.y += dy;
         }
     }
 }

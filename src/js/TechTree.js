@@ -7,11 +7,14 @@ export const TechTree = {
                 title: 'Woodcutters',
                 description: 'Recruit villagers to gather wood.',
                 perTurn: '-1 Meat\n+5 Wood',
-                unlockCost: [0, 0, 0, 5],
-                unlockCostText: '5 Meat',
-                x: 2, y: 2,
+                // Automatically handed out. Not necessarily because I want it that way,
+                // more because it would take extra code bytes to handle the UI when
+                // no jobs were unlocked yet.
+                unlockCost: [],
+                unlockCostText: '',
+                x: 4, y: 4,
                 sprite: 3,
-                r: true, d: true, l: true
+                r: true, d: true, l: true, u: true
             },
             butcher: {
                 title: 'Butchers',
@@ -19,7 +22,7 @@ export const TechTree = {
                 perTurn: '-1 Meat\n+5 Meat',
                 unlockCost: [0, 0, 10],
                 unlockCostText: '10 Wood',
-                x: 2, y: 3,
+                x: 4, y: 5,
                 sprite: 4,
                 d: true
             },
@@ -29,7 +32,7 @@ export const TechTree = {
                 perTurn: '-3 Meat\n-2 Wood\n+1 Torch',
                 unlockCost: [0, 0, 10],
                 unlockCostText: '10 Wood',
-                x: 2, y: 4,
+                x: 4, y: 6,
                 sprite: 5,
                 d: true
             },
@@ -39,36 +42,35 @@ export const TechTree = {
                 perTurn: '-1 Meat\n-1 Torch\n+5 Stone',
                 unlockCost: [0, 0, 10],
                 unlockCostText: '10 Wood',
-                x: 2, y: 5,
+                x: 4, y: 7,
                 sprite: 6
             },
             sacrifice: {
                 title: 'Sacrificial Lamb',
                 description: 'Sacrifice villagers to temporarily increase sanity.',
                 unlockCost: [0, 0, 10, 10, 10, 10],
-                unlockCostText: '10 All Resources',
+                unlockCostText: '10 Wood\n10 Meat\n10 Torches\n10 Stone',
                 perUse: '-1 Villager\n+10 Sanity',
-                x: 1, y: 2,
+                x: 3, y: 4,
                 sprite: 8,
                 l: true
             },
             cantor: {
                 title: 'Cantors',
-                description: 'Soothe the old ones.',
+                description: 'Soothe the old ones with song and sacrifice.',
                 unlockCost: [0, 0, 0, 0, 5, 5],
                 unlockCostText: '5 Torches\n5 Stone',
                 perTurn: '-3 Wood\n-4 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
-                x: 0, y: 2,
-                sprite: 7,
-                l: true
+                x: 2, y: 4,
+                sprite: 7
             },
             ritual: {
                 title: 'Ritual',
-                description: 'Start the ritual and light the seven seals. WARNING: Seals will gradually drain village sanity.',
+                description: 'Summon Freedom. Flames increase sanity drain.',
                 unlockCost: [0, 0, 5, 5, 20, 5],
-                unlockCostText: '5 Wood 5 Meat\n20 Torches 5 Stone',
+                unlockCostText: '5 Wood\n5 Meat\n20 Torches\n5 Stone',
                 perUse: '-5 Wood\n-5 Meat\n-20 Torches\n-5 Stone',
-                x: -1, y: 2,
+                x: 4, y: 3,
                 sprite: 6
             },
             woodplus: {
@@ -76,8 +78,8 @@ export const TechTree = {
                 description: 'Gather 20% more wood.',
                 perTurn: '+1 Wood',
                 unlockCost: [0, 0, 10, 0, 0, 10],
-                unlockCostText: '10 Wood 10 Stone',
-                x: 3, y: 2,
+                unlockCostText: '10 Wood\n10 Stone',
+                x: 5, y: 4,
                 r: true
             },
             woodplusplus: {
@@ -85,8 +87,8 @@ export const TechTree = {
                 description: 'Gather 20% more wood.',
                 perTurn: '+1 Wood',
                 unlockCost: [0, 0, 30, 0, 0, 30],
-                unlockCostText: '30 Wood 30 Stone',
-                x: 4, y: 2
+                unlockCostText: '30 Wood\n30 Stone',
+                x: 6, y: 4
             }
         };
     }

@@ -53,5 +53,5 @@
       rowLen: 3120,   // In sample lengths
       patternLen: 32,  // Rows per pattern
       endPattern: 0,  // End pattern
-      numChannels: 7  // Number of channels
+      numChannels: 1  // Number of channels
     };

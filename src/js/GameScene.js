@@ -465,6 +465,7 @@ export class GameScene {
         const cost = this.nextWorkerCost();
         if (this.resources[INFLUENCE] >= cost) {
             this.resources[INFLUENCE] -= cost;
+            this.buttons[BUTTON_RECRUIT_VILLAGER].active = false;
 
             const villager = new Villager(this.selectedJob || WOODCUTTER);
             this.villagers.push(villager);
@@ -522,7 +523,7 @@ export class GameScene {
             // Ensure villager is removed from appropriate lists
             this.villagersWithJob[IDLE] = this.villagersWithJob[IDLE].filter(v => v != villager);
             this.villagersWithJob[this.selectedJob] = this.villagersWithJob[this.selectedJob].filter(v => v != villager);
-            thi.villagers = this.villagers.filter(v => v != villager);
+            this.villagers = this.villagers.filter(v => v != villager);
 
             // Effects
             this.entities.push(new SacrificeParticle(villager));
@@ -531,6 +532,7 @@ export class GameScene {
 
             // Next sacrifice timer
             this.nextSacrificeTick = this.t + 15 * 60;
+            this.buttons[BUTTON_SACRIFICE_VILLAGER].active = false;
         } else {
             this.addScreenShake(new ScreenShake(4, 4, 4));
             Audio.play(Audio.fail);
