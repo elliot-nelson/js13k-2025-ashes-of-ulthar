@@ -43,9 +43,9 @@ export class GameScene {
         this.screenshakes = [];
 
         // Inventory
-        this.resources = [100, 0, 0, 0, 0, 0];
-        this.resourcesDisplayed = [0, 0, 0, 0, 0, 0];
-        this.gathered = [0, 0, 0, 0, 0, 0];
+        this.resources = [100, 1, 0, 0, 0, 0];
+        this.resourcesDisplayed = [0, 1, 0, 0, 0, 0];
+        this.gathered = [0, 1, 0, 0, 0, 0];
 
         // Clock
         this.t = 0;
@@ -83,6 +83,7 @@ export class GameScene {
         this.unlockTech(this.tech.woodcutter);
 
         // DEBUG
+        /*
         this.unlockTech(this.tech.butcher);
         this.unlockTech(this.tech.tallower);
         this.unlockTech(this.tech.stonecutter);
@@ -90,6 +91,7 @@ export class GameScene {
         this.resources[MEAT] = 50;
         this.resources[TORCHES] = 50;
         this.resources[STONE] = 50;
+        */
     }
 
     update(handleInput = true) {

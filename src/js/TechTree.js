@@ -20,7 +20,7 @@ export const TechTree = {
                 title: 'Butchers',
                 description: 'Recruit villagers to gather meat.',
                 perTurn: '-1 Meat\n+5 Meat',
-                unlockCost: [0, 0, 15],
+                unlockCost: [0, 0, 10],
                 x: 4, y: 5,
                 sprite: 4,
                 d: true
@@ -29,7 +29,7 @@ export const TechTree = {
                 title: 'Tallowers',
                 description: 'Recruit villagers to render fat and make torches.',
                 perTurn: '-3 Meat\n-2 Wood\n+1 Torch',
-                unlockCost: [0, 0, 15, 15],
+                unlockCost: [0, 0, 10, 10],
                 x: 4, y: 6,
                 sprite: 5,
                 d: true, r: true
@@ -38,7 +38,7 @@ export const TechTree = {
                 title: 'Stonemasons',
                 description: 'Recruit villagers to gather stone.',
                 perTurn: '-1 Meat\n-1 Torch\n+5 Stone',
-                unlockCost: [0, 0, 30, 30],
+                unlockCost: [0, 0, 20, 20],
                 x: 4, y: 7,
                 sprite: 6,
                 r: true,
@@ -47,7 +47,7 @@ export const TechTree = {
             cantor: {
                 title: 'Cantors',
                 description: 'Soothe the old ones with song and sacrifice.',
-                unlockCost: [0, 0, 50, 50],
+                unlockCost: [0, 0, 40, 40],
                 perTurn: '-3 Wood\n-4 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
                 x: 4, y: 8,
                 sprite: 7,
@@ -58,7 +58,7 @@ export const TechTree = {
             sacrifice: {
                 title: 'Sacrificial Lamb',
                 description: 'Sacrifice villagers to temporarily increase sanity. Long cooldown.',
-                unlockCost: [0, 0, 25, 5, 10, 25],
+                unlockCost: [0, 0, 25, 25, 5, 25],
                 perUse: '-1 Villager\n+10 Sanity',
                 x: 3, y: 4,
                 sprite: 8,

@@ -514,3 +514,6 @@ REAL: remove glyph dust, -165 bytes left
 (Bug fixes and audio improvements)
 
 REAL: remove ritualglyph (saved to etc), -231 bytes left
+
+Testing:
+  Lose 2 frames of villager, actually costs bytes?

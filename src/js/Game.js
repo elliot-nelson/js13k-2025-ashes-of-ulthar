@@ -94,9 +94,6 @@ export class Game {
         }*/
 
         // Hand off control to the current "screen" (for example, game screen or menu)
-        if (this.scenes.length === 0) {
-            this.scenes.push(new GameScene());
-        }
         this.scene = this.scenes[this.scenes.length - 1];
         this.scene.update();
 
