@@ -14,7 +14,7 @@ export const TechTree = {
                 unlockCost: [],
                 x: 4, y: 4,
                 sprite: 3,
-                r: true, d: true, l: true, u: true
+                d: true, l: true, u: true
             },
             butcher: {
                 title: 'Butchers',
@@ -23,7 +23,7 @@ export const TechTree = {
                 unlockCost: [0, 0, 10],
                 x: 4, y: 5,
                 sprite: 4,
-                d: true
+                d: true, r: true
             },
             tallower: {
                 title: 'Tallowers',
@@ -32,7 +32,7 @@ export const TechTree = {
                 unlockCost: [0, 0, 10, 5],
                 x: 4, y: 6,
                 sprite: 5,
-                d: true, r: true
+                d: true, l: true
             },
             stonecutter: {
                 title: 'Stonemasons',
@@ -41,8 +41,7 @@ export const TechTree = {
                 unlockCost: [0, 0, 15, 15],
                 x: 4, y: 7,
                 sprite: 6,
-                r: true,
-                d: true
+                d: true, r: true
             },
             cantor: {
                 title: 'Cantors',
@@ -51,7 +50,7 @@ export const TechTree = {
                 perTurn: '-3 Wood\n-4 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
                 x: 4, y: 8,
                 sprite: 7,
-                r: true
+                l: true
             },
 
             // Sanity path
@@ -93,8 +92,8 @@ export const TechTree = {
 
             // Ritual path
             ritual: {
-                title: 'Ritual',
-                description: 'Summon Freedom. Flames increase sanity drain.',
+                title: 'The Ritual',
+                description: 'Unlock Freedom. Increases sanity drain.',
                 unlockCost: [0, 0, 5, 5, 20, 5],
                 perUse: '-5 Wood\n-5 Meat\n-20 Torches\n-5 Stone',
                 x: 4, y: 3,
@@ -107,8 +106,7 @@ export const TechTree = {
                 description: 'Woodcutters bring back 40% more wood.',
                 perTurn: '+2 Wood',
                 unlockCost: [0, 0, 20, 0, 0, 20],
-                x: 5, y: 4,
-                r: true
+                x: 6, y: 7,
             },
 
             // Meat upgrades
@@ -118,7 +116,6 @@ export const TechTree = {
                 perTurn: '+2 Meat',
                 unlockCost: [0, 0, 20, 0, 0, 20],
                 x: 5, y: 5,
-                r: true
             },
 
             // Stone upgrades
@@ -127,7 +124,8 @@ export const TechTree = {
                 description: 'Stonemasons bring back 40% more stone.',
                 perTurn: '+2 Stone',
                 unlockCost: [0, 0, 20, 0, 0, 20],
-                x: 5, y: 7
+                x: 5, y: 7,
+                r: true
             },
 
             // Tallower upgrades
@@ -136,7 +134,7 @@ export const TechTree = {
                 description: 'Tallower torch production is doubled.',
                 perTurn: '+1 Torch',
                 unlockCost: [0, 0, 30, 30],
-                x: 5, y: 6,
+                x: 3, y: 6,
                 sprite: 7
             },
 
@@ -146,7 +144,7 @@ export const TechTree = {
                 description: 'Cantor sanity gain is doubled.',
                 perTurn: '+1 Sanity',
                 unlockCost: [0, 0, 30, 30, 30, 30],
-                x: 5, y: 8,
+                x: 3, y: 8,
                 sprite: 7
             }
         };

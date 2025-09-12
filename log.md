@@ -517,3 +517,13 @@ REAL: remove ritualglyph (saved to etc), -231 bytes left
 
 Testing:
   Lose 2 frames of villager, actually costs bytes?
+
+  13793       13324  96% js13k-2025-ulthar-rising.zip
+       13793       13324  96%
+[12:26:01] zip all files 13.3 kB
+[12:26:01] 12 bytes over
+[12:26:01] Finished 'buildZip' after 874 ms
+[12:26:01] Starting 'ready'...
+[12:26:01] Finished 'ready' after 224 μs
+
+Won! 267 seconds, first time! A little TOO easy?

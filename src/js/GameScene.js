@@ -327,6 +327,7 @@ export class GameScene {
             if (villager.layer === 2) villager.draw();
         }
 
+        this.tech.ritual.unlocked = true;
         if (this.tech.ritual.unlocked) {
             this.drawRitual();
         }
@@ -345,6 +346,12 @@ export class GameScene {
 
         for (let villager of this.villagers) {
             if (villager.layer === 1) villager.draw(Math.floor(terrainY));
+        }
+
+        if (this.tech.ritual.unlocked) {
+            let text = '' + this.freedom + '/7';
+            let textWidth = Text.measure(text).w;
+            Text.drawText(Viewport.ctx, text, 170 - textWidth / 2, 99, 1, Text.palette[4]);
         }
 
         if (this.t > 40) {

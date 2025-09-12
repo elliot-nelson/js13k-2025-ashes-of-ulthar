@@ -65,7 +65,6 @@ export class TechScene {
         let cardy = 40;
 
         for (let node of Object.values(this.tech)) {
-            node.visible = true;
             if (node && node.visible && Math.abs(node.x - this.pos.x) <= 2 && Math.abs(node.y - this.pos.y) <= 2) {
                 let bgColor = node.unlocked ? 1 : 0;
 
