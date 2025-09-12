@@ -155,7 +155,6 @@ export class GameScene {
             if (Input.pressed['KeyH']) {
                 game.scenes.push(new HelpScene());
             }
-
         }
 
         // Game ticks
@@ -167,7 +166,9 @@ export class GameScene {
         }
 
         if (this.t >= this.nextSanityTick) {
-            this.resources[SANITY] -= 0.2 + (this.freedom * 0.1);
+            if (this.villagersRecruited > 0) {
+                this.resources[SANITY] -= 0.2 + (this.freedom * 0.1);
+            }
             this.resources[INFLUENCE] += 0.2;
             this.nextSanityTick = this.t + 12;
         }
@@ -560,7 +561,7 @@ export class GameScene {
     }
 
     nextWorkerCost() {
-        return Math.floor(3 * Math.pow(1.3, this.villagers.length));
+        return Math.floor(3 * Math.pow(1.27, this.villagers.length));
     }
 
     gameOver(victory) {
