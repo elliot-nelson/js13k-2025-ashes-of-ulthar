@@ -10,12 +10,12 @@ import { Input } from './input/Input';
 import { Sprite } from './Sprite';
 
 export class TechScene {
-    constructor(tech, lastUnlock) {
+    constructor(tech) {
         this.tech = tech;
         this.t = 0;
 
-        lastUnlock = lastUnlock || Object.values(this.tech)[0];
-        this.pos = { x: lastUnlock.x, y: lastUnlock.y };
+        let lastNode = TechScene.lastPos || Object.values(this.tech)[0];
+        this.pos = { x: lastNode.x, y: lastNode.y };
     }
 
     update() {
@@ -23,6 +23,8 @@ export class TechScene {
 
         this.t++;
         this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
+
+        TechScene.lastPos = this.pos;
 
         if (Input.pressed['ArrowRight']) {
             this.move(1, 0);
@@ -100,7 +102,7 @@ export class TechScene {
             }
         }
 
-        const helpText = `\\l\\r MOVE    SPACE UNLOCK     \\E\\S\\C BACK`;
+        const helpText = `\\l\\r MOVE    \\SPACE UNLOCK     \\E\\S\\C BACK`;
         const helpWidth = Text.measure(helpText, 1).w;
         Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }
