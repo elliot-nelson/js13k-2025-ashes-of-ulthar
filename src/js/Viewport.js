@@ -55,6 +55,7 @@ export const Viewport = {
 
             // Make sure to set this every time the canvas changes size.
             Viewport.ctx.imageSmoothingEnabled = false;
+            Viewport.ctx.webkitImageSmoothingEnabled = false;
         }
 
         // We do this every frame, not just on resize, due to browser sometimes "forgetting".
