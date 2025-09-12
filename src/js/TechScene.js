@@ -63,7 +63,8 @@ export class TechScene {
         let cardy = 40;
 
         for (let node of Object.values(this.tech)) {
-            if (node && node.visible) {
+            node.visible = true;
+            if (node && node.visible && Math.abs(node.x - this.pos.x) <= 2 && Math.abs(node.y - this.pos.y) <= 2) {
                 let bgColor = node.unlocked ? 1 : 0;
 
                 Viewport.ctx.drawImage(Sprite.techtree[bgColor].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
@@ -74,8 +75,6 @@ export class TechScene {
 
                 if (node.x == this.pos.x && node.y == this.pos.y) {
                     Viewport.ctx.drawImage(Sprite.techtree[2].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
-
-                    let color = node.unlocked ? 4 : 3;
 
                     Text.drawText(Viewport.ctx, node.title.toUpperCase(), cardx, cardy, 1, Text.palette[4]);
                     Text.drawParagraph(Viewport.ctx, node.description.toUpperCase(), cardx, cardy + 10, 132, 1, Text.palette[3]);
@@ -100,6 +99,10 @@ export class TechScene {
                 }
             }
         }
+
+        const helpText = `\\l\\r MOVE    SPACE UNLOCK     \\E\\S\\C BACK`;
+        const helpWidth = Text.measure(helpText, 1).w;
+        Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }
 
     move(dx, dy) {

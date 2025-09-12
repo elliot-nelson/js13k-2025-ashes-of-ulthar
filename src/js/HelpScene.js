@@ -16,22 +16,22 @@ export class HelpScene {
         {
             title: 'SANITY',
             text: 'Bring freedom to the village before sanity erodes completely.',
-            arrow: [180, 38, 290, 30]
+            arrow: [180, 38, 306, 30]
         },
         {
             title: 'INFLUENCE',
             text: 'Exert influence to control villagers. Each additional villager requires more influence than before.',
-            arrow: [132, 38, 115, 8]
+            arrow: [132, 38, 126, 8]
         },
         {
             title: 'JOBS',
             text: 'Use arrow keys to select unlocked jobs and assign villagers.',
-            arrow: [160, 70, 65, 116]
+            arrow: [160, 70, 70, 127]
         },
         {
             title: 'RESOURCES',
             text: 'Resources are produced and consumed each turn by each job.',
-            arrow: [160, 70, 190, 122]
+            arrow: [160, 70, 210, 126]
         },
         {
             title: 'CODEX',

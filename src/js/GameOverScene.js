@@ -69,7 +69,7 @@ export class GameOverScene {
     }
 
     draw() {
-        Viewport.ctx.fillStyle = PALETTE[1];
+        Viewport.ctx.fillStyle = PALETTE[0];
         Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
         const gameOverWidth = Text.measure(this.title, 2).w;

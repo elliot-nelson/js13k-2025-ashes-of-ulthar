@@ -50,7 +50,7 @@ export class WoodcutterTask extends TweenChain {
         this.layer = 1;
         this.frame = 0;
         this.cost = [0, 0, 0, 1];
-        this.grant = [0, 0, 5];
+        this.grant = [0, 0, game.gameScene.tech.woodplus.unlocked ? 6 : 5];
     }
 
     update() {
@@ -96,7 +96,7 @@ export class TallowerTask extends TweenChain {
         this.layer = 2;
         this.frame = 0;
         this.cost = [0, 0, 2, 3];
-        this.grant = [0, 0, 0, 0, 1];
+        this.grant = [0, 0, 0, 0, game.gameScene.tech.tallowplus.unlocked ? 2 : 1];
     }
 
     update() {
@@ -119,7 +119,7 @@ export class StonecutterTask extends TweenChain {
         this.layer = 1;
         this.frame = 0;
         this.cost = [0, 0, 0, 1, 1];
-        this.grant = [0, 0, 0, 0, 0, 5];
+        this.grant = [0, 0, 0, 0, 0, game.gameScene.tech.stoneplus.unlocked ? 6 : 5];
     }
 
     update() {
@@ -142,7 +142,7 @@ export class CantorTask extends TweenChain {
         this.layer = 3;
         this.frame = 0;
         this.cost = [0, 0, 3, 3, 3, 3];
-        this.grant = [1];
+        this.grant = [game.gameScene.tech.cantorplus.unlocked ? 2 : 1];
     }
 
     update() {
