@@ -60,6 +60,5 @@ export const SpriteSheet =
   wink: [ [ 0, 257, 3, 5 ], [ 3, 257, 3, 5 ], [ 6, 257, 3, 5 ], [ 9, 257, 3, 5 ] ],
   terrain_FG1: [ [ 0, 262, 320, 150 ] ],
   terrain_FG2: [ [ 0, 412, 320, 150 ] ],
-  terrain_FG3: [ [ 0, 562, 320, 150 ] ],
-  terrain_blackcat: [ [ 0, 712, 320, 150 ] ] }
+  terrain_FG3: [ [ 0, 562, 320, 150 ] ] }
 /* </generated> */

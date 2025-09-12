@@ -637,15 +637,6 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 150 },
     "sourceSize": { "w": 320, "h": 150 },
     "duration": 100
-   },
-   {
-    "filename": "terrain_blackcat.aseprite",
-    "frame": { "x": 0, "y": 712, "w": 320, "h": 150 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 150 },
-    "sourceSize": { "w": 320, "h": 150 },
-    "duration": 100
    }
  ],
  "meta": {
@@ -653,7 +644,7 @@
   "version": "1.3.7-arm64",
   "image": "spritesheet-gen.png",
   "format": "RGBA8888",
-  "size": { "w": 320, "h": 862 },
+  "size": { "w": 320, "h": 712 },
   "scale": "1"
  }
 }
