@@ -31,13 +31,19 @@ export class SacrificeParticle {
     }
 
     draw() {
+        let u = this.villager.pos.u;
         let v = Math.floor(this.villager.pos.v);
 
         if (this.t >= 0 && this.t < 15) {
             let shake = (this.t % 3) - 1;
-            Sprite.drawViewportSprite(Sprite.villager[0], { u: this.villager.pos.u + shake, v: v });
+            Sprite.drawViewportSprite(Sprite.villager[0], { u: u + shake, v });
         } else if (this.t >= 15 && this.t <= 25) {
-            Sprite.drawViewportSprite(Sprite.villagerdeath[0], { u: this.villager.pos.u, v: v });
+            // fake a "fat villager" to save sprite size
+            // ideally we wouldn't expand the head, only the body,
+            // but it's not worth the extra hassle
+            Sprite.drawViewportSprite(Sprite.villager[0], { u, v });
+            Sprite.drawViewportSprite(Sprite.villager[0], { u: u - 1, v });
+            Sprite.drawViewportSprite(Sprite.villager[0], { u: u + 1, v });
         }
     }
 }

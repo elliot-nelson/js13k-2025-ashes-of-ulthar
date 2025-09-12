@@ -513,3 +513,5 @@ DEBT: delete villagerdeath - 326 (-98)
 DEBT: remove TextFloartParticle completely: -44 (-118)
 
 REAL: remove TextFloat completely, +528 bytes over
+REAL: remove Ritual sprite completely, +205 bytes over
+REAL: remove villagerdeath sprite, +86 bytes over
