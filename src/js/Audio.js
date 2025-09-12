@@ -3,12 +3,7 @@
 //import { ZZFX } from './lib/zzfx';
 import { CPlayer } from './lib/player-small';
 import { VillageHusk } from './songs/VillageHusk';
-import { Click } from './sfx/Click';
-import { Bell } from './sfx/Bell';
-import { Explosion } from './sfx/Explosion';
-import { Wink } from './sfx/Wink';
-import { Wind } from './sfx/Wind';
-import { Fail } from './sfx/Fail';
+import { SoundEffects } from './sfx/SoundEffects';
 
 export const Audio = {
     init() {
@@ -48,12 +43,21 @@ export const Audio = {
         if (!Audio.musicPlaying) {
             // Sfx
 
-            Audio.click = this.loadSoundBox(Click);
-            Audio.bell = this.loadSoundBox(Bell);
-            Audio.wink = this.loadSoundBox(Wink);
-            Audio.explosion = this.loadSoundBox(Explosion);
-            Audio.wind = this.loadSoundBox(Wind);
-            Audio.fail = this.loadSoundBox(Fail);
+            // Code golfing for bytes
+            let soundEffects = SoundEffects.map(sfx => ({
+                songData: [sfx],
+                rowLen: 3120,   // In sample lengths
+                patternLen: 32,  // Rows per pattern
+                endPattern: 0,  // End pattern
+                numChannels: 1  // Number of channels
+            }));
+
+            Audio.click = this.loadSoundBox(soundEffects[0]);
+            Audio.bell = this.loadSoundBox(soundEffects[1]);
+            Audio.wink = this.loadSoundBox(soundEffects[2]);
+            Audio.explosion = this.loadSoundBox(soundEffects[3]);
+            Audio.wind = this.loadSoundBox(soundEffects[4]);
+            Audio.fail = this.loadSoundBox(soundEffects[5]);
             Audio.music = this.loadSoundBox(VillageHusk);
 
             Audio.readyToPlay = true;
