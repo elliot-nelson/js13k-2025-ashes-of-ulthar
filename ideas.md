@@ -1,5 +1,6 @@
 don't forget:
 
+ - 2 new noises, update file
  - dark around tech tree
  - animate tech tree lines?
  - bytes: 9-box influence bar
@@ -8,4 +9,6 @@ don't forget:
  - villager job left/right: tiny tick audio
  - sacrifice ready / villager ready: bell audio
  - hide sacrifice button
+ - hide freedom button
+
 
