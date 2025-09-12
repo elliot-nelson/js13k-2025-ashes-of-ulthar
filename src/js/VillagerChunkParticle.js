@@ -1,4 +1,4 @@
-// Particle
+// VillagerChunkParticle
 
 import { Viewport } from './Viewport';
 import { Text } from './Text';

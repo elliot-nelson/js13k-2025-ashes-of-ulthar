@@ -1,10 +1,10 @@
 // ScreenShake
 
 export class ScreenShake {
-    constructor(frames, hAmplitude, vAmplitude) {
+    // This is a slightly truncated version of ScreenShake... only support 1 amplitude.
+    constructor(frames, hAmplitude) {
         this.frames = frames
         this.hAmplitude = hAmplitude;
-        this.vAmplitude = vAmplitude;
         this.hSamples = [];
         this.vSamples = [];
 
@@ -37,7 +37,7 @@ export class ScreenShake {
             (this.hSamples[s0] +
                 (s - s0) * (this.hSamples[s1] - this.hSamples[s0]));
         this.y =
-            this.vAmplitude *
+            this.hAmplitude *
             decay *
             (this.vSamples[s0] +
                 (s - s0) * (this.vSamples[s1] - this.vSamples[s0]));

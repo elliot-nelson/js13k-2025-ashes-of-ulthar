@@ -10,7 +10,6 @@ import { Viewport } from './Viewport';
 import { Button } from './Button';
 import { Input } from './input/Input';
 import { Villager, SillyTask, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR } from './Villager';
-import { Particle } from './Particle';
 import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
 import { clamp, signedString, createCanvas } from './Util';
@@ -19,7 +18,6 @@ import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
 import { GameOverScene } from './GameOverScene';
 import { AshParticle } from './AshParticle';
-import { DustParticle } from './DustParticle';
 
 import { TechTree } from './TechTree';
 
@@ -198,7 +196,7 @@ export class GameScene {
         }
 
         if (this.t === 36) {
-            this.addScreenShake(new ScreenShake(6, 6, 6));
+            this.addScreenShake(new ScreenShake(6, 6));
             Audio.play(Audio.explosion);
         }
         if (this.t >= 36 && this.t <= 38) {
@@ -486,7 +484,7 @@ export class GameScene {
             this.entities.push(new WinkParticle());
             Audio.play(Audio.wink);
         } else {
-            this.addScreenShake(new ScreenShake(4, 4, 4));
+            this.addScreenShake(new ScreenShake(4, 4));
             Audio.play(Audio.fail);
         }
     }
@@ -498,7 +496,7 @@ export class GameScene {
             this.villagersWithJob[this.selectedJob].push(villager);
             Audio.play(Audio.click);
         } else {
-            this.addScreenShake(new ScreenShake(4, 4, 4));
+            this.addScreenShake(new ScreenShake(4, 4));
             Audio.play(Audio.fail);
         }
     }
@@ -510,7 +508,7 @@ export class GameScene {
             this.villagersWithJob[IDLE].push(villager);
             Audio.play(Audio.click);
         } else {
-            this.addScreenShake(new ScreenShake(4, 4, 4));
+            this.addScreenShake(new ScreenShake(4, 4));
             Audio.play(Audio.fail);
         }
     }
@@ -545,7 +543,7 @@ export class GameScene {
             this.nextSacrificeTick = this.t + 15 * 60;
             this.buttons[BUTTON_SACRIFICE_VILLAGER].active = false;
         } else {
-            this.addScreenShake(new ScreenShake(4, 4, 4));
+            this.addScreenShake(new ScreenShake(4, 4));
             Audio.play(Audio.fail);
         }
     }
@@ -555,7 +553,7 @@ export class GameScene {
             Audio.play(Audio.wink);
             this.freedom++;
         } else {
-            this.addScreenShake(new ScreenShake(4, 4, 4));
+            this.addScreenShake(new ScreenShake(4, 4));
             Audio.play(Audio.fail);
         }
     }
