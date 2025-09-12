@@ -81,14 +81,21 @@ export class Game {
     }
 
     update() {
+        // Note that _this_ pause flag means the user isn't looking at the
+        // browser window, and all processing is stopped completely.
+        //
+        // This is separate than hitting ESC in-game and opening the pause scene.
+        // (It's possible for both to be true, e.g. hitting ESC and than alt-tabbing.)
+        if (this.paused) return;
+
         // Gather user input
         Input.update();
 
         // Handle special keys that are screen-independent
-        if (Input.pressed['KeyM']) {
+        /*if (Input.pressed['KeyM']) {
             console.log('KeyM - toggling music');
             Audio.musicEnabled = !Audio.musicEnabled;
-        }
+        }*/
         /*if (Input.pressed[Input.Action.SFX_TOGGLE]) {
             Audio.sfxEnabled = !Audio.sfxEnabled;
         }*/
