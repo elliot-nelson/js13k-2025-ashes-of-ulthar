@@ -210,8 +210,19 @@ export class GameScene {
         if (this.tech.ritual.unlocked) {
             this.buttons[BUTTON_SUMMON_FREEDOM].visible = true;
         }
-        this.buttons[BUTTON_RECRUIT_VILLAGER].active = (this.resources[INFLUENCE] >= this.nextWorkerCost());
-        this.buttons[BUTTON_SACRIFICE_VILLAGER].active = this.t >= this.nextSacrificeTick;
+
+        let recruitActive = (this.resources[INFLUENCE] >= this.nextWorkerCost());
+        if (recruitActive && !this.buttons[BUTTON_RECRUIT_VILLAGER].active) {
+            this.buttons[BUTTON_RECRUIT_VILLAGER].active = true;
+            Audio.play(Audio.bell);
+        }
+
+        let sacrificeActive = (this.t >= this.nextSacrificeTick && this.tech.sacrifice.unlocked);
+        if (sacrificeActive && !this.buttons[BUTTON_SACRIFICE_VILLAGER].active) {
+            this.buttons[BUTTON_SACRIFICE_VILLAGER].active = true;
+            Audio.play(Audio.bell);
+        }
+
         this.buttons[BUTTON_SUMMON_FREEDOM].active = this.canAffordCosts([0, 0, 5, 5, 20, 5]);
 
         // Villagers
@@ -462,61 +473,76 @@ export class GameScene {
 
             this.entities.push(new WinkParticle());
             Audio.play(Audio.wink);
-            return true;
         } else {
+            this.addScreenShake(new ScreenShake(4, 4, 4));
             Audio.play(Audio.fail);
-            this.addScreenShake(new ScreenShake(4, 6, 6));
-            return false;
         }
     }
 
     hireVillager() {
         if (this.villagersWithJob[IDLE].length > 0) {
-            // TODO
             const villager = this.villagersWithJob[IDLE].pop();
             villager.job = this.selectedJob;
             this.villagersWithJob[this.selectedJob].push(villager);
-            return true;
+            Audio.play(Audio.click);
+        } else {
+            this.addScreenShake(new ScreenShake(4, 4, 4));
+            Audio.play(Audio.fail);
         }
-        return false;
     }
 
     fireVillager() {
         if (this.villagersWithJob[this.selectedJob].length > 0) {
-            // TODO
             const villager = this.villagersWithJob[this.selectedJob].pop();
             villager.job = IDLE;
             this.villagersWithJob[IDLE].push(villager);
-            return true;
+            Audio.play(Audio.click);
+        } else {
+            this.addScreenShake(new ScreenShake(4, 4, 4));
+            Audio.play(Audio.fail);
         }
-        return false;
     }
 
     sacrificeVillager() {
-        if (this.villagersWithJob[this.selectedJob].length > 0) {
-            // TODO - pick right villager
-            const villager = this.villagersWithJob[this.selectedJob].pop();
+        let villagerpool = [...this.villagersWithJob[IDLE], ...this.villagersWithJob[this.selectedJob]];
 
-            this.villagers.splice(this.villagers.indexOf(villager), 1);
+        if (villagerpool.length > 0 && this.t >= this.nextSacrificeTick) {
+            // Sacrifice Villager Logic:
+            //
+            // Take all villagers that are working on the selected job OR in the idle pool.
+            // Sort all of them by progress into their current task.
+            // Select the one with the least progress to sacrifice.
+            //
+            // This doesn't guarantee necessarily that idle villagers will be sacrificed,
+            // but it makes it extremely likely because idle villagers have a very low
+            // average t (total task length is 30 instead of 300).
+            villagerpool.sort((a, b) => (b.task?.t || 0) - (a.task?.t || 0));
+            let villager = villagerpool[0];
 
+            // Ensure villager is removed from appropriate lists
+            this.villagersWithJob[IDLE] = this.villagersWithJob[IDLE].filter(v => v != villager);
+            this.villagersWithJob[this.selectedJob] = this.villagersWithJob[this.selectedJob].filter(v => v != villager);
+            thi.villagers = this.villagers.filter(v => v != villager);
+
+            // Effects
             this.entities.push(new SacrificeParticle(villager));
             this.entities.push(new WinkParticle());
             Audio.play(Audio.wink);
 
+            // Next sacrifice timer
             this.nextSacrificeTick = this.t + 15 * 60;
-            return true;
         } else {
+            this.addScreenShake(new ScreenShake(4, 4, 4));
             Audio.play(Audio.fail);
-            return false;
         }
     }
 
     lightFreedom() {
-        //if (this.payCosts([0, 0, 5, 5, 20, 5])) {
-        if (true) {
+        if (this.payCosts([0, 0, 5, 5, 20, 5])) {
             Audio.play(Audio.wink);
             this.freedom++;
         } else {
+            this.addScreenShake(new ScreenShake(4, 4, 4));
             Audio.play(Audio.fail);
         }
     }

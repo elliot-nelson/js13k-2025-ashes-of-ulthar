@@ -3,6 +3,8 @@
 //import { ZZFX } from './lib/zzfx';
 import { CPlayer } from './lib/player-small';
 import { VillageHusk } from './songs/VillageHusk';
+import { Click } from './sfx/Click';
+import { Bell } from './sfx/Bell';
 import { Explosion } from './sfx/Explosion';
 import { Wink } from './sfx/Wink';
 import { Wind } from './sfx/Wind';
@@ -46,11 +48,14 @@ export const Audio = {
         if (!Audio.musicPlaying) {
             // Sfx
 
+            Audio.click = this.loadSoundBox(Click);
+            Audio.bell = this.loadSoundBox(Bell);
             Audio.wink = this.loadSoundBox(Wink);
             Audio.explosion = this.loadSoundBox(Explosion);
             Audio.wind = this.loadSoundBox(Wind);
             Audio.fail = this.loadSoundBox(Fail);
             Audio.music = this.loadSoundBox(VillageHusk);
+
             Audio.readyToPlay = true;
 
             // Start music
