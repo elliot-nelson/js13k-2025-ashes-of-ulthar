@@ -9,6 +9,8 @@ export const TARGET_GAME_HEIGHT = 180;
 export const INVENTORY_POS = { u: 250, v: 131 };
 export const SANITY_POS = { u: 284, v: 9 };
 
+export const RESOURCE_NAMES = ['SANITY', 'INFLUENCE', 'WOOD', 'MEAT', 'TORCHES', 'STONE'];
+
 // Number of "facing left" villager frames (doubled for facing right)
 export const VILLAGER_FRAMES = 12;
 

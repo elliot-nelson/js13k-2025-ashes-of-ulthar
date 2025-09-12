@@ -1,7 +1,7 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES, PALETTE } from './Constants';
+import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES, PALETTE, RESOURCE_NAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -397,7 +397,6 @@ export class GameScene {
     }
 
     drawInventory() {
-        const inventoryText = ['', '', 'WOOD', 'MEAT', 'TORCHES', 'STONE'];
         const inventoryIcon = [0, 0, 0, 2, 3, 1];
 
         for (let i = 0; i < this.inventoryDisplayed.length; i++) {
@@ -412,7 +411,7 @@ export class GameScene {
             );
             Text.drawText(
                 Viewport.ctx,
-                inventoryText[type],
+                RESOURCE_NAMES[type],
                 INVENTORY_POS.u - 50,
                 INVENTORY_POS.v + i*12,
                 1,
@@ -597,8 +596,6 @@ export class GameScene {
     payCosts(arr) {
         if (!this.canAffordCosts(arr)) return false;
         for (let i = 0; i < arr.length; i++) {
-            // HACK FOR COSTS
-            if (arr[i]) arr[i] = 1;
             if (arr[i]) this.resources[i] -= arr[i];
         }
         return true;
@@ -606,8 +603,6 @@ export class GameScene {
 
     canAffordCosts(arr) {
         for (let i = 0; i < arr.length; i++) {
-            // HACK FOR COSTS
-            if (arr[i]) arr[i] = 1;
             if (arr[i] && this.resources[i] < arr[i]) return false;
         }
         return true;

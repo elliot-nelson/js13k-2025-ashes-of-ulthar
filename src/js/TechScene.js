@@ -1,5 +1,6 @@
 // TechScene
 
+import { RESOURCE_NAMES } from './Constants';
 import { Text } from './Text';
 import { Viewport } from './Viewport';
 import { rgba } from './Util';
@@ -83,8 +84,14 @@ export class TechScene {
                         Text.drawText(Viewport.ctx, 'UNLOCKED', cardx, cardy+40, 1, Text.palette[4]);
                     } else {
                         let costColor = game.gameScene.canAffordCosts(node.unlockCost) ? 4 : 2;
+
+                        let unlockCostTextArray = [];
+                        for (let i = 0; i < node.unlockCost.length; i++) {
+                            if (node.unlockCost[i]) unlockCostTextArray.push('' + node.unlockCost[i] + ' ' + RESOURCE_NAMES[i]);
+                        }
+
                         Text.drawText(Viewport.ctx, 'UNLOCK:', cardx, cardy+40, 1, Text.palette[3]);
-                        Text.drawParagraph(Viewport.ctx, node.unlockCostText.toUpperCase(), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[costColor]);
+                        Text.drawParagraph(Viewport.ctx, unlockCostTextArray.join('\n'), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[costColor]);
                     }
 
                     let perText = node.perTurn ? 'PER TURN:' : 'PER USE:';
