@@ -23,8 +23,6 @@
 *
 */
 
-"use strict";
-
 // Some general notes and recommendations:
 //  * This code uses modern ECMAScript features, such as ** instead of
 //    Math.pow(). You may have to modify the code to make it work on older

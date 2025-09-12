@@ -1,4 +1,4 @@
-'use strict';
+// Sprite
 
 import { game } from './Game';
 import { rgba, createCanvas } from './Util';
@@ -109,16 +109,12 @@ export const Sprite = {
         }
     },
 
-    drawSmashedSprite(sprite, pos, height) {
-        let { u, v } = this.viewportSprite2uv(
-            sprite,
-            pos
-        );
-
-        Viewport.ctx.drawImage(sprite.img, u - 1, v - height + sprite.img.height, sprite.img.width + 2, height);
-    },
-
     viewportSprite2uv(sprite, pos) {
+        return {
+            u: pos.u - sprite.anchor.x,
+            v: pos.v - sprite.anchor.y
+        };
+        /*
         // HACK TODO
         if (pos.u) {
             return {
@@ -128,9 +124,10 @@ export const Sprite = {
         }
 
         return {
-            u: pos.x - sprite.anchor.x - (0) /*Camera.pos.x*/ + Viewport.center.u,
-            v: pos.y - sprite.anchor.y - (0) /*Camera.pos.y*/ + Viewport.center.v
+            u: pos.x - sprite.anchor.x - (0) Camera.pos.x + Viewport.center.u,
+            v: pos.y - sprite.anchor.y - (0) Camera.pos.y + Viewport.center.v
         };
+        */
     }
 };
 
@@ -178,14 +175,6 @@ export function flipHorizontal(source) {
     canvas.ctx.translate(source.width, 0);
     canvas.ctx.scale(-1, 1);
     canvas.ctx.drawImage(source, 0, 0);
-    return canvas.canvas;
-}
-
-function shiftTerrain(source, lines) {
-    // To save space, the source image cuts out 30 lines of "space" we don't
-    // fill in. This is just transparent.
-    let canvas = createCanvas(source.width, TARGET_GAME_HEIGHT);
-    canvas.ctx.drawImage(source, 0, 0, source.width, source.height, 0, lines, source.width);
     return canvas.canvas;
 }
 

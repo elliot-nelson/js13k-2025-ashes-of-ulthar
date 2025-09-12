@@ -12,7 +12,7 @@ import { Input } from './input/Input';
 import { Villager, SillyTask, IDLE, BUTCHER, WOODCUTTER, TALLOWER, STONECUTTER, CANTOR } from './Villager';
 import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
-import { clamp, signedString, createCanvas } from './Util';
+import { clamp, createCanvas } from './Util';
 
 import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';

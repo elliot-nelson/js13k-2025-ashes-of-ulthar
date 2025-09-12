@@ -32,18 +32,8 @@ export class Game {
     }
 
     reset() {
-        this.scenes = [];
         this.lastFrame = 0;
-        this.nextLevel = 0;
-
-        this.scores = [
-            { time: 300 * 60, enemiesAlive: 10 },
-            { time: 300 * 60, enemiesAlive: 10 },
-            { time: 300 * 60, enemiesAlive: 10 },
-            { time: 300 * 60, enemiesAlive: 10 }
-        ];
-
-        this.scenes.push(new IntroScene());
+        this.scenes = [new IntroScene()];
     }
 
     start() {
