@@ -155,10 +155,11 @@ export const Text = {
     }
 };
 
-export function createProgressBar(text, color) {
+/*export function createProgressBar(text, color) {
     let w = Text.measure(text, 1).w - 1;
     let canvas = createCanvas(w, 1);
     canvas.ctx.fillStyle = color;
     canvas.ctx.fillRect(0, 0, w, 1);
     return canvas.canvas;
 }
+*/

@@ -4,7 +4,7 @@ import { Audio } from './Audio';
 import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES, PALETTE, RESOURCE_NAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
-import { Text, createProgressBar } from './Text';
+import { Text } from './Text';
 import { SacrificeParticle } from './SacrificeParticle';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
@@ -54,17 +54,17 @@ export class GameScene {
 
         this.buttons = [
             new Button(5, 3, 'V', 'RECRUIT VILLAGER'),
-            new Button(5, 14, 'S', 'SACRIFICE VILLAGER'),
-            new Button(5, 25, 'F', 'LIGHT FREEDOM'),
-            new Button(275, 157, 'C', 'CODEX'),
+            new Button(5, 15, 'S', 'SACRIFICE VILLAGER'),
+            new Button(5, 27, 'F', 'LIGHT FREEDOM'),
+            new Button(275, 156, 'C', 'CODEX'),
             new Button(275, 168, 'H', 'HELP')
         ];
         this.buttons[BUTTON_CODEX].active = true;
         this.buttons[BUTTON_HELP].visible = true;
         this.buttons[BUTTON_HELP].active = true;
 
-        this.recruitProgressBar = createProgressBar('RECRUIT VILLAGER', PALETTE[4]);
-        this.sacrificeProgressBar = createProgressBar('SACRIFICE VILLAGER', PALETTE[4]);
+        //this.recruitProgressBar = createProgressBar('RECRUIT VILLAGER', PALETTE[4]);
+        //this.sacrificeProgressBar = createProgressBar('SACRIFICE VILLAGER', PALETTE[4]);
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
@@ -407,9 +407,9 @@ export class GameScene {
 
         let x = 5 + 11;
         let y = 3 + 8;
-        let w = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * this.recruitProgressBar.width);
+        let w = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * 73);
 
-        Viewport.ctx.drawImage(this.recruitProgressBar,
+        Viewport.ctx.drawImage(Sprite.progressbar[0].img,
             0, 0,
             w, 1,
             x, y,
@@ -418,6 +418,7 @@ export class GameScene {
     }
 
     drawSacrificeProgressBar() {
+        if (!this.nextSacrificeTick) return;
         if (!this.buttons[BUTTON_SACRIFICE_VILLAGER].visible) return;
         if (this.buttons[BUTTON_SACRIFICE_VILLAGER].active) return;
 
@@ -425,9 +426,9 @@ export class GameScene {
         let y = 14 + 8;
         let t2 = this.nextSacrificeTick;
         let t1 = this.nextSacrificeTick - 15*60;
-        let w = Math.floor(Math.min((this.t - t1) / (t2 - t1), 1) * this.sacrificeProgressBar.width);
+        let w = Math.floor(Math.min((this.t - t1) / (t2 - t1), 1) * 79);
 
-        Viewport.ctx.drawImage(this.sacrificeProgressBar,
+        Viewport.ctx.drawImage(Sprite.progressbar[0].img,
             0, 0,
             w, 1,
             x, y,
