@@ -35,27 +35,26 @@ export const Sprite = {
 
     init() {
         // Standard (no special ops) sprites
-        const defaultOpts = { anchor: { x: 0, y: 0 } };
         Sprite.font = initBasicSprite(SpriteSheet.font4[0]);
         Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
-        Sprite.blackcat = initBasicSpriteArray(SpriteSheet.blackcat, defaultOpts);
-        Sprite.button = initBasicSpriteArray(SpriteSheet.button, defaultOpts);
+        Sprite.blackcat = initBasicSpriteArray(SpriteSheet.blackcat);
+        Sprite.button = initBasicSpriteArray(SpriteSheet.button);
         //Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
-        Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows, defaultOpts);
-        Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect, defaultOpts);
-        Sprite.progressbar = initBasicSpriteArray(SpriteSheet.progressbar, defaultOpts);
+        Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows);
+        Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect);
+        Sprite.progressbar = initBasicSpriteArray(SpriteSheet.progressbar);
         //Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
-        Sprite.icons = initBasicSpriteArray(SpriteSheet.icons, defaultOpts);
-        Sprite.wink = initBasicSpriteArray(SpriteSheet.wink, defaultOpts);
-        Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree, defaultOpts);
-        Sprite.techtree[1] = initDynamicSprite(recolor(Sprite.techtree[0].img, PALETTE[3]), defaultOpts);
+        Sprite.icons = initBasicSpriteArray(SpriteSheet.icons);
+        Sprite.wink = initBasicSpriteArray(SpriteSheet.wink);
+        Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree);
+        Sprite.techtree[1] = initDynamicSprite(recolor(Sprite.techtree[0].img, PALETTE[3]));
 
         // Ritual
         Sprite.ritualflame = initBasicSpriteArray(SpriteSheet.ritualflame, { anchor: { x: 4, y: 10 } });
 
         // Sanity bar handling
-        Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar, defaultOpts);
-        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, PALETTE[0]), defaultOpts);
+        //Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar);
+        //Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, PALETTE[0]));
 
         // Terrain handling
         Sprite.terrain = [
@@ -147,20 +146,11 @@ function initBasicSprite(data, opts) {
 }
 
 function initDynamicSprite(source, opts) {
-    let w = source.width,
-        h = source.height;
-
     if (typeof opts !== 'object') {
         opts = {};
     }
 
-    if (!opts.anchor) {
-        opts.anchor = { x: (w / 2) | 0, y: (h / 2) | 0 };
-    }
-
-    if (!opts.bb) {
-        opts.bb = [-opts.anchor.x, -opts.anchor.y, source.width, source.height];
-    }
+    if (!opts.anchor) opts.anchor = { x: 0, y: 0 };
 
     return {
         img: source,

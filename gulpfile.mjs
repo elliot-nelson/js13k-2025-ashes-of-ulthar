@@ -260,7 +260,7 @@ function buildHtml() {
 function buildZip() {
     let s;
 
-    return gulp.src(['dist/build/*', '!dist/build/*.map'])
+    return gulp.src(['dist/build/*', '!dist/build/*.map'], { encoding: false })
         .pipe(size())
         .pipe(zip('js13k-2025-ashes-of-ulthar.zip'))
         .pipe(advzip({ optimizationLevel: 4, iterations: 200 }))

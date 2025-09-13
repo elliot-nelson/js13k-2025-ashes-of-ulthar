@@ -8,7 +8,6 @@ import { Sprite } from './Sprite';
 import { Text } from './Text';
 import { Viewport } from './Viewport';
 import { Input } from './input/Input';
-import { PauseScene } from './PauseScene';
 
 /**
  * Game state.
@@ -115,9 +114,6 @@ export class Game {
         if (this.paused) return;
         this.paused = true;
         Audio.pause();
-        if (this.scene === this.gameScene) {
-            this.scenes.push(new PauseScene());
-        }
     }
 
     unpause() {

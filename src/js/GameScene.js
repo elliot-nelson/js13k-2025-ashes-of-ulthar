@@ -14,14 +14,12 @@ import { WinkParticle } from './WinkParticle';
 import { ScreenShake } from './ScreenShake';
 import { clamp, createCanvas } from './Util';
 
-import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
 import { GameOverScene } from './GameOverScene';
 import { AshParticle } from './AshParticle';
 
 import { TechTree } from './TechTree';
 import { drawBlackCat } from './BlackCat';
-import { PauseScene } from './PauseScene';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
@@ -61,7 +59,7 @@ export class GameScene {
             new Button(275, 168, 'H', 'HELP')
         ];
         this.buttons[BUTTON_CODEX].active = true;
-        this.buttons[BUTTON_HELP].visible = true;
+        this.buttons[BUTTON_HELP].visible = false;
         this.buttons[BUTTON_HELP].active = true;
 
         //this.recruitProgressBar = createProgressBar('RECRUIT VILLAGER', PALETTE[4]);
@@ -153,14 +151,6 @@ export class GameScene {
 
             if (Input.pressed['KeyC']) {
                 game.scenes.push(new TechScene(this.tech));
-            }
-
-            if (Input.pressed['KeyH']) {
-                game.scenes.push(new HelpScene());
-            }
-
-            if (Input.pressed['Escape']) {
-                game.scenes.push(new PauseScene());
             }
         }
 
@@ -384,7 +374,8 @@ export class GameScene {
     }
 
     drawSanityBar() {
-        let k = Math.floor((this.resources[SANITY] / 100) * 78);
+        let k = Math.floor((this.resources[SANITY] / 100) * 70);
+        /*
         Viewport.ctx.drawImage(Sprite.sanitybar[0].img, 320-18-5, -3);
         Viewport.ctx.drawImage(Sprite.sanitybar[1].img, 320-18-5, -3);
         Viewport.ctx.drawImage(Sprite.sanitybar[2].img,
@@ -392,7 +383,13 @@ export class GameScene {
             18, k,
             320-18-5, -3 + 2 + (78 - k),
             18, k
-        );
+        );*/
+        Viewport.ctx.fillStyle = PALETTE[0];
+        Viewport.ctx.fillRect(320 - 5 - 6, -1, 7, 72);
+        Viewport.ctx.fillStyle = PALETTE[2];
+        Viewport.ctx.fillRect(320 - 5 - 5, 0, 5, 70);
+        Viewport.ctx.fillStyle = PALETTE[4];
+        Viewport.ctx.fillRect(320 - 5 - 5, 70 - k, 5, k);
     }
 
     /*drawInfluenceBar() {
