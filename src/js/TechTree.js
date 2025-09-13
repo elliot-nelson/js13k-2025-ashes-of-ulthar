@@ -97,7 +97,7 @@ export const TechTree = {
                 unlockCost: [0, 0, 5, 5, 20, 5],
                 perUse: '-5 Wood\n-5 Meat\n-20 Torches\n-5 Stone',
                 x: 4, y: 3,
-                sprite: 6
+                sprite: 9
             },
 
             // Wood upgrades
@@ -107,6 +107,7 @@ export const TechTree = {
                 perTurn: '+2 Wood',
                 unlockCost: [0, 0, 20, 0, 0, 20],
                 x: 6, y: 7,
+                sprite: 3
             },
 
             // Meat upgrades
@@ -116,6 +117,7 @@ export const TechTree = {
                 perTurn: '+2 Meat',
                 unlockCost: [0, 0, 20, 0, 0, 20],
                 x: 5, y: 5,
+                sprite: 4
             },
 
             // Stone upgrades
@@ -125,7 +127,8 @@ export const TechTree = {
                 perTurn: '+2 Stone',
                 unlockCost: [0, 0, 20, 0, 0, 20],
                 x: 5, y: 7,
-                r: true
+                sprite: 6,
+                r: true,
             },
 
             // Tallower upgrades
@@ -135,7 +138,7 @@ export const TechTree = {
                 perTurn: '+1 Torch',
                 unlockCost: [0, 0, 30, 30],
                 x: 3, y: 6,
-                sprite: 7
+                sprite: 5
             },
 
             // Cantor upgrades
