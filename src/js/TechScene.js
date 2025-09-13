@@ -101,7 +101,8 @@ export class TechScene {
             }
         }
 
-        const helpText = `\\l\\r MOVE    \\SPACE UNLOCK     \\E\\S\\C BACK`;
+        //const helpText = `\\l\\r MOVE    \\SPACE UNLOCK     \\E\\S\\C BACK`;
+        const helpText = '[ARROWS] TO MOVE   [SPACE] TO UNLOCK   \\E\\S\\C BACK'
         const helpWidth = Text.measure(helpText, 1).w;
         Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }

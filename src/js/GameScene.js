@@ -21,6 +21,7 @@ import { AshParticle } from './AshParticle';
 
 import { TechTree } from './TechTree';
 import { drawBlackCat } from './BlackCat';
+import { PauseScene } from './PauseScene';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
@@ -156,6 +157,10 @@ export class GameScene {
 
             if (Input.pressed['KeyH']) {
                 game.scenes.push(new HelpScene());
+            }
+
+            if (Input.pressed['Escape']) {
+                game.scenes.push(new PauseScene());
             }
         }
 
