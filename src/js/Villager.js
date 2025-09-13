@@ -59,7 +59,7 @@ export class WoodcutterTask extends TweenChain {
         const facing = (this.t > 130 && this.t < 170) ? (Math.floor(this.t / 10) % 2) : this.facing;
 
         this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
-        this.equipmentframe = 2 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
     }
 }
 
@@ -82,7 +82,7 @@ export class ButcherTask extends TweenChain {
         const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
 
         this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
-        this.equipmentframe = 3 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 3 + facing * VILLAGER_FRAMES : undefined;
     }
 }
 
@@ -127,7 +127,7 @@ export class StonecutterTask extends TweenChain {
         const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
 
         this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
-        this.equipmentframe = 5 + facing * VILLAGER_FRAMES;
+        this.equipmentframe = (this.t > 60 && this.t < 210) ? 5 + facing * VILLAGER_FRAMES : undefined;
     }
 }
 
