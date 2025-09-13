@@ -202,7 +202,7 @@ function copyAssets() {
         pipeline = pipeline
         .pipe(imagemin())
         .pipe(imagemin([
-            advpng({ optimizationLevel: 4, iterations: 20 })
+            advpng({ optimizationLevel: 4, iterations: 50 })
         ]));
     }
 
@@ -262,7 +262,7 @@ function buildZip() {
 
     return gulp.src(['dist/build/*', '!dist/build/*.map'])
         .pipe(size())
-        .pipe(zip('js13k-2025-ulthar-rising.zip'))
+        .pipe(zip('js13k-2025-ashes-of-ulthar.zip'))
         .pipe(advzip({ optimizationLevel: 4, iterations: 200 }))
         .pipe(s = size({ title: 'zip' }))
         .pipe(gulp.dest('dist/final'))
