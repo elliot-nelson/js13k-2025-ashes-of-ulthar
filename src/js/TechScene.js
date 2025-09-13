@@ -14,7 +14,7 @@ export class TechScene {
         this.tech = tech;
         this.t = 0;
 
-        let lastNode = TechScene.lastPos || Object.values(this.tech)[0];
+        let lastNode = game.gameScene.lastTech || Object.values(this.tech)[0];
         this.pos = { x: lastNode.x, y: lastNode.y };
     }
 
@@ -24,7 +24,7 @@ export class TechScene {
         this.t++;
         this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
 
-        TechScene.lastPos = this.pos;
+        game.gameScene.lastTech = this.pos;
 
         if (Input.pressed['ArrowRight']) {
             this.move(1, 0);
@@ -102,7 +102,7 @@ export class TechScene {
         }
 
         //const helpText = `\\l\\r MOVE    \\SPACE UNLOCK     \\E\\S\\C BACK`;
-        const helpText = '[ARROWS] TO MOVE   [SPACE] TO UNLOCK   \\E\\S\\C BACK'
+        const helpText = 'ARROWS TO MOVE   SPACE TO UNLOCK   \\E\\S\\C BACK'
         const helpWidth = Text.measure(helpText, 1).w;
         Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }
