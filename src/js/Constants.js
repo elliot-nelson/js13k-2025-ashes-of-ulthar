@@ -7,8 +7,8 @@ export const TARGET_GAME_HEIGHT = 180;
 
 // Shortcuts for marker locations on screen
 export const INVENTORY_POS = { u: 250, v: 131 };
-export const SANITY_POS = { u: 284, v: 9 };
 
+// Resource names (for situations where we display on screen)
 export const RESOURCE_NAMES = ['SANITY', 'INFLUENCE', 'WOOD', 'MEAT', 'TORCHES', 'STONE'];
 
 // Number of "facing left" villager frames (doubled for facing right)

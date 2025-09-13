@@ -1,7 +1,7 @@
 // GameScene
 
 import { Audio } from './Audio';
-import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES, PALETTE, RESOURCE_NAMES } from './Constants';
+import { INVENTORY_POS, SEPTAGRAM_FLAMES, PALETTE, RESOURCE_NAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
@@ -304,8 +304,8 @@ export class GameScene {
 
         // Background
 
-        Viewport.ctx.fillStyle = '#40985e';
-        Viewport.ctx.fillRect(0, 0, Viewport.width + 5, Viewport.height);
+        Viewport.ctx.fillStyle = PALETTE[3];
+        Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
 
         // Layer 3 (farthest)
 

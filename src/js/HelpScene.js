@@ -20,8 +20,8 @@ export class HelpScene {
         },
         {
             title: 'INFLUENCE',
-            text: 'Exert influence to control villagers. Each additional villager requires more influence than before.',
-            arrow: [132, 38, 126, 8]
+            text: 'Exert influence to recruit villagers. Each villager requires additional influence.'
+            //arrow: [132, 38, 126, 8]
         },
         {
             title: 'JOBS',
@@ -35,7 +35,7 @@ export class HelpScene {
         },
         {
             title: 'CODEX',
-            text: 'Consult the Codex to unlock jobs, upgrades, and abilities required to free the village.'
+            text: 'Unlock jobs, upgrades and abilities in the Codex.'
         }
     ];
 
