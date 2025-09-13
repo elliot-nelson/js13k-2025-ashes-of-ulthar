@@ -69,16 +69,20 @@ export const Sprite = {
 
         // Villager
         Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
-        Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 16, y: 29 } });
+        Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 5, y: 21 } });
         const villagerFrames = Sprite.villager.length;
-        Sprite.villager[1].img = copySpriteFrame(Sprite.villager[0].img, Sprite.villager[1].img, 22, 28);
-        Sprite.villager[8].img = copySpriteFrame(Sprite.villager[7].img, Sprite.villager[8].img, 22, 29);
-        Sprite.villager[9].img = copySpriteFrame(Sprite.villager[7].img, Sprite.villager[9].img, 22, 29);
-        Sprite.villager[11].img = copySpriteFrame(Sprite.villager[10].img, Sprite.villager[11].img, 22, 29);
+        Sprite.villager[1].img = copySpriteFrame(Sprite.villager[0].img, Sprite.villager[1].img, 11, 20);
+        Sprite.villager[7].img = copySpriteFrame(Sprite.villager[6].img, Sprite.villager[7].img, 11, 20);
+        Sprite.villager[9].img = copySpriteFrame(Sprite.villager[8].img, Sprite.villager[9].img, 11, 20);
         for (let i = 0; i < villagerFrames; i++) {
-            Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 29 } });
+            Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 21 } });
         }
-
+        Sprite.villager[2].anchor =
+          Sprite.villager[3].anchor =
+          Sprite.villager[5].anchor = { x: 16, y: 21 };
+        Sprite.villager[2 + villagerFrames].anchor =
+          Sprite.villager[3 + villagerFrames].anchor =
+          Sprite.villager[5 + villagerFrames].anchor = { x: -6, y: 21 };
     },
 
     /**

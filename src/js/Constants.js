@@ -12,7 +12,7 @@ export const INVENTORY_POS = { u: 250, v: 131 };
 export const RESOURCE_NAMES = ['SANITY', 'INFLUENCE', 'WOOD', 'MEAT', 'TORCHES', 'STONE'];
 
 // Number of "facing left" villager frames (doubled for facing right)
-export const VILLAGER_FRAMES = 12;
+export const VILLAGER_FRAMES = 10;
 
 // Flame locations in ritual
 export const SEPTAGRAM_FLAMES = [
