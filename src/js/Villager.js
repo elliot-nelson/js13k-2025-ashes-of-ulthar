@@ -104,7 +104,7 @@ export class TallowerTask extends TweenChain {
 
         const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
 
-        this.frame = Math.floor((this.t + 1) / 8) % 2 + 7 + facing * VILLAGER_FRAMES;
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + 6 + facing * VILLAGER_FRAMES;
         //this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
     }
 }
@@ -151,7 +151,7 @@ export class CantorTask extends TweenChain {
         //const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
         const facing = (this.t > 120 && this.t < 180) ? 0 : this.facing;
 
-        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES + 10;
+        this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES + 8;
         //this.equipmentframe = (this.t > 60 && this.t < 210) ? 5 + facing * VILLAGER_FRAMES : undefined;
     }
 }

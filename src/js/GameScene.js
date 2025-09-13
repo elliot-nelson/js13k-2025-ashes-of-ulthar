@@ -423,7 +423,7 @@ export class GameScene {
         if (this.buttons[BUTTON_SACRIFICE_VILLAGER].active) return;
 
         let x = 5 + 11;
-        let y = 14 + 8;
+        let y = 15 + 8;
         let t2 = this.nextSacrificeTick;
         let t1 = this.nextSacrificeTick - 15*60;
         let w = Math.floor(Math.min((this.t - t1) / (t2 - t1), 1) * 79);
