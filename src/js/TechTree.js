@@ -47,7 +47,7 @@ export const TechTree = {
                 title: 'Cantors',
                 description: 'Soothe the old ones with song and sacrifice.',
                 unlockCost: [0, 0, 40, 30],
-                perTurn: '-3 Wood\n-4 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
+                perTurn: '-3 Wood\n-3 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
                 x: 4, y: 8,
                 sprite: 7,
                 l: true
@@ -68,7 +68,7 @@ export const TechTree = {
                 title: 'Repeat Offender',
                 description: 'Shorten sacrifice cooldown.',
                 unlockCost: [0, 0, 30, 5, 5, 30],
-                perUse: '-50% Cooldown',
+                perUse: '-40% Cooldown',
                 x: 3, y: 3,
                 sprite: 8,
             },
@@ -76,7 +76,7 @@ export const TechTree = {
                 title: 'Resolute',
                 description: 'The village is more resilient.',
                 unlockCost: [0, 0, 0, 0, 20],
-                perTurn: 'Reduce all sanity drain by 25%',
+                perTurn: 'Reduce all sanity drain by 20%',
                 x: 2, y: 4,
                 sprite: 7,
                 d: true
@@ -85,7 +85,7 @@ export const TechTree = {
                 title: 'Resolute+',
                 description: 'The village is even more resilient.',
                 unlockCost: [0, 0, 0, 0, 40],
-                perTurn: 'Reduce all sanity drain by 50%',
+                perTurn: 'Reduce all sanity drain by 40%',
                 x: 2, y: 5,
                 sprite: 7
             },

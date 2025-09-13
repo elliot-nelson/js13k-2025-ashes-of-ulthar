@@ -141,7 +141,7 @@ export class CantorTask extends TweenChain {
         ]);
         this.layer = 3;
         this.frame = 0;
-        this.cost = [0, 0, 3, 3, 3, 3];
+        this.cost = [0, 0, 3, 3, 1, 3];
         this.grant = [game.gameScene.tech.cantorplus.unlocked ? 2 : 1];
     }
 

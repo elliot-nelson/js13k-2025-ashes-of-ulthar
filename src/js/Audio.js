@@ -9,12 +9,12 @@ export const Audio = {
     init() {
         Audio.contextCreated = false;
         Audio.readyToPlay = false;
-        Audio.musicEnabled = true;
-        Audio.sfxEnabled = true;
-        Audio.musicVolume = 0;
-        Audio.sfxVolume = 0;
+        //Audio.musicEnabled = true;
+        //Audio.sfxEnabled = true;
+        //Audio.musicVolume = 0;
+        //Audio.sfxVolume = 0;
 
-        Audio.sounds = {};
+        //Audio.sounds = {};
     },
 
     initContext() {
@@ -73,16 +73,16 @@ export const Audio = {
     update() {
         if (!Audio.readyToPlay) return;
 
-        this.sfxVolume = this.sfxEnabled ? 0.3 : 0;
-        this.musicVolume = this.musicEnabled ? 1 : 0;
+        //this.sfxVolume = this.sfxEnabled ? 0.3 : 0;
+        //this.musicVolume = this.musicEnabled ? 1 : 0;
 
         //ZZFX.volume = this.sfxVolume;
 
-        if (this.sfxEnabled) {
+        //if (this.sfxEnabled) {
             //ZZFX.volume = 0.3;
-        } else {
+        //} else {
             //ZZFX.volume = 0;
-        }
+        //}
     },
 
     play(sound, startTime, loop) {

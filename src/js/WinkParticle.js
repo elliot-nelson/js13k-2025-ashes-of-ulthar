@@ -7,7 +7,7 @@ export class WinkParticle {
     constructor() {
         this.t = -1;
         this.d = 15;
-        this.winkframe = 3;
+        this.frame = 3;
         this.layer = 1;
     }
 
@@ -17,17 +17,17 @@ export class WinkParticle {
         }
 
         if (this.t === 2) {
-            this.winkframe = 0;
+            this.frame = 0;
         } else if (this.t === 6) {
-            this.winkframe++;
+            this.frame++;
         } else if (this.t === 8) {
-            this.winkframe++;
+            this.frame++;
         } else if (this.t === 10) {
-            this.winkframe++;
+            this.frame++;
         }
     }
 
     draw() {
-        Viewport.ctx.drawImage(Sprite.wink[this.winkframe].img, 160 + 11 - 1, 73 - 30 + 9 - 2);
+        Viewport.ctx.drawImage(Sprite.wink[this.frame].img, 160 + 11 - 1, 73 - 30 + 9 - 2);
     }
 }

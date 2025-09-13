@@ -23,8 +23,6 @@ export class AshParticle {
         }
 
         this.pos.v += 0.1;
-        if (this.pos.v < 3) this.pos.v += 0.02;
-        if (this.pos.v < 2) this.pos.v += 0.02;
 
         if (Math.random() < 0.05) {
             this.pos.u += 0.5;
