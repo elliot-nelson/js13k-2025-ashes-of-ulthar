@@ -4,7 +4,7 @@ import { Audio } from './Audio';
 import { INVENTORY_POS, SANITY_POS, SEPTAGRAM_FLAMES, PALETTE, RESOURCE_NAMES } from './Constants';
 import { game } from './Game';
 import { Sprite } from './Sprite';
-import { Text } from './Text';
+import { Text, createProgressBar } from './Text';
 import { SacrificeParticle } from './SacrificeParticle';
 import { Viewport } from './Viewport';
 import { Button } from './Button';
@@ -20,6 +20,7 @@ import { GameOverScene } from './GameOverScene';
 import { AshParticle } from './AshParticle';
 
 import { TechTree } from './TechTree';
+import { drawBlackCat } from './BlackCat';
 
 const BUTTON_RECRUIT_VILLAGER = 0;
 const BUTTON_SACRIFICE_VILLAGER = 1;
@@ -53,14 +54,17 @@ export class GameScene {
 
         this.buttons = [
             new Button(5, 3, 'V', 'RECRUIT VILLAGER'),
-            new Button(5, 13, 'S', 'SACRIFICE VILLAGER'),
-            new Button(5, 23, 'F', 'LIGHT FREEDOM'),
-            new Button(275, 158, 'C', 'CODEX'),
+            new Button(5, 14, 'S', 'SACRIFICE VILLAGER'),
+            new Button(5, 25, 'F', 'LIGHT FREEDOM'),
+            new Button(275, 157, 'C', 'CODEX'),
             new Button(275, 168, 'H', 'HELP')
         ];
         this.buttons[BUTTON_CODEX].active = true;
         this.buttons[BUTTON_HELP].visible = true;
         this.buttons[BUTTON_HELP].active = true;
+
+        this.recruitProgressBar = createProgressBar('RECRUIT VILLAGER', PALETTE[4]);
+        this.sacrificeProgressBar = createProgressBar('SACRIFICE VILLAGER', PALETTE[4]);
 
         this.selectedJob = WOODCUTTER;
         this.jobsDisplayed = [WOODCUTTER];
@@ -216,9 +220,8 @@ export class GameScene {
 
         // Button UI Elements
 
-        if (this.resources[INFLUENCE] >= this.nextWorkerCost()) {
+        if (this.t === 60) {
             this.buttons[BUTTON_RECRUIT_VILLAGER].visible = true;
-            this.buttons[BUTTON_CODEX].visible = true;
         }
         if (this.tech.sacrifice.unlocked) {
             this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = true;
@@ -230,6 +233,7 @@ export class GameScene {
         let recruitActive = (this.resources[INFLUENCE] >= this.nextWorkerCost());
         if (recruitActive && !this.buttons[BUTTON_RECRUIT_VILLAGER].active) {
             this.buttons[BUTTON_RECRUIT_VILLAGER].active = true;
+            this.buttons[BUTTON_CODEX].visible = true;
             Audio.play(Audio.bell);
         }
 
@@ -327,7 +331,7 @@ export class GameScene {
             if (villager.layer === 2) villager.draw();
         }
 
-        this.tech.ritual.unlocked = true;
+        //this.tech.ritual.unlocked = true;
         if (this.tech.ritual.unlocked) {
             this.drawRitual();
         }
@@ -338,7 +342,9 @@ export class GameScene {
 
         // Black cat perch
 
-        Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
+        let adjustment = this.tech.ritual.unlocked ? 0.1 + (this.freedom * 0.9 / 7) : 0;
+        drawBlackCat(this, this.t % (9 - this.freedom) === 0, adjustment);
+        //Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
 
         for (let entity of this.entities) {
             if (entity.layer === 1 || !entity.layer) entity.draw();
@@ -362,8 +368,11 @@ export class GameScene {
                 }
             }
 
+            this.drawRecruitProgressBar();
+            this.drawSacrificeProgressBar();
+
             this.drawSanityBar();
-            this.drawInfluenceBar();
+            //this.drawInfluenceBar();
             this.drawJobSelectUI();
             this.drawInventory();
         }
@@ -381,7 +390,7 @@ export class GameScene {
         );
     }
 
-    drawInfluenceBar() {
+    /*drawInfluenceBar() {
         let k = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * 80);
         Viewport.ctx.drawImage(Sprite.influencebar[0].img, (320-80)/2, 3);
         Viewport.ctx.drawImage(Sprite.influencebar[1].img,
@@ -389,6 +398,40 @@ export class GameScene {
             k, 4,
             (320-80)/2 + 2, 3 + 3,
             k, 4
+        );
+    }*/
+
+    drawRecruitProgressBar() {
+        if (!this.buttons[BUTTON_RECRUIT_VILLAGER].visible) return;
+        if (this.buttons[BUTTON_RECRUIT_VILLAGER].active) return;
+
+        let x = 5 + 11;
+        let y = 3 + 8;
+        let w = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * this.recruitProgressBar.width);
+
+        Viewport.ctx.drawImage(this.recruitProgressBar,
+            0, 0,
+            w, 1,
+            x, y,
+            w, 1
+        );
+    }
+
+    drawSacrificeProgressBar() {
+        if (!this.buttons[BUTTON_SACRIFICE_VILLAGER].visible) return;
+        if (this.buttons[BUTTON_SACRIFICE_VILLAGER].active) return;
+
+        let x = 5 + 11;
+        let y = 14 + 8;
+        let t2 = this.nextSacrificeTick;
+        let t1 = this.nextSacrificeTick - 15*60;
+        let w = Math.floor(Math.min((this.t - t1) / (t2 - t1), 1) * this.sacrificeProgressBar.width);
+
+        Viewport.ctx.drawImage(this.sacrificeProgressBar,
+            0, 0,
+            w, 1,
+            x, y,
+            w, 1
         );
     }
 

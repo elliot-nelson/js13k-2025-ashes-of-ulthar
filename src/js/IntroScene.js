@@ -9,6 +9,9 @@ import { Input } from './input/Input';
 import { AshParticle } from './AshParticle';
 import { Audio } from './Audio';
 import { GameScene } from './GameScene';
+import { drawBlackCat } from './BlackCat';
+
+
 
 export class IntroScene {
     constructor() {
@@ -64,18 +67,7 @@ export class IntroScene {
 
         if (this.t > 30) {
             let adjustment = Math.max(1 - this.t / 54, 0);
-
-            if (!this.x || this.t % 3 === 0) {
-                this.x = [0,1,2,3,4,5,6,7,8].map(x => adjustment * (Math.random() * 12 - 6));
-                this.alpha = [0,1,2,3,4,5,6,7,8].map(x => 1 - adjustment * Math.random());
-            }
-
-            for (let i = 0; i < 9; i++) {
-                let y = i * 4;
-                Viewport.ctx.globalAlpha = this.alpha[i];
-                Viewport.ctx.drawImage(Sprite.blackcat[0].img, 0, y, 24, 4, 160 + this.x[i], 73 - 30 + y, 24, 4);
-                Viewport.ctx.globalAlpha = 1;
-            }
+            drawBlackCat(this, this.t % 3 === 0, adjustment);
         }
 
         if (this.t > 40) {
