@@ -61,12 +61,31 @@ export class GameOverScene {
 
         if (Input.pressed['Space']) {
             Audio.play(Audio.click);
-            game.scenes.pop();
-            game.scenes.push(new GameScene());
+            Audio.play(Audio.click);
+            if (this.t > 210) {
+                game.scenes.pop();
+                game.scenes.push(new GameScene());
+            } else {
+                this.t = 210;
+                while (this.linesDisplayed < 7) {
+                    this.linesDisplayed++;
+                    this.finalScore += this.scorelines[this.linesDisplayed - 1][2];
+                }
+                this.displayedScore = this.finalScore;
+            }
         }
 
-        if (this.t === 15) {
+        if (this.t % 15 === 0 && this.t <= 210) {
             Audio.play(Audio.click);
+        }
+
+        if (this.t > 0 && (this.t % 30) === 0 && this.linesDisplayed < 7) {
+            this.linesDisplayed++;
+            this.finalScore += this.scorelines[this.linesDisplayed - 1][2];
+        }
+
+        if (this.displayedScore < this.finalScore) {
+            this.displayedScore += Math.ceil((this.finalScore - this.displayedScore) * 0.1);
         }
     }
 
@@ -85,7 +104,9 @@ export class GameOverScene {
         }
 
         y += 0.5;
-        for (let i = 0; i < 14; i++) {
+
+        let displayed = clamp(this.t / 15, 0, 14);
+        for (let i = 0; i < displayed; i++) {
             let idx = Math.floor(i / 2);
             let column = i % 2;
             if (column === 0) {
@@ -100,10 +121,10 @@ export class GameOverScene {
 
         y = 11;
         Text.drawText(Viewport.ctx, 'FINAL SCORE', 70, 32 + y * 10, 1, Text.palette[3]);
-        let width = Text.measure(String(this.finalScore), 1).w;
-        Text.drawText(Viewport.ctx, String(this.finalScore), 250 - width, 32 + y * 10, 1, Text.palette[4]);
+        let width = Text.measure(String(this.displayedScore), 1).w;
+        Text.drawText(Viewport.ctx, String(this.displayedScore), 250 - width, 32 + y * 10, 1, Text.palette[4]);
 
-        if (this.t > 15) {
+        if (this.t > 210) {
             let text = 'PRESS SPACE TO PLAY AGAIN';
             let width = Text.measure(text, 1).w;
             Text.drawText(Viewport.ctx, text, 160 - width / 2, 165, 1, Text.palette[4], Text.palette[1]);

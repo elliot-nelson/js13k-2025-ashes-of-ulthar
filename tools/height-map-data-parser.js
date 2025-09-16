@@ -30,8 +30,6 @@ const HeightMapDataParser = {
 
             let orig = [];
 
-            console.log(layer, xpos, ypos, w, h);
-
             for (let x = 0; x < w; x++) {
                 for (let y = 0; y < h; y++) {
                     let p = (y * w + x) * 4;

@@ -53,8 +53,8 @@ export const Sprite = {
         Sprite.ritualflame = initBasicSpriteArray(SpriteSheet.ritualflame, { anchor: { x: 4, y: 10 } });
 
         // Sanity bar handling
-        //Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar);
-        //Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, PALETTE[0]));
+        Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar);
+        Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, PALETTE[0]));
 
         // Terrain handling
         Sprite.terrain = [
