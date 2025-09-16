@@ -147,9 +147,9 @@ export class GameScene {
                 this.fireVillager(this.selectedJob);
             }
 
-            /*if (Input.pressed['Space']) {
+            if (Input.pressed['Space']) {
                 this.resources[SANITY] -= 10;
-            }*/
+            }
 
             if (Input.pressed['KeyC']) {
                 game.scenes.push(new TechScene(this.tech));

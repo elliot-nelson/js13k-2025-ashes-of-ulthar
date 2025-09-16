@@ -49,18 +49,14 @@ export class GameOverScene {
 
         this.t = 0;
         this.finalScore = 0;
-        this.linesDisplayed = 7;
-
-        for (let i = 0; i < 7; i++) {
-            this.finalScore += this.scorelines[i][2];
-        }
+        this.displayedScore = 0;
+        this.linesDisplayed = 0;
     }
 
     update() {
         this.t++;
 
         if (Input.pressed['Space']) {
-            Audio.play(Audio.click);
             Audio.play(Audio.click);
             if (this.t > 210) {
                 game.scenes.pop();
