@@ -16,6 +16,7 @@ import { clamp, createCanvas } from './Util';
 
 import { HelpScene } from './HelpScene';
 import { TechScene } from './TechScene';
+import { PauseScene } from './PauseScene';
 import { GameOverScene } from './GameOverScene';
 import { AshParticle } from './AshParticle';
 
@@ -146,9 +147,9 @@ export class GameScene {
                 this.fireVillager(this.selectedJob);
             }
 
-            if (Input.pressed['Space']) {
+            /*if (Input.pressed['Space']) {
                 this.resources[SANITY] -= 10;
-            }
+            }*/
 
             if (Input.pressed['KeyC']) {
                 game.scenes.push(new TechScene(this.tech));
@@ -156,6 +157,10 @@ export class GameScene {
 
             if (Input.pressed['KeyH']) {
                 game.scenes.push(new HelpScene());
+            }
+
+            if (Input.pressed['Escape']) {
+                game.scenes.push(new PauseScene());
             }
         }
 

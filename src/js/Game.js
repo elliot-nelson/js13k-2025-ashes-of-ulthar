@@ -4,6 +4,7 @@ import { Audio } from './Audio';
 import { FPS } from './Constants';
 import { IntroScene } from './IntroScene';
 import { GameScene } from './GameScene';
+import { PauseScene } from './PauseScene';
 import { Sprite } from './Sprite';
 import { Text } from './Text';
 import { Viewport } from './Viewport';
@@ -114,6 +115,9 @@ export class Game {
         if (this.paused) return;
         this.paused = true;
         Audio.pause();
+        if (this.scene === this.gameScene) {
+            this.scenes.push(new PauseScene());
+        }
     }
 
     unpause() {
