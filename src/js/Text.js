@@ -34,6 +34,8 @@ const C_SHIFT = {
     91: 4, // [ (s)
     109: 6, // m (up)
     111: 6, // o (down),
+    108: 6,
+    114: 6,
     1108: 10, // left arrow key
     1114: 10, // right arrow key
     1069: 6, // E
@@ -62,33 +64,55 @@ export const Text = {
         C_ICONS[1069] = Sprite.button[0];
         C_ICONS[1083] = Sprite.button[0];
         C_ICONS[1067] = Sprite.button[0];
+
+        Text.cache = {};
     },
 
     drawText(ctx, text, u, v, scale = 1, font = Text.white) {
+        let fgfont = font;
+        let highlightsRemaining = 0;
+
         for (let c of this.charactersToDraw(text, scale)) {
-            let nextfont = font;
+            fgfont = font;
+            if (c.c > 1000) {
+                highlightsRemaining = c.c - 1000 - 48;
+                continue;
+            }
             if (C_ICONS[c.c]) {
                 ctx.drawImage(
                     C_ICONS[c.c].img,
                     u + c.u,
                     v + c.v - Math.floor((C_ICONS[c.c].img.height) / 2) + 2
                 );
-                nextfont = Text.palette[0];
                 c.c -= 1000;
                 c.u += 2;
             }
             let k = (c.c - 32) * FONT_SHEET_C_WIDTH;
-            ctx.drawImage(
-                nextfont,
-                k % FONT_SHEET_WIDTH,
-                (k / FONT_SHEET_WIDTH | 0) * FONT_SHEET_C_WIDTH,
-                C_WIDTH,
-                C_HEIGHT,
-                u + c.u,
-                v + c.v,
-                C_WIDTH * scale,
-                C_HEIGHT * scale
-            );
+            if (highlightsRemaining > 0) {
+                highlightsRemaining--;
+                ctx.drawImage(
+                    Text.getHighlight(c.c),
+                    0, 0,
+                    C_WIDTH + 2,
+                    C_HEIGHT + 2,
+                    u + c.u - 1,
+                    v + c.v - 1,
+                    (C_WIDTH + 2) * scale,
+                    (C_HEIGHT + 2) * scale
+                );
+            } else {
+                ctx.drawImage(
+                    fgfont,
+                    k % FONT_SHEET_WIDTH,
+                    (k / FONT_SHEET_WIDTH | 0) * FONT_SHEET_C_WIDTH,
+                    C_WIDTH,
+                    C_HEIGHT,
+                    u + c.u,
+                    v + c.v,
+                    C_WIDTH * scale,
+                    C_HEIGHT * scale
+                );
+            }
         }
     },
 
@@ -145,13 +169,41 @@ export const Text = {
             if (c === 92) {
                 // Backslash
                 idx++;
-                c = 1000 + text.charCodeAt(idx);
+                if (text.charCodeAt(idx) === 104) {
+                    // h
+                    idx++;
+                    c = 1000 + text.charCodeAt(idx);
+                    C_SHIFT[c] = 0;
+                }
             }
 
             yield { c, u, v };
 
-            u += (C_SHIFT[c] || DEFAULT_C_SHIFT) * scale;
+            u += (C_SHIFT[c] ?? DEFAULT_C_SHIFT) * scale;
         }
+    },
+
+    getHighlight(c) {
+        if (!Text.cache[c]) {
+            let w = C_SHIFT[c] ?? DEFAULT_C_SHIFT + 2;
+            let h = C_HEIGHT + 2;
+            let canvas = createCanvas(w,h);
+
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 0, 0, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 1, 0, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 2, 0, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 0, 1, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 2, 1, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 0, 2, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 1, 2, 1, Text.palette[4]);
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 2, 2, 1, Text.palette[4]);
+
+            Text.drawText(canvas.ctx, String.fromCharCode(c), 1, 1, 1, Text.palette[0]);
+
+            Text.cache[c] = canvas.canvas;
+        }
+
+        return Text.cache[c];
     }
 };
 

@@ -47,7 +47,7 @@ export class TechScene {
             }
         }
 
-        if (Input.pressed['Escape']) {
+        if (Input.pressed['Escape'] || Input.pressed['KeyC']) {
             game.scenes.pop();
         }
     }
@@ -102,7 +102,7 @@ export class TechScene {
         }
 
         //const helpText = `\\l\\r MOVE    \\SPACE UNLOCK     \\E\\S\\C BACK`;
-        const helpText = 'ARROWS TO MOVE   SPACE TO UNLOCK   \\E\\S\\C BACK'
+        const helpText = 'ARROWS TO MOVE   \\h5SPACE TO UNLOCK   \\h1C / \\h3ESC BACK'
         const helpWidth = Text.measure(helpText, 1).w;
         Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }
