@@ -34,8 +34,8 @@ const C_SHIFT = {
     91: 4, // [ (s)
     109: 6, // m (up)
     111: 6, // o (down),
-    108: 6,
-    114: 6,
+    108: 7,
+    114: 7,
     1108: 10, // left arrow key
     1114: 10, // right arrow key
     1069: 6, // E

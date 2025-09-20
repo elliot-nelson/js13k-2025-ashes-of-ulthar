@@ -25,8 +25,8 @@ export class HelpScene {
         },
         {
             title: 'JOBS',
-            text: 'Use arrow keys to select unlocked jobs and assign villagers.',
-            arrow: [160, 70, 70, 127]
+            text: 'Use arrow keys to switch jobs and assign recruited villagers. You can move villagers you have already recruited between jobs.',
+            arrow: [160, 80, 70, 127]
         },
         {
             title: 'RESOURCES',
@@ -80,7 +80,7 @@ export class HelpScene {
         }
         Viewport.ctx.stroke();
 
-        const helpText = `HELP PAGE ${this.page + 1}/${HelpScene.pagesUnlocked}    \\h1l \\h1r MORE HELP    \\h1H / \\h3ESC BACK`;
+        const helpText = `HELP PAGE ${this.page + 1}/${HelpScene.pagesUnlocked} \\h3MOV   \\h1l \\h1r MORE HELP    \\h1H / \\h3ESC BACK`;
         const helpWidth = Text.measure(helpText, 1).w;
         Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
     }
