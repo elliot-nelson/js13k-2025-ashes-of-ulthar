@@ -18,6 +18,9 @@ export class IntroScene {
         this.t = 0;
         this.fadet = -1;
         this.entities = [];
+
+        // Fade in GitHub link for first time in intro scene.
+        document.getElementsByClassName('github-corner')[0].className = 'github-corner';
     }
 
     update() {

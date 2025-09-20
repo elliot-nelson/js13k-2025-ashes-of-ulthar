@@ -95,6 +95,10 @@ export class GameScene {
         this.resources[TORCHES] = 50;
         this.resources[STONE] = 50;
         */
+
+        // The first time a game scene loads, we fade out the GitHub
+        // link so it doesn't distract players.
+        document.getElementsByClassName('github-corner')[0].className = 'github-corner hidden';
     }
 
     update(handleInput = true) {
